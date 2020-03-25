@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <iostream>
 
 
 int main(){
@@ -18,64 +19,45 @@ int main(){
         FILE *arq;
         arq = fopen(filename, "rt"); //abertura de arquivo de text para leitura
 
-        float x[100], y[100], z[100], s, bigX, bigY, bigZ;  //arrays para armazenamento do bloco de dados
+        std::cout << "Insira o valor do parâmetro de resolução de leitura." << '\n';
+        std::cin >> delta_z;
 
-
-        size_t n=0; //n é definido como long unsigned integer
-
-        //CONTAGEM DE PONTOS DO ARQUIVO:
-         do {
+        //CONTAGEM DE PONTOS DO BLOCO DE DADOS:
+        int n=1;
+        do{
           fscanf(arq, "%E%E%E \n", &bigX, &bigY, &bigZ);
-          printf("Linha: %ld \n", n);
+          std::cout << "\r" <<"Número de pontos localizados no bloco de dados:" << n;
           n=n+1;
-        } while (bigX != EOF | bigY != EOF | bigZ != EOF ); // not working
+        } while(bigZ >= 0 && bigZ < delta_z);
 
+        std::cout << "Total de pontos do bloco de dados:" << n << '\n';
 
-        printf("Total de pontos: %ld. \n", n);
-
+        //passando dados do arquivo para arrays:
+        float x[n], y[n], z[n];                                //is it possible???
         int i=0;
-        while (i<=100) {
+        while (i<=n) {
           fscanf(arq, "%E%E%E \n", &x[i], &y[i], &z[i]);
           i++;
         }
 
 
-        i=0;
+        //encontrando ponto mais próximo ao primeiro ponto da lista copiada:
+        float d, d_min, I_min;
+        d_min = 100;
+        for (i = 0; i < n; i++) {
+          d = sqrt(pow(x[0]-x[i],2)+pow(y[0]-y[i],2)+pow(z[0]-z[i],2));
+          if (d<d_min) {
+            d_min=d;
+            I_min=i;
+          }
 
-        //determinando borda do grafo:
-            //determinando pontos mais distantes e mais próximos do bloco de dados:
-                float d=0;
-                float d_max, d_min;
-                int j, I_max, J_max, I_min, J_min;
-                for (i = 0; i < 100; i++) {
-                    for (j = 0; j < 100 && i!=j; j++) {
-                      d= sqrt(pow(x[i]-x[j],2)+pow(y[i]-y[j],2)+pow(z[i]-z[j],2));
-                      if (d>d_max) {
-                        d_max=d;
-                        I_max=i;
-                        J_max=j;
-                      }
-                      if (d<d_min) {
-                        d_min=d;
-                        I_min=i;
-                        J_min=j;
-                      }
-                    }
-                }
+        //montando primeira aresta:
+        std::cout << "Primeira aresta encontrada:" << "(" x[0] << "," << y[0] << "," << z[0] << ")" << "----"
+                                                   << "(" x[I_min] << "," << y[I_min] << "," << z[I_min] << ")"  '\n';
 
-                printf("Os pontos mais distantes um do outro são: (%f, %f, %f) e (%f, %f, %f). \n Com uma distância de %f \n", x[I_max], y[I_max], z[I_max], x[J_max], y[J_max], z[J_max], d_max);
+        //montando triangulação (Critério de Delaunay):
 
-                printf("Os pontos mais próximos um do outro são: (%f, %f, %f) e (%f, %f, %f). \n Com uma distância de %f \n", x[I_min], y[I_min], z[I_min], x[J_min], y[J_min], z[J_min], d_min);
-
-          //estudando distribuição de pontos via distribuição de distâncias entre pontos:
-
-
-
-
-   /*
-
-
-  */
+        
 
 
 
