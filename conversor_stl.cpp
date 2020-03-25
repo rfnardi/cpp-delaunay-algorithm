@@ -4,17 +4,18 @@
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
-#include <string.h>
+#include <string>
 #include <iostream>
 
 
 int main(){
 
-        char filename[27]; // cria variável char para armazenar string com o nome do arquivo de log
+        std::string filename; // cria objeto da classe string para armazenar string com o nome do arquivo de dados
 
-        printf("Digite o nome do arquivo a ser triangulado.\n");
-        scanf("%s'EOF'\n", filename);
-        printf("Nome do arquivo inserido: %s \n", filename);
+        std::cout << "Digite o nome do arquivo a ser triangulado." << '\n';
+        std::cin >> filename;
+        std::cout << "Nome do arquivo inserido:" << filename << ''\n';
+
 
         FILE *arq;
         arq = fopen(filename, "rt"); //abertura de arquivo de text para leitura
@@ -28,6 +29,7 @@ int main(){
           fscanf(arq, "%E%E%E \n", &bigX, &bigY, &bigZ);
           std::cout << "\r" <<"Número de pontos localizados no bloco de dados:" << n;
           n=n+1;
+
         } while(bigZ >= 0 && bigZ < delta_z);
 
         std::cout << "Total de pontos do bloco de dados:" << n << '\n';
@@ -57,7 +59,7 @@ int main(){
 
         //montando triangulação (Critério de Delaunay):
 
-        
+
 
 
 
