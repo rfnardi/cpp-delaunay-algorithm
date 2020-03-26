@@ -60,8 +60,8 @@ int main(){
         //montando triangulação (Critério de Delaunay):
 
               //medir as distâncias d(P_i,P_j) entre todos os ptos
-              /*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos 
-                  (ptos cuja distância é menor do que 1,5*delta_z)) */
+              /*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos
+                  (ptos cuja distância é menor do que 1.5*delta_z)) */
               //encontrar ciclo de 4 vizinhos
                   //qual é o Critério para determinar se 4 pontos formam um ciclo de vizinhos?
                         //----> não há nenhum ponto interno ao ciclo
@@ -69,15 +69,6 @@ int main(){
               //determinar convex hull (borda)
 
 
-
-
-
-
-        //considere todos os ciclos de de 3 arestas tais que o tamanho de uma das arestas não seja maior do que 1.3 vezes o tamanho de qualquer outra aresta do ciclo
-
-
-
-        //crie conjunto de pontos da borda superior
 
         //leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 
