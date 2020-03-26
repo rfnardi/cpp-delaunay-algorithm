@@ -59,18 +59,23 @@ int main(){
 
         //montando triangulação (Critério de Delaunay):
 
+              //medir as distâncias d(P_i,P_j) entre todos os ptos
+              /*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos 
+                  (ptos cuja distância é menor do que 1,5*delta_z)) */
+              //encontrar ciclo de 4 vizinhos
+                  //qual é o Critério para determinar se 4 pontos formam um ciclo de vizinhos?
+                        //----> não há nenhum ponto interno ao ciclo
+              //aplicar Critério de Delaunay
+              //determinar convex hull (borda)
 
 
 
 
-        //ler a primeira faixa de dados do arquivo: 0<=z<=s ; s é o passo vertical de leitura, que deve ser pouco maior que o passo vertical de escrita
-            //contar o número N de pontos dentro da faixa e criar uma matriz 3xN onde os dados do arquivo são copiados
 
-        //medir as distâncias d(P_i,P_j) entre todos os pontos da faixa e criar associação entre pontos próximos (d<=1.3*S) dentro da faixa: criação de arestas
 
         //considere todos os ciclos de de 3 arestas tais que o tamanho de uma das arestas não seja maior do que 1.3 vezes o tamanho de qualquer outra aresta do ciclo
 
-        //grave os ciclos no arquivo gerado
+
 
         //crie conjunto de pontos da borda superior
 
