@@ -3,16 +3,26 @@ private:
   /* data */
 
 public:
-  quadrilatero_vizinhos (std::vector<float> A; std::vector<float> B; std::vector<float> C; std::vector<float> D;);
+  quadrilatero_vizinhos (array A[3]; array B[3]; array C[3]; array D[3]);
   virtual ~quadrilatero_vizinhos ();
 };
 
-
-class name_t {
+class catalogo_vizinhos {
 private:
   /* data */
 
 public:
-  name_t (arguments);
-  virtual ~name_t ();
+  catalogo_vizinhos (array P; std::vector<float> ptos_vizinhos;);
+  virtual ~catalogo_vizinhos ();
+};
+
+
+
+class triangulo_Delaunay {
+private:
+  /* data */
+
+public:
+  triangulo_Delaunay (arguments);
+  virtual ~triangulo_Delaunay ();
 };
