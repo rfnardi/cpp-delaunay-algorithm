@@ -29,6 +29,13 @@ namespace del {
             void define_referencial ( float ponto[ 3 ] );
 
             /**
+             * Informa as coordenadas do ponto referencial.
+             * 
+             * @return Ponto definido como referencial.
+            */
+            float ver_referencial ();
+
+            /**
              * Calcula a distância entre dois pontos.
              * 
              * @param a Coordenadas de um ponto.

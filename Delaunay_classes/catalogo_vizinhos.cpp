@@ -12,6 +12,10 @@ void del::catalogo_vizinhos::define_referencial ( float ponto[ 3 ] ) {
     this.ponto_referencial = ponto;
 };
 
+float del::catalogo_vizinhos::ver_referencial () {
+    return this.ponto_referencial;
+};
+
 float del::catalogo_vizinhos::distancia_entre ( float a[ 3 ], float b[ 3 ] ) {
     // calculo de distancia entre pontos a e b
     // ax = a[0], ay = a[1] e az = a[2]
