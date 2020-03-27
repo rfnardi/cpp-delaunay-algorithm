@@ -7,6 +7,11 @@
 #include <string>
 #include <iostream>
 
+#include <vector>
+#include <fstream>
+#include <bits/stdc++.h>
+
+#include "Delaunay_classes/catalogo_vizinhos.cpp";
 
 int main(){
 
@@ -16,32 +21,52 @@ int main(){
         std::cin >> filename;
         std::cout << "Nome do arquivo inserido:" << filename << '\n';
 
+        /* Another way */
+        std::ifstream inFile;
+        // Uma linha de arquivo é identificada pelo caracter '\n' (conhecido como quebra de linha)
+        // Se eu definir que a quebra de linha é agora o carater 'x', então "texto escrito axim" teria as linhas
+        // te
+        // to escrito a
+        // im
+        // portanto pensei que line é a linha do arquivo e coord é a linha da linha do arquivo
+        std::string line;
+        std::string coord;
+        std::vector<float> ponto;
+        std::vector<std::vector<float>> pontos;
+        int num_linhas = 0;
+        inFile.open( filename );
+        if ( ! inFile ) {
+          std::cout << "Arquivo não existente ou está sendo editado por outro programa." << std::endl;
+          exit( 1 );
+        }
+        // ATENÇÃO! Em C++ "i" é um string e 'i' é um char.
+        // "isto é permitido" é string válida.
+        // 'isto não é permitido' não é um char!
+        
+        //passando dados do arquivo para arrays:
+        while ( std::getline( inFile, line, '\n' ) ) {
+          num_linhas += 1;
+          while ( std::getline( line, coord, ' ' ) ) {
+            ponto.push_back( std::stof( coord ) );
+          }
+          pontos.push_back( ponto );
+          ponto.clear();
+        }
 
-        FILE *arq;
-        arq = fopen(filename, "rt"); //abertura de arquivo de text para leitura
-
+        //
+        //
         std::cout << "Insira o valor do parâmetro de resolução de leitura." << '\n';
+        float delta_z;
         std::cin >> delta_z;
 
         //CONTAGEM DE PONTOS DO BLOCO DE DADOS:
-        int n=1;
-        do{
-          fscanf(arq, "%E%E%E \n", &bigX, &bigY, &bigZ);
-          std::cout << "\r" <<"Número de pontos localizados no bloco de dados:" << n;
-          n=n+1;
+        std::cout << "Total de pontos (num_linhas) do bloco de dados:" << num_linhas << std::endl;
 
-        } while(bigZ >= 0 && bigZ < delta_z);
+        // catalogo de pontos inicia aqui
+        del::catalogo_vizinhos catalogo( pontos );
+        catalogo.define_raio_vizinhanca( 1.5 * delta_z );
 
-        std::cout << "Total de pontos do bloco de dados:" << n << '\n';
-
-        //passando dados do arquivo para arrays:
-        float x[n], y[n], z[n];                                //is it possible???
-        int i=0;
-        while (i<=n) {
-          fscanf(arq, "%E%E%E \n", &x[i], &y[i], &z[i]);
-          i++;
-        }
-
+        // Inicia algum loop nos pontos do catalogo em busca de vizinhanças
 
         //encontrando ponto mais próximo ao primeiro ponto da lista copiada:
         float d, d_min, I_min;

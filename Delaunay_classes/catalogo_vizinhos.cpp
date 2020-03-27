@@ -1,6 +1,6 @@
 #include "catalogo_vizinhos.hpp"
 
-del::catalogo_vizinhos::catalogo_vizinhos ( vector<float> conjunto_universo[ 3 ] ) {
+del::catalogo_vizinhos::catalogo_vizinhos ( std::vector<std::vector<float>> conjunto_universo ) {
     this.catalogo_vizinhos = conjunto_universo;
 };
 
@@ -16,11 +16,11 @@ float del::catalogo_vizinhos::ver_referencial () {
     return this.ponto_referencial;
 };
 
-float del::catalogo_vizinhos::distancia_entre ( float a[ 3 ], float b[ 3 ] ) {
+float del::catalogo_vizinhos::distancia_referencial ( float ponto[ 3 ] ) {
     // calculo de distancia entre pontos a e b
     // ax = a[0], ay = a[1] e az = a[2]
 };
 
 bool del::catalogo_vizinhos::e_vizinho ( float ponto[ 3 ] ) {
-    return ( this.distancia_entre( this.ponto_referencial, ponto ) <= this.raio ) ? true : false;
+    return ( this.distancia_referencial( ponto ) <= this.raio ) ? true : false;
 };

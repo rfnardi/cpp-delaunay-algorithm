@@ -1,8 +1,10 @@
+#include <vector>
+
 namespace del {
 
     class catalogo_vizinhos {
         private:
-            vector<float> conjunto_universo[ 3 ];
+            std::vector<std::vector<float>> conjunto_universo;
             float ponto_referencial[ 3 ];
             float raio;
 
@@ -12,7 +14,7 @@ namespace del {
              * 
              * @param conjunto_universo O conjunto de todos os pontos do sólido.
             */
-            catalogo_vizinhos ( vector<float> conjunto_universo[ 3 ] );
+            catalogo_vizinhos ( std::vector<std::vector<float>> conjunto_universo );
 
             /**
              * Define uma distância de vizinhança.
@@ -20,6 +22,14 @@ namespace del {
              * @param raio O raio da vizinhança.
             */
             void define_raio_vizinhanca ( float raio );
+
+            /**
+             * Assimila uma vizinhança com um conjunto de pontos.
+             * Futuramente suportar objeto desta classe como argumento.
+             * 
+             * @param pontos Conjunto de pontos para comparar vizinhança.
+            */
+            void define_raio_vizinhanca ( std::vector<std::vector<float>> pontos );
 
             /**
              * Define um ponto de referência.
@@ -36,13 +46,12 @@ namespace del {
             float ver_referencial ();
 
             /**
-             * Calcula a distância entre dois pontos.
+             * Calcula a distância entre um ponto e o ponto referencial.
              * 
-             * @param a Coordenadas de um ponto.
-             * @param b Coordenadas de um ponto.
+             * @param ponto Coordenadas de um ponto.
              * @return Distância entre os pontos a e b.
             */
-            float distancia_entre ( float a[ 3 ], float b[ 3 ] );
+            float distancia_referencial ( float ponto[ 3 ] );
 
             /**
              * Verifica se o ponto é vizinho do ponto de referência.
