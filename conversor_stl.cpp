@@ -14,7 +14,7 @@ int main(){
 
         std::cout << "Digite o nome do arquivo a ser triangulado." << '\n';
         std::cin >> filename;
-        std::cout << "Nome do arquivo inserido:" << filename << ''\n';
+        std::cout << "Nome do arquivo inserido:" << filename << '\n';
 
 
         FILE *arq;

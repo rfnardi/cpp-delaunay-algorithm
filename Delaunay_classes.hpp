@@ -1,3 +1,5 @@
+namespace del {
+
 class quadrilatero_vizinhos {
 private:
   /* data */
@@ -12,7 +14,7 @@ private:
   /* data */
 
 public:
-  catalogo_vizinhos (array P; std::vector<float> ptos_vizinhos;);
+  catalogo_vizinhos (array P, std::vector<float> ptos_vizinhos );
   virtual ~catalogo_vizinhos ();
 };
 
@@ -26,3 +28,5 @@ public:
   triangulo_Delaunay (arguments);
   virtual ~triangulo_Delaunay ();
 };
+
+}
