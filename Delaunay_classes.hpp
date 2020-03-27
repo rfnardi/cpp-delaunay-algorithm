@@ -12,7 +12,7 @@ private:
   /* data */
 
 public:
-  catalogo_vizinhos (array P; std::vector<float> ptos_vizinhos;);
+  catalogo_vizinhos (array P[3]; std::vector<float> ptos_vizinhos;);
   virtual ~catalogo_vizinhos ();
 };
 

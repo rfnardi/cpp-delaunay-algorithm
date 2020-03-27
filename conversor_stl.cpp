@@ -36,7 +36,7 @@ int main(){
 
         //passando dados do arquivo para arrays:
         float x[n], y[n], z[n];                                //is it possible???
-        int i=0;
+        long i=0;
         while (i<=n) {
           fscanf(arq, "%E%E%E \n", &x[i], &y[i], &z[i]);
           i++;
@@ -59,7 +59,17 @@ int main(){
 
         //montando triangulação (Critério de Delaunay):
 
-              //medir as distâncias d(P_i,P_j) entre todos os ptos
+        //medindo as distâncias d(P_i,P_j) entre todos os ptos:
+
+        for ( i = 0; i < n; i++) {
+          for (long j = 0; j < count; j++) {
+            d = sqrt(pow(x[i]-x[j],2)+pow(y[i]-y[j],2)+pow(z[i]-z[j],2));
+            if (d<delta_z*1.5) {
+              construct 
+            }
+          }
+
+        }
               /*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos
                   (ptos cuja distância é menor do que 1.5*delta_z)) */
               //encontrar ciclo de 4 vizinhos
