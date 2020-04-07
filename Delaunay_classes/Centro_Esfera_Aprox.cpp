@@ -47,6 +47,7 @@ namespace del {
 
     Centro[2] = (Esfera(Centro_0[], C[]) - Jacobiano[2][0]*(Centro[0] - Centro_0[0]) - Jacobiano[2][1]*(Centro[1] - Centro_0[1]))/Jacobiano[2][2];
 
+    float Raio = Esfera(Centro[], A[]);
   };
 
 
