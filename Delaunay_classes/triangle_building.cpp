@@ -1,6 +1,6 @@
 namespace del {
 
-  class triangulo_Delaunay {
+  class triangulo_Delaunay {       //classe que determina quais são os triangulos de Delaunay
   private:
     /* data */
 
@@ -16,7 +16,7 @@ namespace del {
       {A[0], A[1], A[2]},
       {B[0], B[1], B[2]}
     };
-    //procura ponto que seja vizinho comum de A e B - ponto C:
+    //procura ponto que seja vizinho comum de A e B - ponto C: <-------------------------- to be done!!
 
     //define triangulo ABC: candidato à triangulação de Delaunay
     float ABC[3][3]={
@@ -24,12 +24,21 @@ namespace del {
       {B[0], B[1], B[2]},
       {C[0], C[1], C[2]}
     };
+
     //calcula centro da esfera que circunscreve A, B e C. <------------------------ já escrito. Método de Newton
+    Find_Centro_esfera find_center_sphere_obj;      // cria objeto da classe Find_Centro_esfera,  a qual calcula o centro da esfera que circunscreve os pontos A,B e C
+        for (int j = 0; j < 3; j++) {
+          find_center_sphere_obj.A[j]= ABC[0][j];
+          find_center_sphere_obj.B[j]= ABC[1][j];       //faz passagem por valor dos pontos A, B e C para o objeto find_center_sphere_obj
+          find_center_sphere_obj.C[j]= ABC[2][j];
+        }
+
+
     float Centro_Circunf_ABC[3];
-    for (size_t i = 0; i < 3; i++) {
-      Centro_Circunf_ABC[i]= Find_Centro_esfera.centro[i];
+    for (int i = 0; i < 3; i++) {
+      Centro_Circunf_ABC[i]= find_center_sphere_obj.centro[i];
     }
-    float Raio = Find_Centro_esfera.Raio;
+    float Raio = find_center_sphere_obj.Raio;
     //procura pontos nas vizinhas de A, B e C que estejam dentro da Esfera:
 
           //SE (busca não retornar nenhum ponto) ENTÃO (triangulo é admitido na triangulação de Delaunay)

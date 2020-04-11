@@ -10,7 +10,7 @@ namespace del {
     /* data */
 
   public:
-    Find_Centro_esfera (arguments); //constructor
+    Find_Centro_esfera (); //constructor
 
     float Centro_0[3], A[3], B[3], C[3], Centro[3], delta_z;
     float Jacobiano [3][3];
