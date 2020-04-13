@@ -11,9 +11,9 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-#include "Delaunay_classes/catalogo_vizinhos.cpp";
+#include "Delaunay_classes/Vizinhanca.cpp"
 
-int main(){
+int main() {
 
         std::string filename; // cria objeto da classe string para armazenar string com o nome do arquivo de dados
 
@@ -21,37 +21,40 @@ int main(){
         std::cin >> filename;
         std::cout << "Nome do arquivo inserido:" << filename << '\n';
 
-        /* Another way */
-        std::ifstream inFile;
-        // Uma linha de arquivo é identificada pelo caracter '\n' (conhecido como quebra de linha)
-        // Se eu definir que a quebra de linha é agora o carater 'x', então "texto escrito axim" teria as linhas
-        // te
-        // to escrito a
-        // im
-        // portanto pensei que line é a linha do arquivo e coord é a linha da linha do arquivo
+        std::fstream file ( filename );
+        // se não conseguiu abrir o arquivo, retorna erro e para o programa.
+        if ( ! file.is_open() ) {
+          std::cout << "Arquivo não existente ou está sendo editado por outro programa." << std::endl;
+          return 1;
+        }
         std::string line;
         std::string coord;
         std::vector<float> ponto;
         std::vector<std::vector<float>> pontos;
         int num_linhas = 0;
-        inFile.open( filename );
-        if ( ! inFile ) {
-          std::cout << "Arquivo não existente ou está sendo editado por outro programa." << std::endl;
-          exit( 1 );
-        }
-        // ATENÇÃO! Em C++ "i" é um string e 'i' é um char.
-        // "isto é permitido" é string válida.
-        // 'isto não é permitido' não é um char!
-        
-        //passando dados do arquivo para arrays:
-        while ( std::getline( inFile, line, '\n' ) ) {
-          num_linhas += 1;
-          while ( std::getline( line, coord, ' ' ) ) {
-            ponto.push_back( std::stof( coord ) );
+        // loop para cada linha line do arquivo file
+        while ( getline( file, line ) ) {
+          num_linhas++;
+          // loop para cada caracter n da linha line
+          for ( auto n:line ) {
+            if ( n != ' ' ) {
+              // se não for espaço faz parte de uma coordenada
+              coord += n;
+            } else
+            if ( n == ' ' && coord != "" ) {
+              // se for espaço então acabou a coordenada
+              // adiciona a coordenada ao ponto
+              ponto.push_back( stof( coord ) );
+              coord = "";
+            }
           }
+          // acabou a leitura dos caracteres n da linha line, ou seja, já se conhece o ponto com suas coordenadas
+          // adiciona o ponto  a lista de pontos
           pontos.push_back( ponto );
-          ponto.clear();
         }
+        // encerra as operações com o arquivo
+        // esquecer esta parte pode proibir de outra rotina usar o arquivo (até mesmo do proprio sistema!)
+        file.close();
 
         //
         //
@@ -63,24 +66,9 @@ int main(){
         std::cout << "Total de pontos (num_linhas) do bloco de dados:" << num_linhas << std::endl;
 
         // catalogo de pontos inicia aqui
-        del::catalogo_vizinhos catalogo( pontos );
-        catalogo.define_raio_vizinhanca( 1.5 * delta_z );
-
-        // Inicia algum loop nos pontos do catalogo em busca de vizinhanças
-
-        //encontrando ponto mais próximo ao primeiro ponto da lista copiada:
-        float d, d_min, I_min;
-        d_min = 100;
-        for (i = 0; i < n; i++) {
-          d = sqrt(pow(x[0]-x[i],2)+pow(y[0]-y[i],2)+pow(z[0]-z[i],2));
-          if (d<d_min) {
-            d_min=d;
-            I_min=i;
-          }
-
-        //montando primeira aresta:
-        std::cout << "Primeira aresta encontrada:" << "(" x[0] << "," << y[0] << "," << z[0] << ")" << "----"
-                                                   << "(" x[I_min] << "," << y[I_min] << "," << z[I_min] << ")"  '\n';
+        del::Vizinhanca vizinhanca( pontos );
+        vizinhanca.definir_raio( 1.5 * delta_z );
+        std::vector<std::vector<std::vector<float>>> catalogo = vizinhanca.obter_catalogo_de_vizinhancas();
 
         //montando triangulação (Critério de Delaunay):
 
@@ -98,5 +86,6 @@ int main(){
         //leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 
         //repita até computar todas as faixas de dados
+        return 0;
 
   }
