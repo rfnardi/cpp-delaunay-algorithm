@@ -9,7 +9,7 @@ namespace del {
 
     //pega componentes do primeiro vetor do catálogo de ptos_vizinhos - ponto A:
     float A[3];
-    //Pega ponto mais próximo da lista de vizinhos - ponto B:
+    //Pega ponto mais próximo da lista de vizinhos - ponto B: <--------- falta determinar como ele vai econtrar este ponto
     float B[3];
     //define aresta AB:
     float AB[3][2]={
