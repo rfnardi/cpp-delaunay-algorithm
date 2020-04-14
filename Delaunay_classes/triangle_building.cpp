@@ -8,14 +8,19 @@ namespace del {
     triangulo_Delaunay ();
 
     //pega componentes do primeiro vetor do catálogo de ptos_vizinhos - ponto A:
-    float A[3];
-    //Pega ponto mais próximo da lista de vizinhos - ponto B: <--------- falta determinar como ele vai econtrar este ponto
-    float B[3];
+    //Pega o segundo ponto da lista de vizinhos de A - ponto B.
     //define aresta AB:
-    float AB[3][2]={
-      {A[0], A[1], A[2]},
-      {B[0], B[1], B[2]}
-    };
+    float AB[2][3];
+
+    for (size_t i = 0; i < 2; i++)
+    {
+      for (size_t j = 0; j < 3; j++)
+      {
+        AB[i][j]=catalogo[0][i][j];
+      }
+      
+    }
+    
     //procura ponto que seja vizinho comum de A e B - ponto C: <-------------------------- to be done!!
 
     //define triangulo ABC: candidato à triangulação de Delaunay
