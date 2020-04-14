@@ -12,7 +12,7 @@ namespace del {
     float y;
     float z;
     
-    point operator ++ (point P)
+    point operator + (point P)
     {
       point new_point;
       new_point.p[0] = p[0] + P.p[0];
@@ -34,10 +34,16 @@ namespace del {
       }
     }
 
+    float distancia (point X, point Y)
+    {
+      float d=sqrt(pow(X.p[0]-Y.p[0], 2 ) + pow(X.p[1]-Y.p[1], 2 ) + pow(X.p[2]-Y.p[2], 2 ))
+      return d;
+    }
+
     ~point();
   };
   
-  point::point(/* args */)
+  point::point()
   {
   }
   
@@ -55,7 +61,7 @@ namespace del {
   public:
     triangulo_Delaunay ();
 
-    size_t k, VIZ_A, VIZ_B;
+    long unsigned int k, VIZ_A, VIZ_B, VIZ_C;
 
     del::point A;
 
@@ -93,6 +99,8 @@ namespace del {
     }
     
     del::Find_Centro_esfera find_center_sphere_obj; //cria objeto da classe que calcula centro da esfera que circunscreve 3 pontos
+    del::point Centro_Circunf_ABC; //variável para armazenar o centro da esfera que circunscreve os pontos A, B e C.
+    float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Find_Centro_esfera
 
     //define aresta AB:
     float AB[2][3];
@@ -120,7 +128,7 @@ namespace del {
                 for (size_t col_B = 0; col_B < 3; col_B++)
                 {
                   P2.p[j] = catalogo[VIZ_B][linha_B][col_B];
-                  if (P1 == P2)
+                  if ( (P1 == P2) && (P1 != A) && (P1 != B) ) //P1 == P2 é o PONTO C !!!
                   {
                     //define triangulo ABC: candidato à triangulação de Delaunay
                     float ABC[3][3]={
@@ -130,11 +138,64 @@ namespace del {
                     };
                     
                     for (int j = 0; j < 3; j++) {
-                      find_center_sphere_obj.A[j]= ABC[0][j];
-                      find_center_sphere_obj.B[j]= ABC[1][j];       //faz passagem por valor dos pontos A, B e C para o objeto find_center_sphere_obj
+                      find_center_sphere_obj.A[j]= ABC[0][j];    //faz passagem por valor dos pontos A, B e C
+                      find_center_sphere_obj.B[j]= ABC[1][j];       // para o objeto find_center_sphere_obj
                       find_center_sphere_obj.C[j]= ABC[2][j];
                     }
-                    
+                    for (int i = 0; i < 3; i++) //encontra centro da esfera
+                      {
+                        Centro_Circunf_ABC.p[i]= find_center_sphere_obj.centro[i];
+                      }
+                    Raio = find_center_sphere_obj.Raio; //guarda raio da esfera
+
+                    for (size_t k = 0; k < catalogo.size(); k++) // encontra vizinhança do ponto C
+                      {
+                        del::point P;
+                        P.p[0]=catalogo[k][0][0];
+                        P.p[1]=catalogo[k][0][1];
+                        P.p[2]=catalogo[k][0][2];
+                        if (P1 == P)
+                          {
+                            N_C = k;
+                          }                    
+                      }
+                        //procurando pontos da vizinhança de A dentro da esfera:
+                        for (size_t i = 2; i < catalogo[VIZ_A].size(); i++) 
+                        {
+                          P.p[0]=catalogo[VIZ_A][i][0];
+                          P.p[1]=catalogo[VIZ_A][i][1];
+                          P.p[2]=catalogo[VIZ_A][i][2];
+                          d= distancia(P , Centro_Circunf_ABC);
+                          if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
+                          {
+                            break;
+                          }
+                          
+                        }
+                        //procurando pontos da vizinhança de B dentro da esfera:
+                        for (size_t i = 1; i < catalogo[VIZ_B].size(); i++)
+                        {
+                          P.p[0]=catalogo[VIZ_B][i][0];
+                          P.p[1]=catalogo[VIZ_B][i][1];
+                          P.p[2]=catalogo[VIZ_B][i][2];
+                          d= distancia(P , Centro_Circunf_ABC);
+                          if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
+                          {
+                            break;
+                          }
+                        }
+                        //procurando pontos da vizinhança de C dentro da esfera:
+                        for (size_t i = 1; i < catalogo[VIZ_C].size(); i++)
+                        {
+                          P.p[0]=catalogo[VIZ_C][i][0];
+                          P.p[1]=catalogo[VIZ_C][i][1];
+                          P.p[2]=catalogo[VIZ_C][i][2];
+                          d= distancia(P , Centro_Circunf_ABC);
+                          if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
+                          {
+                            break;
+                          }
+                        }
                   }
                   
                 }
@@ -151,18 +212,6 @@ namespace del {
         }
     
     
-
-    //calcula centro da esfera que circunscreve A, B e C. <------------------------ já escrito. Método de Newton
-    del::Find_Centro_esfera find_center_sphere_obj;      // cria objeto da classe Find_Centro_esfera,  a qual calcula o centro da esfera que circunscreve os pontos A,B e C
-        
-
-
-    float Centro_Circunf_ABC[3];
-    for (int i = 0; i < 3; i++) 
-    {
-      Centro_Circunf_ABC[i]= find_center_sphere_obj.centro[i];
-    }
-    float Raio = find_center_sphere_obj.Raio;
     //procura pontos nas vizinhanças de A, B e C que estejam dentro da Esfera:
     for (int i = 0; i < count; i++)
     {
