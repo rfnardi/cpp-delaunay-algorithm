@@ -69,7 +69,7 @@ namespace del
             bool same_curl (triangle_Delaunay T ) //ACHTUNG1! T muss schon ein orientierte Dreieck sein 
             {                                       //um diese Funktion richtig funktioniert.
                 if ( (A==T.B)&&(B == T.A)           //ACHTUNG2: T muss auch ein Dreieck sein 
-                    ||(A==T.A)&&(B == T.C)         //der mit der anderer Dreieck ein gemeine Kante hat.
+                    ||(A==T.A)&&(B == T.C)          //der mit der anderer Dreieck eine gemeine Kante hat.
                     ||(A==T.C)&&(B == T.B)
                     )
                 {
@@ -80,7 +80,22 @@ namespace del
                     swap();
                     return true;
                 }
+            }
+
+            point Normal ()
+            {
+                point X = B - A;
+                point Y = C - A;
                 
+                float N[3] = (  X.p[1]*Y.p[2]-X.p[2]*Y.p[1] , //N é calculado como um produto vetorial
+                                X.p[2]*Y.p[0]-X.p[0]*Y.p[2] ,
+                                X.p[0]*Y.p[1]-X.p[1]*Y.p[0]
+                             );
+                float norm = sqqrt(pow(N[0],2)+pow(N[1],2)+pow(N[2],2));
+                //normalização de N:
+                N[0]=N[0]/norm;
+                N[1]=N[1]/norm;
+                N[2]=N[2]/norm;
             }
 
 

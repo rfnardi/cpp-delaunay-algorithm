@@ -30,6 +30,16 @@ namespace del {
       return new_point;
     }
 
+    point operator - (del::point P)
+    {
+      point new_point;
+      new_point.p[0] = p[0] - P.p[0];
+      new_point.p[1] = p[1] - P.p[1];
+      new_point.p[2] = p[2] - P.p[2];
+      
+      return new_point;
+    }
+
     bool operator == (point P)
     {
       if (p[0] == P.p[0] && p[1] == P.p[1] && p[2] == P.p[2])
