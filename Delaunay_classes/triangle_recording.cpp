@@ -16,7 +16,7 @@ namespace del
             
             bool contem (point P)
             {
-                if (P==A || P==B || P==C)
+                if (P==this->A || P==this->B || P==this->C)
                 {
                     return true;
                 }
@@ -44,17 +44,17 @@ namespace del
             }
             void swap () //Austauscht die Orientierung einer Kante 
             {
-                del::point P = A;
-                A = B;
-                B = P;
+                del::point P = this->A;
+                this->A = this->B;
+                this->B = P;
             }
             
             bool operator == (triangle_Delaunay T) //Gleichwertigkeit zwischen zwei Delaunay Dreiecke 
             {
 
-                if (   ((A == T.A) && (B == T.B) && (C == T.C))
-                    || ((A == T.B) && (B == T.C) && (C == T.A))
-                    || ((A == T.C) && (B == T.A) && (C == T.B))
+                if (   ((this->A == T.A) && (this->B == T.B) && (this->C == T.C))
+                    || ((this->A == T.B) && (this->B == T.C) && (this->C == T.A))
+                    || ((this->A == T.C) && (this->B == T.A) && (this->C == T.B))
                     )
                 {
                     return true;
@@ -67,9 +67,9 @@ namespace del
 
             triangle_Delaunay same_curl (triangle_Delaunay T ) //ACHTUNG1! T muss schon ein orientierte Dreieck sein 
             {                                       //um diese Funktion richtig funktioniert.
-                if ( (A==T.B)&&(B == T.A)           //ACHTUNG2: T muss auch ein Dreieck sein 
-                    ||(A==T.A)&&(B == T.C)          //der mit der anderer Dreieck eine gemeine Kante hat.
-                    ||(A==T.C)&&(B == T.B)
+                if ( (this->A==T.B)&&(this->B == T.A)           //ACHTUNG2: T muss auch ein Dreieck sein 
+                    ||(this->A==T.A)&&(this->B == T.C)          //der mit der anderer Dreieck eine gemeine Kante hat.
+                    ||(this->A==T.C)&&(this->B == T.B)
                     )
                 {
                     return this ; //quero retornar o próprio triangulo. does it work???????
@@ -83,8 +83,8 @@ namespace del
 
             del::point Normal ()
             {
-                del::point X = B - A;
-                del::point Y = C - A;
+                del::point X = this->B - this->A;
+                del::point Y = this->C - this->A;
                 
                 float N[3] = (  X.p[1]*Y.p[2]-X.p[2]*Y.p[1] , //N é calculado como um produto vetorial
                                 X.p[2]*Y.p[0]-X.p[0]*Y.p[2] ,
