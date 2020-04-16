@@ -28,9 +28,9 @@ namespace del
 
             bool edge_sharing (triangle_Delaunay T)
             {
-                if (    (contem(T.A)&&contem(T.B))
-                        ||(contem(T.A)&&contem(T.C))
-                        ||(contem(T.B)&&contem(T.C))
+                if (    (this->contem(T.A)&&this->contem(T.B))
+                        ||(this->contem(T.A)&&this->contem(T.C))
+                        ||(this->contem(T.B)&&this->contem(T.C))
                     )
                 {
                     return true;
@@ -76,7 +76,7 @@ namespace del
                 }
                 else
                 {
-                    swap();
+                    this->swap();
                     return this;
                 }
             }
