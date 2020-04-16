@@ -13,8 +13,7 @@ namespace del
             del::point B;
             del::point C;
 
-            std::vector< del::triangle_Delaunay> Triangulation; //Speichert alle Delaunay Dreiecke
-
+            
             bool contem (point P)
             {
                 if (P==A || P==B || P==C)
@@ -82,10 +81,10 @@ namespace del
                 }
             }
 
-            point Normal ()
+            del::point Normal ()
             {
-                point X = B - A;
-                point Y = C - A;
+                del::point X = B - A;
+                del::point Y = C - A;
                 
                 float N[3] = (  X.p[1]*Y.p[2]-X.p[2]*Y.p[1] , //N é calculado como um produto vetorial
                                 X.p[2]*Y.p[0]-X.p[0]*Y.p[2] ,
@@ -96,6 +95,14 @@ namespace del
                 N[0]=N[0]/norm;
                 N[1]=N[1]/norm;
                 N[2]=N[2]/norm;
+
+                del::point NORMAL;
+                NORMAL.p[0]=N[0];
+                NORMAL.p[1]=N[1];
+                NORMAL.p[2]=N[2];
+
+                return NORMAL;
+
             }
 
 
@@ -109,6 +116,29 @@ namespace del
         triangle_Delaunay::~triangle_Delaunay()
         {
         }
+
+        
+        class stl_module
+        {
+        private:
+            /* data */
+        public:
+            stl_module(/* args */);
+            ~stl_module();
+
+            del::Point Normal;
+            del::triangle_Delaunay Triangle;
+            
+        };
+        
+        stl_module::stl_module(/* args */)
+        {
+        }
+        
+        stl_module::~stl_module()
+        {
+        }
+        
 
 
 

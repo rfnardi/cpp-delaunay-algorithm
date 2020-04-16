@@ -264,8 +264,9 @@ namespace del {
                         T.A = A;
                         T.B = B;
                         T.C = C;
-                        //proceder com ordenação dos pontos (seguindo regra da mão direita)  <--- no arquivo principal
-                        //determinar vetor normal (produto vetorial normalizado)             <--- no arquivo principal
+
+                        return T;
+                        
                         
                         
                     
