@@ -65,19 +65,19 @@ namespace del
                 }
             }
 
-            bool same_curl (triangle_Delaunay T ) //ACHTUNG1! T muss schon ein orientierte Dreieck sein 
+            triangle_Delaunay same_curl (triangle_Delaunay T ) //ACHTUNG1! T muss schon ein orientierte Dreieck sein 
             {                                       //um diese Funktion richtig funktioniert.
                 if ( (A==T.B)&&(B == T.A)           //ACHTUNG2: T muss auch ein Dreieck sein 
                     ||(A==T.A)&&(B == T.C)          //der mit der anderer Dreieck eine gemeine Kante hat.
                     ||(A==T.C)&&(B == T.B)
                     )
                 {
-                    return true;
+                    return this ; //quero retornar o próprio triangulo. does it work???????
                 }
                 else
                 {
                     swap();
-                    return true;
+                    return this;
                 }
             }
 

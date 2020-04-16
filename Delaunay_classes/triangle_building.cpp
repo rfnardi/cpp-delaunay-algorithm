@@ -79,7 +79,7 @@ namespace del {
       public:
         triangle_building ();
 
-        triangle_Delaunay point_based_triangle_building (point A)
+        triangle_Delaunay point_based_triangle_building (del::point A)
         {
                     long unsigned int k, VIZ_A, VIZ_B, VIZ_C;
 
@@ -253,7 +253,7 @@ namespace del {
                           
                           
 
-                          
+                          //falta contemplar caso em que nenhum ponto C satisfaz a condição de Delaunay!!!!!!!!!!!!!!
 
 
 

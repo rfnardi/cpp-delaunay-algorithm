@@ -97,6 +97,40 @@ int main(){
         //guardando primeiro módulo do arquivo stl:
         Triangulation_with_normals.push_back(Module1);
         
+        while (/* Catalogo is not empty */)
+        {
+          /*pega último triangulo incluído em "Triangulation_w_normals" --> */
+          triangle_Delaunay T_last = Triangulation_with_normals[Triangulation_with_normals.size()-1].Triangle;
+            /* pega aresta por aresta deste triangulo -->*/
+                      
+          del::stl_module New_Module;
+          del::triangle_building Build; 
+          del::triangle_Delaunay New_Triangle;
+          del::point New_Normal;
+          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.B);
+          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
+          {
+            New_Triangle.same_curl(T_last);
+            New_NOrmal=New_Triangle.Normal()
+            Triangulation_with_normals.push_back(New_Triangle);
+          }
+
+          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.C);
+          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
+          {
+            Triangulation_with_normals.push_back(New_Triangle);
+          }
+          
+          New_triangle = Build.edge_based_triangle_building_obj (T_last.B, T_last.C);
+          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
+          {
+            Triangulation_with_normals.push_back(New_Triangle);
+          }
+            /*procura ponto no catalogo que seja vizinho comum dos dois pontos de cada aresta -->
+            monta triangulo com este ponto e testa a validade do critério de Delaunay*/
+             
+
+        }
         
 
         
