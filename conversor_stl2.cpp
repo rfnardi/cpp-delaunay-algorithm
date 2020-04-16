@@ -109,23 +109,33 @@ int main(){
           del::point New_Normal;
           New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.B);
           if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-          {
-            New_Triangle.same_curl(T_last);
-            New_NOrmal=New_Triangle.Normal()
-            Triangulation_with_normals.push_back(New_Triangle);
-          }
+              {
+                New_Triangle.same_curl(T_last);
+                New_Normal = New_Triangle.Normal();
+                New_Module.Normal = New_Normal;
+                New_Module.Triangle = New_Triangle;
+                Triangulation_with_normals.push_back(New_Module);
+              }
 
           New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.C);
           if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-          {
-            Triangulation_with_normals.push_back(New_Triangle);
-          }
+              {
+                New_Triangle.same_curl(T_last);
+                New_Normal = New_Triangle.Normal();
+                New_Module.Normal = New_Normal;
+                New_Module.Triangle = New_Triangle;
+                Triangulation_with_normals.push_back(New_Module);
+              }
           
           New_triangle = Build.edge_based_triangle_building_obj (T_last.B, T_last.C);
           if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-          {
-            Triangulation_with_normals.push_back(New_Triangle);
-          }
+              {
+                New_Triangle.same_curl(T_last);
+                New_Normal = New_Triangle.Normal();
+                New_Module.Normal = New_Normal;
+                New_Module.Triangle = New_Triangle;
+                Triangulation_with_normals.push_back(New_Module);
+              }
             /*procura ponto no catalogo que seja vizinho comum dos dois pontos de cada aresta -->
             monta triangulo com este ponto e testa a validade do critério de Delaunay*/
              

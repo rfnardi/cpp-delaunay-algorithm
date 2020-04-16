@@ -72,7 +72,7 @@ namespace del
                     ||(this->A==T.C)&&(this->B == T.B)
                     )
                 {
-                    return this ; //quero retornar o próprio triangulo. does it work???????
+                    return this; 
                 }
                 else
                 {

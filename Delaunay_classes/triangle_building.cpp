@@ -12,18 +12,18 @@ namespace del {
 
         point operator = (del::point P) //asignment operator
         {
-          p[0]=P.p[0];
-          p[1]=P.p[1];
-          p[2]=P.p[2];
+          this->p[0]=P.p[0];
+          this->p[1]=P.p[1];
+          this->p[2]=P.p[2];
 
         }
         
         point operator + (del::point P)
         {
           point new_point;
-          new_point.p[0] = p[0] + P.p[0];
-          new_point.p[1] = p[1] + P.p[1];
-          new_point.p[2] = p[2] + P.p[2];
+          new_point.p[0] = this->p[0] + P.p[0];
+          new_point.p[1] = this->p[1] + P.p[1];
+          new_point.p[2] = this->p[2] + P.p[2];
           
           return new_point;
         }
@@ -31,16 +31,16 @@ namespace del {
         point operator - (del::point P)
         {
           point new_point;
-          new_point.p[0] = p[0] - P.p[0];
-          new_point.p[1] = p[1] - P.p[1];
-          new_point.p[2] = p[2] - P.p[2];
+          new_point.p[0] = this->p[0] - P.p[0];
+          new_point.p[1] = this->p[1] - P.p[1];
+          new_point.p[2] = this->p[2] - P.p[2];
           
           return new_point;
         }
 
         bool operator == (point P)
         {
-          if (p[0] == P.p[0] && p[1] == P.p[1] && p[2] == P.p[2])
+          if (this->p[0] == P.p[0] && this->p[1] == P.p[1] && this->p[2] == P.p[2])
           {
             return true;
           }
@@ -52,7 +52,7 @@ namespace del {
 
         float distancia ( point Y) //calcula a distância do ponto instanciado até um outro ponto informado como arguemento dessa função
         {
-          float d=sqrt(pow(p[0]-Y.p[0], 2 ) + pow(p[1]-Y.p[1], 2 ) + pow(p[2]-Y.p[2], 2 ));
+          float d = sqrt(pow(p[0]-Y.p[0], 2 ) + pow(p[1]-Y.p[1], 2 ) + pow(p[2]-Y.p[2], 2 ));
           return d;
         }
 
@@ -260,7 +260,7 @@ namespace del {
                         }while(!encontrou);
 
                         //triangulo ABC é admitido na triangulação
-                        triangle_Delaunay T;
+                        del::triangle_Delaunay T;
                         T.A = A;
                         T.B = B;
                         T.C = C;
