@@ -99,9 +99,12 @@ int main(){
               /*esta condição abaixo para o loop while não vai funcionar. 
               Como saber que um ponto já esgotou seus triangulos??? 
               Alternativa: construir triangulos a partir dos edges
-              do convex_hull dinâmico até que todos os edges do convex_hull 
+              do convex_hull dinâmico até que todos esses edges  
               não fornecam novos triangulos. Quando isso ocorrer, o convex hull 
               é finalizado e identificado como a borda "de facto" da região*/
+
+        //inicia convex_hull
+        del::convex_hull convex_hull_obj;
         while (/* Catalogo is not empty */) 
         {
           /*pega último triangulo incluído em "Triangulation_w_normals" --> */
@@ -112,35 +115,31 @@ int main(){
           del::triangle_building Build; 
           del::triangle_Delaunay New_Triangle;
           del::point New_Normal;
-          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.B);
-          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-              {
-                New_Triangle.same_curl(T_last);
-                New_Normal = New_Triangle.Normal();
-                New_Module.Normal = New_Normal;
-                New_Module.Triangle = New_Triangle;
-                Triangulation_with_normals.push_back(New_Module);
-              }
+          bool not_found;
 
-          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.C);
-          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-              {
-                New_Triangle.same_curl(T_last);
-                New_Normal = New_Triangle.Normal();
-                New_Module.Normal = New_Normal;
-                New_Module.Triangle = New_Triangle;
-                Triangulation_with_normals.push_back(New_Module);
-              }
+          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.B);
+          New_Triangle.same_curl(T_last);
+          New_Normal = New_Triangle.Normal();
+          New_Module.Normal = New_Normal;
+          New_Module.Triangle = New_Triangle;
+          not_found = true;
+          //varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
+          for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
+                {
+                  if (Triangulation_with_normals[i] == New_Module)
+                  {
+                    /* descarta triangulo e o modulo e sai do loop */
+                    not_found = false;
+                    break;
+                  }
+                  else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
+                  {
+                    Triangulation_with_normals.push_back(New_Module);
+                  }
+                  
+                }
+
           
-          New_triangle = Build.edge_based_triangle_building_obj (T_last.B, T_last.C);
-          if (/* triangulo encontrado não é trivial e ainda não consta no Triangles_with_normals*/)
-              {
-                New_Triangle.same_curl(T_last);
-                New_Normal = New_Triangle.Normal();
-                New_Module.Normal = New_Normal;
-                New_Module.Triangle = New_Triangle;
-                Triangulation_with_normals.push_back(New_Module);
-              }
             
              
 
