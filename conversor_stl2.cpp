@@ -67,7 +67,7 @@ int main(){
         del::catalogo_vizinhos catalogo( pontos );
         catalogo.define_raio_vizinhanca( 1.5 * delta_z );
 
-        // Inicia algum loop nos pontos do catalogo em busca de vizinhanças
+        //Chama método da classe catalogo que monta as vizinhanças
 
         //Inicia triangulação
         std::cout<<"Iniciando triangulação."<<'\n';
@@ -76,28 +76,33 @@ int main(){
 
         del::triangle_building triangle_building_obj;
 
-        del::point A;
+        del::point A; //ponto mais alto do sólido (maior z)
 
         A.p[0] = catalogo[0][0][0];
         A.p[1] = catalogo[0][0][1];
         A.p[2] = catalogo[0][0][2];
 
-        triangle_Delaunay T0 = triangle_building_obj.point_based_triangle_building(A);
+        del::triangle_Delaunay T_0 = triangle_building_obj.point_based_triangle_building(A);
 
         //orientando corretamente para cima a normal do primeiro triangulo:
-        if (T0.Normal.p[2]<0)
+        if (T_0.Normal.p[2]<0)
         {
-            del::T0.swap();
+            del::T_0.swap();
         }
         
-        del::stl_module Module1;
-        Module1.Normal = T0.Normal;
-        Module1.Triangle = T0;
+        del::stl_module Module_0;
+        Module_0.Normal = T_0.Normal;
+        Module_0.Triangle = T_0;
 
         //guardando primeiro módulo do arquivo stl:
-        Triangulation_with_normals.push_back(Module1);
-        
-        while (/* Catalogo is not empty */)
+        Triangulation_with_normals.push_back(Module_0);
+              /*esta condição abaixo para o loop while não vai funcionar. 
+              Como saber que um ponto já esgotou seus triangulos??? 
+              Alternativa: construir triangulos a partir dos edges
+              do convex_hull dinâmico até que todos os edges do convex_hull 
+              não fornecam novos triangulos. Quando isso ocorrer, o convex hull 
+              é finalizado e identificado como a borda "de facto" da região*/
+        while (/* Catalogo is not empty */) 
         {
           /*pega último triangulo incluído em "Triangulation_w_normals" --> */
           triangle_Delaunay T_last = Triangulation_with_normals[Triangulation_with_normals.size()-1].Triangle;
@@ -136,11 +141,10 @@ int main(){
                 New_Module.Triangle = New_Triangle;
                 Triangulation_with_normals.push_back(New_Module);
               }
-            /*procura ponto no catalogo que seja vizinho comum dos dois pontos de cada aresta -->
-            monta triangulo com este ponto e testa a validade do critério de Delaunay*/
+            
              
 
-        }
+        }//end while: catálogo está vazio <-------- não vai funcionar
         
 
         

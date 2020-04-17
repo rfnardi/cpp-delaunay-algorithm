@@ -136,7 +136,7 @@ namespace del {
                           {
                             for (size_t j = 0; j < 3; j++)
                             {
-                              AB[i][j]=catalogo[N_A][i][j];
+                              AB[i][j]=catalogo[VIZ_A][i][j];
                             }
                             
                           }
@@ -183,7 +183,7 @@ namespace del {
                                           P.p[2]=catalogo[k][0][2];
                                           if (P1 == P)
                                             {
-                                              N_C = k;
+                                              VIZ_C = k;
                                             }                    
                                         }
                                         //procurando pontos da vizinhança de A dentro da esfera:
@@ -253,8 +253,8 @@ namespace del {
                           
                           
 
-                          //falta contemplar caso em que nenhum ponto C satisfaz a condição de Delaunay!!!!!!!!!!!!!!
-
+                          
+                          
 
 
                         }while(!encontrou);
@@ -315,7 +315,7 @@ namespace del {
                     del::Find_Centro_esfera find_center_sphere_obj; //cria objeto da classe que calcula centro da esfera que circunscreve 3 pontos
                     del::point Centro_Circunf_ABC; //variável para armazenar o centro da esfera que circunscreve os pontos A, B e C.
                     float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Find_Centro_esfera
-                    bool encontrou;
+                    bool encontrou, kein_Dreieck_gefunden;
                     float d;
                     float ABC[3][3]; //armazena os 3 pontos A, B e C : candidatos a triangulo de Delaunay
 
@@ -376,7 +376,7 @@ namespace del {
                                           P.p[2]=catalogo[k][0][2];
                                           if (P1 == P)
                                             {
-                                              N_C = k;
+                                              VIZ_C = k;
                                             }                    
                                         }
                                         //procurando pontos da vizinhança de A dentro da esfera:
@@ -446,19 +446,36 @@ namespace del {
                           
                           
 
-                          
+                          //contemplando caso em que nenhum ponto C satisfaz a condição de Delaunay:
+                          if ((linha_A == catalogo[VIZ_A].size()-1) && (linha_B == catalogo[VIZ_B].size()-1) && (!encontrou))
+                          {
+                            kein_Dreieck_gefunden = true;
+                            del::triangle_Delaunay T;
+                            del::point Origem;
+                            Origem.p[0]=0;
+                            Origem.p[1]=0;
+                            Origem.p[2]=0;
+                            T.A = Origem;
+                            T.B = Origem;
+                            T.C = Origem;
+                            break;
+                          }
 
 
 
                         }while(!encontrou);
 
                         //triangulo ABC é admitido na triangulação
-                        triangle_Delaunay T;
-                        T.A = A;
-                        T.B = B;
-                        T.C = C;
-                        //proceder com ordenação dos pontos (seguindo regra da mão direita)  <--- no arquivo principal
-                        //determinar vetor normal (produto vetorial normalizado)             <--- no arquivo principal
+                        if (!kein_Dreieck_gefunden)
+                        {
+                          triangle_Delaunay T;
+                          T.A = A;
+                          T.B = B;
+                          T.C = C;
+                        }
+                        
+                        
+                        return T;
                         
                         
                     

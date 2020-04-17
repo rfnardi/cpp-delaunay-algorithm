@@ -86,7 +86,7 @@ namespace del
                 del::point X = this->B - this->A;
                 del::point Y = this->C - this->A;
                 
-                float N[3] = (  X.p[1]*Y.p[2]-X.p[2]*Y.p[1] , //N é calculado como um produto vetorial
+                float N[3] = (  X.p[1]*Y.p[2]-X.p[2]*Y.p[1] , //N é calculado como o produto vetorial X x Y normalizado
                                 X.p[2]*Y.p[0]-X.p[0]*Y.p[2] ,
                                 X.p[0]*Y.p[1]-X.p[1]*Y.p[0]
                              );
