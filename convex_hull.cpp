@@ -6,10 +6,13 @@ namespace del
         /* data */
     public:
         edge(/* args */);
+        {
+            this->really_a_convex_hull_member = false;
+        }
         ~edge();
 
-        del::point A;
-        del::point B;
+        del::point first_point;
+        del::point second_point;
         
         bool really_a_convex_hull_member;
 

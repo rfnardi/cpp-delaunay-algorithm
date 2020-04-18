@@ -96,75 +96,98 @@ int main(){
 
         //guardando primeiro módulo do arquivo stl:
         Triangulation_with_normals.push_back(Module_0);
-              /*esta condição abaixo para o loop while não vai funcionar. 
-              Como saber que um ponto já esgotou seus triangulos??? 
-              Alternativa: construir triangulos a partir dos edges
-              do convex_hull dinâmico até que todos esses edges  
-              não fornecam novos triangulos. Quando isso ocorrer, o convex hull 
-              é finalizado e identificado como a borda "de facto" da região*/
-
+              
         //inicia convex_hull
         del::convex_hull convex_hull_obj;
-        while (/* Catalogo is not empty */) 
+
+        //constrói primeiros edges a partir do T_0 e os armazena no convex_hull_obj
+        del::edge AB;
+        AB.first_point = Module_0.Triangle.A;
+        AB.second_point = Module_0.Triangle.B;
+        convex_hull_obj.push_back(AB);
+
+        del::edge BC;
+        BC.first_point = Module_0.Triangle.B;
+        BC.second_point = Module_0.Triangle.C;
+        convex_hull_obj.push_back(BC);
+
+        del::edge CA;
+        CA.first_point = Module_0.Triangle.C;
+        CA.second_point = Module_0.Triangle.A;
+        convex_hull_obj.push_back(CA);
+
+        del::stl_module New_Module;
+        del::triangle_building Build; 
+        del::triangle_Delaunay New_Triangle;
+        del::point New_Normal;
+        bool not_found;
+        del::edge New_Edge_1;
+        del::edge New_Edge_2;
+
+        del::point Origem;
+        Origem.p[0]=0;
+        Origem.p[1]=0;
+        Origem.p[2]=0;
+
+        while (/* convex_hull still have 'bool really_a_convex_hull_member = false' edges*/) 
         {
-          /*pega último triangulo incluído em "Triangulation_w_normals" --> */
-          triangle_Delaunay T_last = Triangulation_with_normals[Triangulation_with_normals.size()-1].Triangle;
-            /* pega aresta por aresta deste triangulo -->*/
+          /*varre convex_hull testando really_a_convex_hull_member para cada edge*/
+          del::edge working_edge = convex_hull_obj[i];
+
+          New_Triangle = Build.edge_based_triangle_building_obj (working_edge);
+          if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem)
+          {
+              working_edge.really_a_convex_hull_member = true;
+          }
+          if (working_edge.really_a_convex_hull_member=false)
+          {
+              
+              //extraindo os dois edges do New_Triangle:
+              New_Edge_1.first_point = ;
+              New_Edge_1.second_point = ;           //to be done!!!!!!!!
+              New_Edge_2.first_point = ;
+              New_Edge_2.second_point = ;
+
+              /*se achou triangulo, então deve apagar do convex_hull 
+              o edge que deu base para sua construção 
+              e inserir os outros 2 edges do New_Triangle no convex_hull: */
+              convex_hull.erase(i);
+              convex_hull.insert(i,New_Edge_2);
+              convex_hull.insert(i,New_Edge_1);
+
+              New_Triangle.same_curl(/* triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados*/);
+              New_Normal = New_Triangle.Normal();
+              New_Module.Normal = New_Normal;
+              New_Module.Triangle = New_Triangle;
+              not_found = true;
+              //varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
+              for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
+                    {
+                      if (Triangulation_with_normals[i] == New_Module)
+                      {
+                        /* descarta triangulo e o modulo e sai do loop */
+                        not_found = false;
+                        break;
+                      }
+                      else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
+                      {
+                        Triangulation_with_normals.push_back(New_Module);
+                      }
                       
-          del::stl_module New_Module;
-          del::triangle_building Build; 
-          del::triangle_Delaunay New_Triangle;
-          del::point New_Normal;
-          bool not_found;
-
-          New_triangle = Build.edge_based_triangle_building_obj (T_last.A, T_last.B);
-          New_Triangle.same_curl(T_last);
-          New_Normal = New_Triangle.Normal();
-          New_Module.Normal = New_Normal;
-          New_Module.Triangle = New_Triangle;
-          not_found = true;
-          //varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
-          for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
-                {
-                  if (Triangulation_with_normals[i] == New_Module)
-                  {
-                    /* descarta triangulo e o modulo e sai do loop */
-                    not_found = false;
-                    break;
-                  }
-                  else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
-                  {
-                    Triangulation_with_normals.push_back(New_Module);
-                  }
-                  
-                }
-
+                    }
+          }
           
-            
+          i++;
+          if (i==convex_hull.size())
+          {
+            i=0;
+          }
+          
+          
              
 
-        }//end while: catálogo está vazio <-------- não vai funcionar
+        }//end while: 
         
-
-        
-
-
-        
-        //proceder com ordenação dos pontos (seguindo regra da mão direita)  <--- no arquivo principal
-        //determinar vetor normal (produto vetorial normalizado)             <--- no arquivo principal
-
-        //montando triangulação (Critério de Delaunay):
-
-        
-              /*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos
-                  (ptos cuja distância é menor do que 1.5*delta_z)) */
-              //encontrar ciclo de 4 vizinhos
-                  //qual é o Critério para determinar se 4 pontos formam um ciclo de vizinhos?
-                        //----> não há nenhum ponto interno ao ciclo
-              //aplicar Critério de Delaunay
-              //determinar convex hull (borda)
-
-
 
         //leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 

@@ -276,12 +276,13 @@ namespace del {
 
         } //Fim do método "point_based_triangle_building"
 
-        triangle_Delaunay edge_based_triangle_building (del::point A, del::point B)
+        triangle_Delaunay edge_based_triangle_building (del::edge Edge)
         {
 
                     long unsigned int k, VIZ_A, VIZ_B, VIZ_C;
 
-                    del::point A;
+                    del::point A = Edge.first_point;
+                    del::point B = Edge.second_point
 
                     //encontra vizinhança do ponto A:
                     for (size_t k = 0; k < catalogo.size(); k++)
