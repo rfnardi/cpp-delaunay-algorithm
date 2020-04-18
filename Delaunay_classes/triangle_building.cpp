@@ -276,8 +276,10 @@ namespace del {
 
         } //Fim do método "point_based_triangle_building"
 
-        triangle_Delaunay edge_based_triangle_building (del::edge Edge)
-        {
+        
+        triangle_Delaunay edge_based_triangle_building (del::edge Edge) 
+        {       
+                //é necessário alterar este método de modo a gerar 2 triangulos por edge e não apenas 1  !!!!!!!
 
                     long unsigned int k, VIZ_A, VIZ_B, VIZ_C;
 

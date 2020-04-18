@@ -129,15 +129,17 @@ int main(){
         Origem.p[1]=0;
         Origem.p[2]=0;
 
-        while (/* convex_hull still have 'bool really_a_convex_hull_member = false' edges*/) 
+        long unsigned int J =0;               
+        while (i<convex_hull.size() /* convex_hull still have 'bool really_a_convex_hull_member = false' edges*/) 
         {
           /*varre convex_hull testando really_a_convex_hull_member para cada edge*/
-          del::edge working_edge = convex_hull_obj[i];
+          del::edge working_edge = convex_hull_obj[J];
 
           New_Triangle = Build.edge_based_triangle_building_obj (working_edge);
-          if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem)
+          if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem) //triângulo construído é trivial
           {
               working_edge.really_a_convex_hull_member = true;
+              J++; //apenas prossegue na varredura do convex_hull quando a aresta working_edge não dá origem a outro triangulo
           }
           if (working_edge.really_a_convex_hull_member=false)
           {
@@ -151,9 +153,9 @@ int main(){
               /*se achou triangulo, então deve apagar do convex_hull 
               o edge que deu base para sua construção 
               e inserir os outros 2 edges do New_Triangle no convex_hull: */
-              convex_hull.erase(i);
-              convex_hull.insert(i,New_Edge_2);
-              convex_hull.insert(i,New_Edge_1);
+              convex_hull.erase(J);
+              convex_hull.insert(J,New_Edge_2);
+              convex_hull.insert(J,New_Edge_1);
 
               New_Triangle.same_curl(/* triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados*/);
               New_Normal = New_Triangle.Normal();
@@ -175,13 +177,11 @@ int main(){
                       }
                       
                     }
+                    
           }
           
-          i++;
-          if (i==convex_hull.size())
-          {
-            i=0;
-          }
+          
+          
           
           
              
