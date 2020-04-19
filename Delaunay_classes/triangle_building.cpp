@@ -321,21 +321,11 @@ namespace del {
                     bool encontrou, kein_Dreieck_gefunden;
                     float d;
                     float ABC[3][3]; //armazena os 3 pontos A, B e C : candidatos a triangulo de Delaunay
-
-                    
-                    float AB[2][3]; //define aresta AB
-                        
+                                                               
                         do     
                         {
                           
-                        for (size_t i = 0; i < 2; i++)
-                          {
-                            for (size_t j = 0; j < 3; j++)
-                            {
-                              AB[i][j]=catalogo[N_A][i][j];
-                            }
-                            
-                          }
+                        
                           //procura ponto que seja vizinho comum de A e B - ponto C: 
                           del::point P1;
                           del::point P2;
@@ -355,8 +345,8 @@ namespace del {
                                     C = P1;
                                     //monta triangulo ABC: candidato à triangulação de Delaunay
                                     ABC[][]={
-                                      {AB[0][0], AB[0][1], AB[0][2]},
-                                      {AB[1][0], AB[1][1], AB[1][2]},
+                                      {A.p[0], A.p[1], A.p[2]},
+                                      {B.p[0], B.p[1], B.p[2]},
                                       {P1.p[0], P1.p[1], P1.p[2]}
                                     };
                                     
