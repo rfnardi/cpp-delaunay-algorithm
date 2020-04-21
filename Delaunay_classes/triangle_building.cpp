@@ -319,7 +319,7 @@ namespace del {
                     del::Find_Centro_esfera find_center_sphere_obj; //cria objeto da classe que calcula centro da esfera que circunscreve 3 pontos
                     del::point Centro_Circunf_ABC; //variável para armazenar o centro da esfera que circunscreve os pontos A, B e C.
                     float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Find_Centro_esfera
-                    bool encontrou_ponto_dentro_da_esfera, kein_Dreieck_gefunden;
+                    bool encontrou_ponto_dentro_da_esfera, kein_Dreieck_gefunden, encontrou_triangulo_valido;
                     float d;
                     float ABC[3][3]; //armazena os 3 pontos A, B e C : candidatos a triangulo de Delaunay
                                                                
@@ -423,8 +423,9 @@ namespace del {
                                           }
                                           else
                                           {
-                                            encontrou_ponto_dentro_da_esfera = false; //SE NENHUM PONTO FOR ENCONTRADO NO INTERIOR DA ESFERA QUE CIRCUNSCREVE O TRIANGULO ABC, 
-                                                                                      //CONSTRUA New_triangle E COMPARE COM O 'not_this_triangle' fornecido no argumento deste método
+                                             //SE NENHUM PONTO FOR ENCONTRADO NO INTERIOR DA ESFERA QUE CIRCUNSCREVE O TRIANGULO ABC, 
+                                             //CONSTRUA New_triangle E COMPARE COM O 'not_this_triangle' fornecido no argumento deste método
+
                                             New_triangle.A = A;
                                             New_triangle.B = B;
                                             New_triangle.C = C;
@@ -433,9 +434,9 @@ namespace del {
                                             {
                                               break;
                                             }
-                                            else //caso sejam diferentes, New_triangle é cuspido como resultado e a busca é terminada
+                                            else //caso sejam diferentes, New_triangle é cuspido como resultado e a busca é terminada (sai do 'do ... while' loop)
                                             {
-                                              return New_triangle;
+                                              encontrou_triangulo_valido = true;
                                             }
                                             
                                                                                       
@@ -446,7 +447,7 @@ namespace del {
                                         
                                         if (encontrou_ponto_dentro_da_esfera)
                                         {
-                                          break;
+                                          break; //continua busca por ponto C
                                         }
                                   }
                                   
@@ -462,10 +463,9 @@ namespace del {
                           
 
                           //contemplando caso em que nenhum ponto C satisfaz a condição de Delaunay:
-                          //(se varreu as vizinhanças de A e B e não encontrou qqr C então construa o 'triangulo" trivial)
+                          //(se varreu as vizinhanças de A e B e não encontrou qqr C então construa o 'triangulo" trivial) --- neste caso o edge deve ser reconhecido como um membro definitivo do convex_hull
                           if ((linha_A == catalogo[VIZ_A].size()-1) && (linha_B == catalogo[VIZ_B].size()-1) && (!encontrou_ponto_dentro_da_esfera))
                           {
-                            kein_Dreieck_gefunden = true;
                             
                             del::point Origem;
                             Origem.p[0]=0.0;
@@ -474,30 +474,17 @@ namespace del {
                             New_triangle.A = Origem;
                             New_triangle.B = Origem;
                             New_triangle.C = Origem;
-                            break;
+
+                            encontrou_triangulo_valido = true; //sai do loop 'do...while' e método retorna o triangulo trivial
                           }
 
 
 
-                        }while(!encontrou);
-
-                        //triangulo ABC é admitido na triangulação
-                        if (!kein_Dreieck_gefunden && New_triangle !== Not_this_triangle)
-                        {
-                          
-                        }
+                        }while(!encontrou_triangulo_valido);                    
                         
-                        
-                        return New_triangle;
-                        
-                        
-                    
-
-
-
-
-
-
+        
+        return New_triangle;
+              
         } //Fim do método "edge_based_triangle_building"
 
         

@@ -161,7 +161,8 @@ int main(){
               New_Normal = New_Triangle.Normal();
               New_Module.Normal = New_Normal;
               New_Module.Triangle = New_Triangle;
-              not_found = true;
+              not_found = true; //marcador lógico para registrar quando o triangulo encontrado já está guardado no Triangulation_with_normals
+              
               //varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
               for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
                     {
