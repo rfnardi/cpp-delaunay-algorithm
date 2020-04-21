@@ -277,14 +277,14 @@ namespace del {
         } //Fim do método "point_based_triangle_building"
 
         
-        triangle_Delaunay edge_based_triangle_building (del::edge Edge) 
+        triangle_Delaunay edge_based_triangle_building (del::edge Edge, triangle_Delaunay Not_this_triangle) 
         {       
-                //é necessário alterar este método de modo a gerar 2 triangulos por edge e não apenas 1  !!!!!!!
+                
 
                     long unsigned int k, VIZ_A, VIZ_B, VIZ_C;
 
                     del::point A = Edge.first_point;
-                    del::point B = Edge.second_point
+                    del::point B = Edge.second_point;
 
                     //encontra vizinhança do ponto A:
                     for (size_t k = 0; k < catalogo.size(); k++)
@@ -315,10 +315,11 @@ namespace del {
                       
                     }
                     
+                    del::triangle_Delaunay New_triangle;
                     del::Find_Centro_esfera find_center_sphere_obj; //cria objeto da classe que calcula centro da esfera que circunscreve 3 pontos
                     del::point Centro_Circunf_ABC; //variável para armazenar o centro da esfera que circunscreve os pontos A, B e C.
                     float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Find_Centro_esfera
-                    bool encontrou, kein_Dreieck_gefunden;
+                    bool encontrou_ponto_dentro_da_esfera, kein_Dreieck_gefunden;
                     float d;
                     float ABC[3][3]; //armazena os 3 pontos A, B e C : candidatos a triangulo de Delaunay
                                                                
@@ -330,14 +331,14 @@ namespace del {
                           del::point P1;
                           del::point P2;
                           del::point C;
-                          for (size_t linha_A = 0; linha_A < catalogo[VIZ_A].size(); linha_A++)
+                          for (size_t linha_A = 0; linha_A < catalogo[VIZ_A].size(); linha_A++)//BUSCA DO PONTO C
                           {
-                            for (size_t col_A = 0; col_A < 3; col_A++)
+                            for (size_t col_A = 0; col_A < 3; col_A++)//BUSCA DO PONTO C
                             {
                               P1.p[col_A] = catalogo[VIZ_A][linha_A][col_A];
-                              for (size_t linha_B = 0; linha_B < catalogo[VIZ_B].size(); linha_B++)
+                              for (size_t linha_B = 0; linha_B < catalogo[VIZ_B].size(); linha_B++)//BUSCA DO PONTO C
                               {
-                                for (size_t col_B = 0; col_B < 3; col_B++)
+                                for (size_t col_B = 0; col_B < 3; col_B++)//BUSCA DO PONTO C
                                 {
                                   P2.p[col_B] = catalogo[VIZ_B][linha_B][col_B];
                                   if ( (P1 == P2) && (P1 != A) && (P1 != B) ) //P1 == P2 é o PONTO C !!!
@@ -381,12 +382,12 @@ namespace del {
                                           d= P.distancia(Centro_Circunf_ABC);
                                           if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
                                           {
-                                            encontrou = true;
+                                            encontrou_ponto_dentro_da_esfera = true; //caso isso for verdadeiro, o programa deve continuar a busca por outro ponto C 
                                             break;
                                           }
                                           
                                         }
-                                        if (encontrou)
+                                        if (encontrou_ponto_dentro_da_esfera)
                                         {
                                           break;
                                         }
@@ -400,11 +401,11 @@ namespace del {
                                           d= P.distancia(Centro_Circunf_ABC);
                                           if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
                                           {
-                                            encontrou = true;
+                                            encontrou_ponto_dentro_da_esfera = true; //caso isso for verdadeiro, o programa deve continuar a busca por outro ponto C 
                                             break;
                                           }
                                         }
-                                        if (encontrou)
+                                        if (encontrou_ponto_dentro_da_esfera)
                                         {
                                           break;
                                         }
@@ -417,16 +418,33 @@ namespace del {
                                           d= P.distancia(Centro_Circunf_ABC);
                                           if ((d<Raio) && (P! == A)&& (P! == B)&& (P! == C))
                                           {
-                                            encontrou = true;
+                                            encontrou_ponto_dentro_da_esfera = true; //caso isso for verdadeiro, o programa deve continuar a busca por outro ponto C 
                                             break;
                                           }
                                           else
                                           {
-                                            encontrou = false;
+                                            encontrou_ponto_dentro_da_esfera = false; //SE NENHUM PONTO FOR ENCONTRADO NO INTERIOR DA ESFERA QUE CIRCUNSCREVE O TRIANGULO ABC, 
+                                                                                      //CONSTRUA New_triangle E COMPARE COM O 'not_this_triangle' fornecido no argumento deste método
+                                            New_triangle.A = A;
+                                            New_triangle.B = B;
+                                            New_triangle.C = C;
+
+                                            if (New_triangle == Not_this_triangle)
+                                            {
+                                              break;
+                                            }
+                                            else //caso sejam diferentes, New_triangle é cuspido como resultado e a busca é terminada
+                                            {
+                                              return New_triangle;
+                                            }
+                                            
+                                                                                      
                                           }
                                           
                                         }
-                                        if (encontrou)
+
+                                        
+                                        if (encontrou_ponto_dentro_da_esfera)
                                         {
                                           break;
                                         }
@@ -435,22 +453,27 @@ namespace del {
                                 }
                               }
                             }
-                          }
+
+                          
+
+
+                          }//fim do loop de varredura na vizinhança de A ... FIM DA BUSCA PELO PONTO C
                           
                           
 
                           //contemplando caso em que nenhum ponto C satisfaz a condição de Delaunay:
-                          if ((linha_A == catalogo[VIZ_A].size()-1) && (linha_B == catalogo[VIZ_B].size()-1) && (!encontrou))
+                          //(se varreu as vizinhanças de A e B e não encontrou qqr C então construa o 'triangulo" trivial)
+                          if ((linha_A == catalogo[VIZ_A].size()-1) && (linha_B == catalogo[VIZ_B].size()-1) && (!encontrou_ponto_dentro_da_esfera))
                           {
                             kein_Dreieck_gefunden = true;
-                            del::triangle_Delaunay T;
+                            
                             del::point Origem;
-                            Origem.p[0]=0;
-                            Origem.p[1]=0;
-                            Origem.p[2]=0;
-                            T.A = Origem;
-                            T.B = Origem;
-                            T.C = Origem;
+                            Origem.p[0]=0.0;
+                            Origem.p[1]=0.0;
+                            Origem.p[2]=0.0;
+                            New_triangle.A = Origem;
+                            New_triangle.B = Origem;
+                            New_triangle.C = Origem;
                             break;
                           }
 
@@ -459,16 +482,13 @@ namespace del {
                         }while(!encontrou);
 
                         //triangulo ABC é admitido na triangulação
-                        if (!kein_Dreieck_gefunden)
+                        if (!kein_Dreieck_gefunden && New_triangle !== Not_this_triangle)
                         {
-                          triangle_Delaunay T;
-                          T.A = A;
-                          T.B = B;
-                          T.C = C;
+                          
                         }
                         
                         
-                        return T;
+                        return New_triangle;
                         
                         
                     
