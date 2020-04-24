@@ -8,6 +8,7 @@ namespace del {
             float raio;
             std::vector<float> referencial;
             std::vector<std::vector<float>> vizinhos;
+            bool debug = true;
 
         public:
             /**
@@ -16,6 +17,13 @@ namespace del {
              * @param conjuntoUniverso O conjunto de todos os pontos do sólido.
             */
             Vizinhanca ( std::vector<std::vector<float>> conjuntoUniverso );
+
+            /**
+             * Apresenta as coordenadas de um ponto de forma humanamente legível no console.
+             * 
+             * @param ponto Conjunto de coordendas
+            */
+            std::string debugar_ponto ( std::vector<float> ponto );
 
             /**
              * Define o raio de vizinhança.
@@ -44,7 +52,19 @@ namespace del {
              * 
              * @return catalogo de vizinhos.
             */
-            std::vector<std::vector<std::vector<float>>> obter_catalogo_de_vizinhos ();
+            std::vector<std::vector<std::vector<float>>> obter_catalogo_de_vizinhancas ();
+
+            /**
+             * Ativa mensagens no console
+             * 
+            */
+            void ativar_debug ();
+
+            /**
+             * Desativa mensagens no console
+             * 
+            */
+            void desativar_debug ();
 
         private:
             /**
@@ -69,6 +89,23 @@ namespace del {
              * @param ponto Coordenadas do ponto.
             */
             void adicionar_vizinho ( std::vector<float> ponto );
+
+            /**
+             * Compara distancia referencial de dois pontos
+             * 
+             * @param p1 ponto.
+             * @param p2 ponto.
+             * @return se o primeiro argumento está mais próximo do referencial.
+            */
+            bool comparar_distancia_referencial ( std::vector<float> p1, std::vector<float> p2 );
+
+            /**
+             * Ordena os pontos da vizinhança em ordem crescente de distância ao ponto referencial.
+             * 
+             * @param viz vizinhança.
+             * @return Vizinhança ordenada.
+            */
+            std::vector<std::vector<float>> ordenar_vizinhanca ( std::vector<std::vector<float>> viz );
     };
 
 };
