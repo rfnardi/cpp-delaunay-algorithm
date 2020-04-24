@@ -11,19 +11,20 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-#include "Delaunay_classes/catalogo_vizinhos.cpp";
+#include "Delaunay_classes/catalogo_vizinhos.cpp"
 
 int main(){
 
         std::string filename; // cria objeto da classe string para armazenar string com o nome do arquivo de dados
 
-        std::cout << "Digite o nome do arquivo a ser triangulado." << '\n';
+        std::cout << "Digite o nome do arquivo a ser triangulado." << std::endl;
         std::cin >> filename;
-        std::cout << "Nome do arquivo inserido:" << filename << '\n';
+        std::cout << "Nome do arquivo inserido:" << filename << std::endl;
 
-        /* Another way */
+        return 0;
+        /*
         std::ifstream inFile;
-        // Uma linha de arquivo é identificada pelo caracter '\n' (conhecido como quebra de linha)
+        // Uma linha de arquivo é identificada pelo caracter std::endl (conhecido como quebra de linha)
         // Se eu definir que a quebra de linha é agora o carater 'x', então "texto escrito axim" teria as linhas
         // te
         // to escrito a
@@ -44,7 +45,7 @@ int main(){
         // 'isto não é permitido' não é um char!
         
         //passando dados do arquivo para arrays:
-        while ( std::getline( inFile, line, '\n' ) ) {
+        while ( std::getline( inFile, line, std::endl ) ) {
           num_linhas += 1;
           while ( std::getline( line, coord, ' ' ) ) {
             ponto.push_back( std::stof( coord ) );
@@ -55,26 +56,24 @@ int main(){
 
         //
         //
-        std::cout << "Insira o valor do parâmetro de resolução de leitura." << '\n';
+        std::cout << "Insira o valor do parâmetro de resolução de leitura." << std::endl;
         float delta_z;
         std::cin >> delta_z;
 
         //CONTAGEM DE PONTOS DO BLOCO DE DADOS:
         std::cout << "Total de pontos (num_linhas) do bloco de dados:" << num_linhas << std::endl;
 
-<<<<<<< HEAD
         //passando dados do arquivo para arrays:
         float x[n], y[n], z[n];                                //is it possible???
         long i=0;
         while (i<=n) {
           fscanf(arq, "%E%E%E \n", &x[i], &y[i], &z[i]);
+          fscanf()
           i++;
         }
-=======
         // catalogo de pontos inicia aqui
         del::catalogo_vizinhos catalogo( pontos );
         catalogo.define_raio_vizinhanca( 1.5 * delta_z );
->>>>>>> feature/catalogo-de-vizinhos
 
         // Inicia algum loop nos pontos do catalogo em busca de vizinhanças
 
@@ -90,7 +89,7 @@ int main(){
 
         //montando primeira aresta:
         std::cout << "Primeira aresta encontrada:" << "(" x[0] << "," << y[0] << "," << z[0] << ")" << "----"
-                                                   << "(" x[I_min] << "," << y[I_min] << "," << z[I_min] << ")"  '\n';
+                                                   << "(" x[I_min] << "," << y[I_min] << "," << z[I_min] << ")"  std::endl;
 
         //montando triangulação (Critério de Delaunay):
 
