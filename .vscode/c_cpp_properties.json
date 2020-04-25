@@ -3,7 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${/CPP-Delaunay}/**"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/g++",

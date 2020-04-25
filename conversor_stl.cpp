@@ -93,39 +93,124 @@ int main( int argc, char* argv[] ) {
 
 
 	return EXIT_SUCCESS;
+	// compilação e utilização testada até esta linha 
+	// conteúdo abaixo não foi testado ainda! 
+
+	//Inicia triangulação
+	std::cout << "Iniciando triangulação." << std::endl;
 	/*
+	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
-	//montando primeira aresta:
-	std::cout << "Primeira aresta encontrada:" << "(" x[0] << "," << y[0] << "," << z[0] << ")" << "----"
-																							<< "(" x[I_min] << "," << y[I_min] << "," << z[I_min] << ")"  std::endl;
-	del::Vizinhanca vizinhanca( pontos );
-	vizinhanca.definir_raio( 1.5 * delta_z );
-	std::vector<std::vector<std::vector<float>>> catalogo = vizinhanca.obter_catalogo_de_vizinhancas();
+	del::triangle_building triangle_building_obj;
 
-	//montando triangulação (Critério de Delaunay):
+	del::point A; //ponto mais alto do sólido (maior z)
 
-	//medindo as distâncias d(P_i,P_j) entre todos os ptos:
+	A.p[0] = catalogo[0][0][0];
+	A.p[1] = catalogo[0][0][1];
+	A.p[2] = catalogo[0][0][2];
 
-	for ( i = 0; i < n; i++) {
-		for (long j = 0; j < count; j++) {
-			d = sqrt(pow(x[i]-x[j],2)+pow(y[i]-y[j],2)+pow(z[i]-z[j],2));
-			if (d<delta_z*1.5) {
-				construct 
-			}
+	del::triangle_Delaunay T_0 = triangle_building_obj.point_based_triangle_building(A);
+
+	//orientando corretamente para cima a normal do primeiro triangulo:
+	if (T_0.Normal.p[2]<0)
+	{
+		del::T_0.swap();
+	}
+	
+	del::stl_module Module_0;
+	Module_0.Normal = T_0.Normal;
+	Module_0.Triangle = T_0;
+
+	//guardando primeiro módulo do arquivo stl:
+	Triangulation_with_normals.push_back(Module_0);
+			
+	//inicia convex_hull
+	del::convex_hull convex_hull_obj;
+
+	//constrói primeiros edges a partir do T_0 e os armazena no convex_hull_obj
+	del::edge AB;
+	AB.first_point = Module_0.Triangle.A;
+	AB.second_point = Module_0.Triangle.B;
+	convex_hull_obj.push_back(AB);
+
+	del::edge BC;
+	BC.first_point = Module_0.Triangle.B;
+	BC.second_point = Module_0.Triangle.C;
+	convex_hull_obj.push_back(BC);
+
+	del::edge CA;
+	CA.first_point = Module_0.Triangle.C;
+	CA.second_point = Module_0.Triangle.A;
+	convex_hull_obj.push_back(CA);
+
+	del::stl_module New_Module;
+	del::triangle_building Build; 
+	del::triangle_Delaunay New_Triangle;
+	del::point New_Normal;
+	bool not_found;
+	del::edge New_Edge_1;
+	del::edge New_Edge_2;
+
+	del::point Origem;
+	Origem.p[0]=0;
+	Origem.p[1]=0;
+	Origem.p[2]=0;
+
+	long unsigned int J =0;      
+	// convex_hull still have 'bool really_a_convex_hull_member = false' edges         
+	while (i<convex_hull.size() ) 
+	{
+		// varre convex_hull testando really_a_convex_hull_member para cada edge
+		del::edge working_edge = convex_hull_obj[J];
+
+		New_Triangle = Build.edge_based_triangle_building_obj (working_edge);
+		if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem) //triângulo construído é trivial
+		{
+			working_edge.really_a_convex_hull_member = true;
+			J++; //apenas prossegue na varredura do convex_hull quando a aresta working_edge não dá origem a outro triangulo
+		}
+		if (working_edge.really_a_convex_hull_member=false)
+		{
+			
+			//extraindo os dois edges do New_Triangle:
+			New_Edge_1.first_point = ;
+			New_Edge_1.second_point = ;           //to be done!!!!!!!!
+			New_Edge_2.first_point = ;
+			New_Edge_2.second_point = ;
+
+			// se achou triangulo, então deve apagar do convex_hull 
+			// o edge que deu base para sua construção 
+			// e inserir os outros 2 edges do New_Triangle no convex_hull: 
+			convex_hull.erase(J);
+			convex_hull.insert(J,New_Edge_2);
+			convex_hull.insert(J,New_Edge_1);
+
+			// triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados
+			New_Triangle.same_curl();
+			New_Normal = New_Triangle.Normal();
+			New_Module.Normal = New_Normal;
+			New_Module.Triangle = New_Triangle;
+			not_found = true; //marcador lógico para registrar quando o triangulo encontrado já está guardado no Triangulation_with_normals
+			
+			//varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
+			for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
+				{
+					if (Triangulation_with_normals[i] == New_Module)
+					{
+					// descarta triangulo e o modulo e sai do loop
+					not_found = false;
+					break;
+					}
+					else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
+					{
+					Triangulation_with_normals.push_back(New_Module);
+					}
+					
+				}
+				
 		}
 
-	}
-				/*criar catálogo de vizinhos (dizer para cada ponto, quem são seus vizinhos
-						(ptos cuja distância é menor do que 1.5*delta_z)) */
-				//encontrar ciclo de 4 vizinhos
-						//qual é o Critério para determinar se 4 pontos formam um ciclo de vizinhos?
-									//----> não há nenhum ponto interno ao ciclo
-				//aplicar Critério de Delaunay
-				//determinar convex hull (borda)
-
-
-
+	} //end while: 
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
-
 	//repita até computar todas as faixas de dados
 }
