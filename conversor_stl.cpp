@@ -97,7 +97,7 @@ int main( int argc, char* argv[] ) {
 	// conteúdo abaixo não foi testado ainda! 
 
 	//Inicia triangulação
-	std::cout << "Iniciando triangulação." << std::endl;
+	// std::cout << "Iniciando triangulação." << std::endl;
 	/*
 	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
@@ -213,4 +213,5 @@ int main( int argc, char* argv[] ) {
 	} //end while: 
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
+	*/
 }
