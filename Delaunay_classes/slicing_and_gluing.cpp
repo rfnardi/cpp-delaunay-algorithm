@@ -8,13 +8,13 @@ namespace del {
 
     
 
-    class slicing_and_gluing
+    class slicing
     {
     private:
         /* data */
     public:
-        slicing_and_gluing(/* args */);
-        ~slicing_and_gluing();
+        slicing(/* args */);
+        ~slicing();
 
     //tomando dimensões do sólido para efetuar fatiamento:
     // URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
@@ -56,16 +56,81 @@ namespace del {
 
     std::cout<<"Dimensões do sólido: \n";
     
+    std::cout<<"x máximo: "<< x_max <<"x mínimo: "<< x_min << '\n';
+    std::cout<<"y máximo: "<< y_max <<"y mínimo: "<< y_min << '\n';
+    std::cout<<"z máximo: "<< z_max <<"z mínimo: "<< z_min << '\n';
 
-    };//end class slicing_and_gluing
+    std::cout<<"Quantidade total de pontos: "<< currentLine << '\n';
 
-    slicing_and_gluing::slicing_and_gluing(/* args */)
+    //aqui precisamos definir quantos pontos o programa deve pegar por vez. 200 pontos? ----->
+
+    long number_of_slices = currentLine/200;
+
+    float slice_depth = (z_max - z_min)/number_of_slices; //futuramente considerar fatiamento ao longo de outros eixos de acordo com as proporções do sólido
+
+    long int slice_index = 0;
+
+    for (slice_index = 0; slice_index < number_of_slices; slice_index++)
+    {
+        currentLine = 0;
+        lineIterator;
+        do {
+            currentLine++;
+            lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
+            if (z<=(z_max - slice_index*slice_depth) && z<(z_max - (slice_index + 1)*slice_depth))
+            {
+                pontos.push_back( {x, y, z} );
+            }
+            
+            //aqui deve entrar praticamente todo o código do main !!!!!!!!!!!!!!!!!!!!!!!!!
+            
+            
+            //------>  é preciso decidir a melhor estratégia de escrita dos módulos stl para economizar memória !!!!!!!!!!
+            //escrever todos módulos stl no arquivo de saída 
+            //esvaziar vetor de módulos stl
+
+            //coletar pontos do convex hull 
+            //varrer vizinhanças e limpar todas com exceção daquelas que tiverem pontos do convex hull?????
+            //fazer update das vizinhanças dos pontos do convex hull na nova região
+            //vizinhanças que receberem novos pontos vizinhos devem ser ponto de partida para triangulação da região
+
+                
+
+        } while ( lineIterator != EOF );
+        /* code */
+    }
+    
+
+    
+
+    };//end class slicing
+
+    slicing::slicing(/* args */)
     {
     }
 
-    slicing_and_gluing::~slicing_and_gluing()
+    slicing::~slicing()
     {
     }
 
 
+
+
+    class gluing
+    {
+    private:
+        /* data */
+    public:
+        gluing(/* args */);
+        ~gluing();
+    };
+    
+    gluing::gluing(/* args */)
+    {
+    }
+    
+    gluing::~gluing()
+    {
+    }
+    
 }; //end namespace del
