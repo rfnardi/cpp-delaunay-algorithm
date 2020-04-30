@@ -89,11 +89,7 @@ namespace del {
             //escrever todos módulos stl no arquivo de saída 
             //esvaziar vetor de módulos stl
 
-            //coletar pontos do convex hull 
-            //varrer vizinhanças e limpar todas com exceção daquelas que tiverem pontos do convex hull?????
-            //fazer update das vizinhanças dos pontos do convex hull na nova região
-            //vizinhanças que receberem novos pontos vizinhos devem ser ponto de partida para triangulação da região
-
+            
                 
 
         } while ( lineIterator != EOF );
@@ -123,7 +119,29 @@ namespace del {
     public:
         gluing(/* args */);
         ~gluing();
-    };
+
+        std::vector<del::point> Extract_convex_hull_points
+        {
+            std::vector<del::point> convex_hull_points;
+            
+            for (size_t i = 0; i < del::convex_hull.edge_collection.size(); i++)
+            {
+                convex_hull_points.push_back( del::convex_hull.edge_collection[i].first_point);
+            }
+            
+            return convex_hull_points;
+        }
+
+        
+
+
+
+        //coletar pontos do convex hull 
+        //varrer vizinhanças e limpar todas com exceção daquelas que tiverem pontos do convex hull?????
+        //fazer update das vizinhanças dos pontos do convex hull na nova região
+        //vizinhanças que receberem novos pontos vizinhos devem ser ponto de partida para triangulação da região
+
+    };//end of class gluing
     
     gluing::gluing(/* args */)
     {
