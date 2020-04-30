@@ -77,7 +77,7 @@ namespace del {
         do {
             currentLine++;
             lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
-            if (z<=(z_max - slice_index*slice_depth) && z<(z_max - (slice_index + 1)*slice_depth))
+            if (z<=(z_max - slice_index*slice_depth) && z<(z_max - (slice_index + 1)*slice_depth)) //fatiamento do processo de montagem das vizinhanças
             {
                 pontos.push_back( {x, y, z} );
             }
@@ -120,26 +120,23 @@ namespace del {
         gluing(/* args */);
         ~gluing();
 
-        std::vector<del::point> Extract_convex_hull_points
+               
+        //varrer catalogo de vizinhanças e apagar todas com exceção daquelas que tiverem pontos do convex hull:
+        for (size_t VIZ = 0; VIZ < catalogo.size(); VIZ++)
         {
-            std::vector<del::point> convex_hull_points;
-            
-            for (size_t i = 0; i < del::convex_hull.edge_collection.size(); i++)
+            for (size_t convex_hull_index = 0; convex_hull_index < del::convex_hull.edge_collection.size(); convex_hull_index++)
             {
-                convex_hull_points.push_back( del::convex_hull.edge_collection[i].first_point);
+                if (/*ponto do convex hull != primeiro ponto da vizinhança*/)
+                {
+                   catalogo.erase(VIZ); //apaga vizinhança do catálogo
+                }
             }
-            
-            return convex_hull_points;
+                        
         }
-
-        
-
-
-
-        //coletar pontos do convex hull 
-        //varrer vizinhanças e limpar todas com exceção daquelas que tiverem pontos do convex hull?????
         //fazer update das vizinhanças dos pontos do convex hull na nova região
-        //vizinhanças que receberem novos pontos vizinhos devem ser ponto de partida para triangulação da região
+        //colocar 'FALSE' em 'bool really_a_convex_hull_member' de todos os edges que tiverem pontos cujas vizinhanças sofreram atualização
+        //monta todas as outras vizinhanças de pontos na nova região
+        //vizinhanças que receberem novos pontos vizinhos (isto é, que sofreram atualização) devem ser ponto de partida para triangulação da região
 
     };//end of class gluing
     
