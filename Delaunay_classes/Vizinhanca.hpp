@@ -1,13 +1,17 @@
+#ifndef DEL_NEIGHBORHOOD_H
+#define DEL_NEIGHBORHOOD_H
+
 #include <vector>
+#include "./Point.hpp"
 
 namespace del {
 
     class Vizinhanca {
         private:
-            std::vector<std::vector<float>> conjuntoUniverso;
+            std::vector<Point> conjuntoUniverso;
             float raio;
-            std::vector<float> referencial;
-            std::vector<std::vector<float>> vizinhos;
+            Point referencial;
+            std::vector<Point> vizinhos;
             bool debug = true;
 
         public:
@@ -16,14 +20,14 @@ namespace del {
              * 
              * @param conjuntoUniverso O conjunto de todos os pontos do sólido.
             */
-            Vizinhanca ( std::vector<std::vector<float>> conjuntoUniverso );
+            Vizinhanca ( std::vector<Point> conjuntoUniverso );
 
             /**
              * Apresenta as coordenadas de um ponto de forma humanamente legível no console.
              * 
              * @param ponto Conjunto de coordendas
             */
-            std::string debugar_ponto ( std::vector<float> ponto );
+            std::string debugar_ponto ( Point ponto );
 
             /**
              * Define o raio de vizinhança.
@@ -37,14 +41,14 @@ namespace del {
              * 
              * @param ponto O ponto de referência.
             */
-            void definir_referencial ( std::vector<float> ponto );
+            void definir_referencial ( Point ponto );
 
             /**
              * Retorna a vizinhança do ponto de referência.
              * 
              * @return vizinhança do ponto de referência.
             */
-            std::vector<std::vector<float>> obter_vizinhos ();
+            std::vector<Point> obter_vizinhos ();
 
             /**
              * Calcula a vizinhança de todos os pontos do conjunto.
@@ -52,7 +56,7 @@ namespace del {
              * 
              * @return catalogo de vizinhos.
             */
-            std::vector<std::vector<std::vector<float>>> obter_catalogo_de_vizinhancas ();
+            std::vector<std::vector<Point>> obter_catalogo_de_vizinhancas ();
 
             /**
              * Ativa mensagens no console
@@ -73,7 +77,7 @@ namespace del {
              * @param ponto Coordenadas de um ponto.
              * @return Distância entre os pontos a e b.
             */
-            float obter_distancia_de ( std::vector<float> ponto );
+            float obter_distancia_de ( Point ponto );
 
             /**
              * Verifica se o ponto é vizinho do ponto de referência.
@@ -81,14 +85,14 @@ namespace del {
              * @param ponto Coordenadas do ponto.
              * @return verdadeiro caso serja vizinho, false caso conrtário.
             */
-            bool e_vizinho_de ( std::vector<float> ponto );
+            bool e_vizinho_de ( Point ponto );
 
             /**
              * Adiciona ponto para a lista de vizinhos do ponto de referência.
              * 
              * @param ponto Coordenadas do ponto.
             */
-            void adicionar_vizinho ( std::vector<float> ponto );
+            void adicionar_vizinho ( Point ponto );
 
             /**
              * Compara distancia referencial de dois pontos
@@ -97,7 +101,7 @@ namespace del {
              * @param p2 ponto.
              * @return se o primeiro argumento está mais próximo do referencial.
             */
-            bool comparar_distancia_referencial ( std::vector<float> p1, std::vector<float> p2 );
+            bool comparar_distancia_referencial ( Point p1, Point p2 );
 
             /**
              * Ordena os pontos da vizinhança em ordem crescente de distância ao ponto referencial.
@@ -105,7 +109,8 @@ namespace del {
              * @param viz vizinhança.
              * @return Vizinhança ordenada.
             */
-            std::vector<std::vector<float>> ordenar_vizinhanca ( std::vector<std::vector<float>> viz );
+            std::vector<Point> ordenar_vizinhanca ( std::vector<Point> viz );
     };
 
 };
+#endif

@@ -49,14 +49,19 @@ int main( int argc, char* argv[] ) {
 	}
 	// Assumir apenas vetores 3D
 	// URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
-	float x, y, z;
-	std::vector<std::vector<float>> pontos;
+	float x, y, z, c[ 3 ];
+	del::Point ponto;
+	std::vector<del::Point> pontos;
 	int currentLine = 0;
 	int lineIterator;
 	do {
 		currentLine++;
 		lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
-		pontos.push_back( { x, y, z } );
+		// ponto.setCoordinates( 3, { x, y, z } );
+		ponto.p[ 0 ]= x;
+		ponto.p[ 1 ]= y;
+		ponto.p[ 2 ]= z;
+		pontos.push_back( ponto );
 	} while ( lineIterator != EOF );
 	// CONTAGEM DE PONTOS DO BLOCO DE DADOS:
 	std::cout << std::endl;
@@ -87,7 +92,7 @@ int main( int argc, char* argv[] ) {
 	vizinhanca.definir_raio( radius );
 
 	t[ 0 ] = clock();
-	std::vector<std::vector<std::vector<float>>> neighboorhoodsBook = vizinhanca.obter_catalogo_de_vizinhancas();
+	std::vector<std::vector<del::Point>> neighboorhoodsBook = vizinhanca.obter_catalogo_de_vizinhancas();
 	t[ 1 ] = clock();
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
@@ -97,8 +102,8 @@ int main( int argc, char* argv[] ) {
 	// conteúdo abaixo não foi testado ainda! 
 
 	//Inicia triangulação
-	std::cout << "Iniciando triangulação." << std::endl;
 	/*
+	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
 	del::triangle_building triangle_building_obj;
@@ -213,4 +218,5 @@ int main( int argc, char* argv[] ) {
 	} //end while: 
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
+	*/
 }
