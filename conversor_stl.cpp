@@ -11,12 +11,26 @@
 
 #include <vector>
 #include <fstream>
+
 #include <bits/stdc++.h>
 
+#include "Delaunay_classes/Point.cpp"
 #include "Delaunay_classes/Vizinhanca.cpp"
 
 long timeBetween( long before, long after ) {
 	return ( after - before ) * 1000 / CLOCKS_PER_SEC;
+}
+
+void appendToFile ( std::string fileName, std::string line ) {
+	std::ofstream fout;
+	std::ifstream fin;
+	fin.open( fileName );
+	fout.open( fileName, std::ios::app );
+	if ( fin.is_open() ) {
+		fout << line << std::endl;
+	}
+	fin.close();
+	fout.close();
 }
 
 int main( int argc, char* argv[] ) {
@@ -24,8 +38,9 @@ int main( int argc, char* argv[] ) {
 	char* filename; // char* instead string because of fopen use bellow
 	if ( argc > 3 ) {
 		std::cout << "Muitos argumentos inseridos." << std::endl;
-		std::cout << "Conversor STL aceita apenas dois parâmetros opcionais. Sintaxe:" << std::endl;
-		std::cout << "COMMANDO [nome do arquivo] [parametro de varredura]" << std::endl;
+		std::cout << "Conversor STL aceita apenas dois parâmetros opcionais." << std::endl;
+		std::cout << "	Sintaxe:" << std::endl;
+		std::cout << "		conversort-stl [nome do arquivo] [parametro de varredura]" << std::endl;
 		exit( EXIT_FAILURE );
 	}
 	if ( argc >= 2 ) {
@@ -39,7 +54,6 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Nome do arquivo inserido:" << filename << std::endl;
 	std::cout << std::endl;
 
-	t[ 0 ] = clock();
 	FILE *file;
 	file = fopen( filename, "r" );
 	if ( file == NULL ) {
@@ -47,31 +61,31 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Conversor STL encerra sua execução retornando erro 1." << std::endl;
 		exit( EXIT_FAILURE );
 	}
+	
 	// Assumir apenas vetores 3D
 	// URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
 	float x, y, z, c[ 3 ];
 	del::Point ponto;
 	std::vector<del::Point> pontos;
 	int currentLine = 0;
-	int lineIterator;
-	do {
+	
+	t[ 0 ] = clock();
+	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF ) {
 		currentLine++;
-		lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
 		// ponto.setCoordinates( 3, { x, y, z } );
 		ponto.p[ 0 ]= x;
 		ponto.p[ 1 ]= y;
 		ponto.p[ 2 ]= z;
 		pontos.push_back( ponto );
-	} while ( lineIterator != EOF );
-	// CONTAGEM DE PONTOS DO BLOCO DE DADOS:
+	};
+	t[ 1 ] = clock();
+	
+	fclose( file );
+	
 	std::cout << std::endl;
 	std::cout << "Total de linhas no arquivo de bloco de dados: " << currentLine << std::endl;
 	std::cout << "Total de pontos armazenados em memória: " << pontos.size() << std::endl;
-	// encerra as operações com o arquivo
-	// esquecer esta parte pode proibir de outra rotina usar o arquivo (até mesmo do proprio sistema!)
-	fclose( file );
-	t[ 1 ] = clock();
-	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 1 ], t[ 2 ] ) << " ms" << std::endl << std::endl;
+	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
 
 	float delta_z;
@@ -87,13 +101,15 @@ int main( int argc, char* argv[] ) {
 
 	// catalogo de pontos inicia aqui
 	del::Vizinhanca vizinhanca( pontos );
-	vizinhanca.ativar_debug();
+	// vizinhanca.ativar_debug();
+	vizinhanca.desativar_debug();
 	float radius =  1.5 * delta_z;
 	vizinhanca.definir_raio( radius );
 
 	t[ 0 ] = clock();
 	std::vector<std::vector<del::Point>> neighboorhoodsBook = vizinhanca.obter_catalogo_de_vizinhancas();
 	t[ 1 ] = clock();
+	appendToFile( "timer.log", std::to_string( currentLine ) + " " + std::to_string( timeBetween( t[ 0 ], t[ 1 ] ) ) + " " + std::to_string( delta_z ) );
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
 

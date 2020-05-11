@@ -32,7 +32,7 @@ class Point
 		 * 
 		 * @param Point
 		*/
-		Point operator = ( Point P ) ;
+		void operator = ( Point P ) ;
 		
 		/**
 		 * Operador de soma entre Points.
