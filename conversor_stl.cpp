@@ -16,6 +16,13 @@
 
 #include "Delaunay_classes/Point.cpp"
 #include "Delaunay_classes/Vizinhanca.cpp"
+#include "Delaunay_classes/convex_hull.cpp"
+#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
+#include "Delaunay_classes/triangle_building.cpp"
+#include "Delaunay_classes/triangle_recording.cpp"
+
+
+
 
 long timeBetween( long before, long after ) {
 	return ( after - before ) * 1000 / CLOCKS_PER_SEC;
@@ -118,10 +125,10 @@ int main( int argc, char* argv[] ) {
 	// conteúdo abaixo não foi testado ainda! 
 
 	//Inicia triangulação
-	/*
+	
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
-
+/*
 	del::triangle_building triangle_building_obj;
 
 	del::point A; //ponto mais alto do sólido (maior z)
