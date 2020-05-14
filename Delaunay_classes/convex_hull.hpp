@@ -5,13 +5,9 @@ namespace del
 {
     class Edge
     {
-    private:
-        /* data */
-    public:
-        Edge(/* args */);
-        {
-            this->really_a_convex_hull_member = false;
-        }
+        public:
+        Edge();
+        
         ~Edge();
 
         del::Point first_point;
@@ -26,8 +22,7 @@ namespace del
     
     class Convex_hull
     {
-    private:
-        /* data */
+    
     public:
         Convex_hull(/* args */);
         ~Convex_hull();

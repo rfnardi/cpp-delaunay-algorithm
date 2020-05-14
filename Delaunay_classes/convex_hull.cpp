@@ -1,51 +1,9 @@
-namespace del
-{
-    class edge
-    {
-    private:
-        /* data */
-    public:
-        edge(/* args */);
-        {
-            this->really_a_convex_hull_member = false;
-        }
-        ~edge();
+#include "convex_hull.hpp"
 
-        del::point first_point;
-        del::point second_point;
-        
-        bool really_a_convex_hull_member;
+del::Edge::Edge()
+    {
+        this->really_a_convex_hull_member = false;
+    }
 
+del::Edge::~Edge()
 
-    };
-    
-    edge::edge(/* args */)
-    {
-    }
-    
-    edge::~edge()
-    {
-    }
-    
-    
-    class convex_hull
-    {
-    private:
-        /* data */
-    public:
-        convex_hull(/* args */);
-        ~convex_hull();
-
-        std::vector< del::edge > edge_collection;
-        
-    };
-    
-    convex_hull::convex_hull(/* args */)
-    {
-    }
-    
-    convex_hull::~convex_hull()
-    {
-    }
-    
-} // namespace del

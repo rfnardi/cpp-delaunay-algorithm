@@ -1,54 +1,50 @@
+#ifndef DEL_SPHERE
+#define DEL_SPHERE
 #include <iostream>
 #include <cmath>
+#include"./Centro_Esfera_Aprox.hpp"
+#include "./Point.hpp"
 
 
-namespace del {
+float del::Find_Centro_Esfera::Distancia(del::Point P1, del::Point P2)
+{
+  float d = pow((P1.p[0]-P2.p[0]),2) + pow((P1.p[1]-P2.p[1]),2) + pow((P1.p[2]-P2.p[2]),2);
 
+  return d;
+};
 
-  class Find_Centro_esfera {
-  private:
-    /* data */
-
-  public:
-    Find_Centro_esfera (); //constructor
-
-    float Centro_0[3], A[3], B[3], C[3], Centro[3], delta_z;
-    float Jacobiano [3][3];
-
-    //chute de ordem zero para o centro da esfera (média das coordenadas dos vértices) :
-    for (size_t i = 0; i < 3; i++) {
-        Centro_0[i] = (A[i] + B[i] + C[i])/3
+del::Point del::Find_Centro_Esfera::retorna_centro(del::Point A, del::Point B, del::Point C)
+{
+  //chute de ordem zero para o centro da esfera (média das coordenadas dos vértices) :
+    for (size_t i = 0; i < 3; i++) 
+    {
+        Centro_0.p[i] = (A.p[i] + B.p[i] + C.p[i])/3
     }
 
-
-    Jacobiano = {
-      {2*(Centro_0[0]-A[0]), 2*(Centro_0[1]-A[1]), 2*(Centro_0[2]-A[2])},
-      {2*(Centro_0[0]-B[0]), 2*(Centro_0[1]-B[1]), 2*(Centro_0[2]-B[2])},
-      {2*(Centro_0[0]-C[0]), 2*(Centro_0[1]-C[1]), 2*(Centro_0[2]-C[2])}
+  del::Find_Centro_Esfera::Jacobiano = 
+    {
+      {2*(Centro_0.p[0]-A.p[0]), 2*(Centro_0.p[1]-A.p[1]), 2*(Centro_0.p[2]-A.p[2])},
+      {2*(Centro_0.p[0]-B.p[0]), 2*(Centro_0.p[1]-B.p[1]), 2*(Centro_0.p[2]-B.p[2])},
+      {2*(Centro_0.p[0]-C.p[0]), 2*(Centro_0.p[1]-C.p[1]), 2*(Centro_0.p[2]-C.p[2])}
     };
 
-    float Esfera(float P1[3], float P2[3]){
+  //variáveis de simplificação das contas:
+  del::Find_Centro_Esfera::alpha = (Jacobiano[0][0] - (Jacobiano[0][2]*Jacobiano[1][0])/Jacobiano[1][2] );
+  del::Find_Centro_Esfera::beta = (Jacobiano[0][1] - (Jacobiano[0][2]*Jacobiano[1][1])/Jacobiano[1][2] );
+  del::Find_Centro_Esfera::gamma = (Jacobiano[1][0] - (Jacobiano[1][2]*Jacobiano[2][0])/Jacobiano[2][2] );
+  del::Find_Centro_Esfera::delta = (Jacobiano[1][1] - (Jacobiano[1][2]*Jacobiano[2][1])/Jacobiano[2][2] );
 
-      float d = pow((P1[0]-P2[0]),2)+pow((P1[1]-P2[1]),2)+pow((P1[2]-P2[2]),2) - pow(1.5*delta_z, 2);
+  //determinando ponto central da espera que engloba os 3 vértices A, B e C do triângulo:
+  Centro.p[0] = ((Jacobiano[0][2]/Jacobiano[1][2])*Distancia(Centro_0, B) - Distancia(Centro_0, A))*(beta/gamma)/(alpha - gamma*beta/delta) + Centro_0.p[0];
 
-      return d;
-    }
-    //variáveis de simplificação das contas:
-    float alpha = (Jacobiano[0][0] - (Jacobiano[0][2]*Jacobiano[1][0])/Jacobiano[1][2] );
-    float beta = (Jacobiano[0][1] - (Jacobiano[0][2]*Jacobiano[1][1])/Jacobiano[1][2] );
-    float gamma = (Jacobiano[1][0] - (Jacobiano[1][2]*Jacobiano[2][0])/Jacobiano[2][2] );
-    float delta = (Jacobiano[1][1] - (Jacobiano[1][2]*Jacobiano[2][1])/Jacobiano[2][2] );
+  Centro.p[1] = (((Jacobiano[1][2]/Jacobiano[2][2])*Distancia(Centro_0, C) - Distancia(Centro_0, B))/delta - (Centro.p[0] - Centro_0.p[0])*gamma;
 
+  Centro.p[2] = (Distancia(Centro_0, C) - Jacobiano[2][0]*(Centro.p[0] - Centro_0.p[0]) - Jacobiano[2][1]*(Centro.p[1] - Centro_0.p[1]))/Jacobiano[2][2];
 
-    //determinando ponto central da espera que engloba os 3 vértices A, B e C do triângulo:
-    Centro[0] = ((Jacobiano[0][2]/Jacobiano[1][2])*Esfera(Centro_0[], B[]) - Esfera(Centro_0[], A[]))*(beta/gamma)/(alpha - gamma*beta/delta) + Centro_0[0];
+  float Raio = Distancia(Centro, A);
 
-    Centro[1] = (((Jacobiano[1][2]/Jacobiano[2][2])*Esfera(Centro_0[], C[]) - Esfera(Centro_0[], B[]))/delta - (Centro[0] - Centro_0[0])*gamma;
-
-    Centro[2] = (Esfera(Centro_0[], C[]) - Jacobiano[2][0]*(Centro[0] - Centro_0[0]) - Jacobiano[2][1]*(Centro[1] - Centro_0[1]))/Jacobiano[2][2];
-
-    float Raio = Esfera(Centro[], A[]);
-  };
-
-
-} /* del */
+  return Centro;
+    
+  
+};
+#endif
