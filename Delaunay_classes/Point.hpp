@@ -119,5 +119,5 @@ class Point
 
 }; //fim da classe point
 
-}
+};
 #endif

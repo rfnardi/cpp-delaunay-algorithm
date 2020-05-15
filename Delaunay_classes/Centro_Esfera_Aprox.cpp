@@ -2,7 +2,7 @@
 #define DEL_SPHERE
 #include <iostream>
 #include <cmath>
-#include"./Centro_Esfera_Aprox.hpp"
+#include "./Centro_Esfera_Aprox.hpp"
 #include "./Point.hpp"
 
 
@@ -18,7 +18,7 @@ del::Point del::Find_Centro_Esfera::retorna_centro(del::Point A, del::Point B, d
   //chute de ordem zero para o centro da esfera (média das coordenadas dos vértices) :
     for (size_t i = 0; i < 3; i++) 
     {
-        Centro_0.p[i] = (A.p[i] + B.p[i] + C.p[i])/3
+        Centro_0.p[i] = (A.p[i] + B.p[i] + C.p[i])/3;
     }
 
   del::Find_Centro_Esfera::Jacobiano = 
@@ -26,7 +26,7 @@ del::Point del::Find_Centro_Esfera::retorna_centro(del::Point A, del::Point B, d
       {2*(Centro_0.p[0]-A.p[0]), 2*(Centro_0.p[1]-A.p[1]), 2*(Centro_0.p[2]-A.p[2])},
       {2*(Centro_0.p[0]-B.p[0]), 2*(Centro_0.p[1]-B.p[1]), 2*(Centro_0.p[2]-B.p[2])},
       {2*(Centro_0.p[0]-C.p[0]), 2*(Centro_0.p[1]-C.p[1]), 2*(Centro_0.p[2]-C.p[2])}
-    };
+    }
 
   //variáveis de simplificação das contas:
   del::Find_Centro_Esfera::alpha = (Jacobiano[0][0] - (Jacobiano[0][2]*Jacobiano[1][0])/Jacobiano[1][2] );

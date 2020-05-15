@@ -18,8 +18,8 @@
 #include "Delaunay_classes/Vizinhanca.cpp"
 #include "Delaunay_classes/convex_hull.cpp"
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-#include "Delaunay_classes/triangle_building.cpp"
-#include "Delaunay_classes/triangle_recording.cpp"
+//#include "Delaunay_classes/triangle_building.cpp"
+//#include "Delaunay_classes/triangle_recording.cpp"
 
 
 
