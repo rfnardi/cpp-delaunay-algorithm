@@ -8,7 +8,7 @@
 #include <iostream>
 
 #include <time.h>
-
+#include <array>
 #include <vector>
 #include <fstream>
 
@@ -18,7 +18,7 @@
 #include "Delaunay_classes/Vizinhanca.cpp"
 #include "Delaunay_classes/convex_hull.cpp"
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-//#include "Delaunay_classes/triangle_building.cpp"
+#include "Delaunay_classes/triangle_building.cpp"
 //#include "Delaunay_classes/triangle_recording.cpp"
 
 
@@ -68,14 +68,14 @@ int main( int argc, char* argv[] ) {
 		std::cout << "Conversor STL encerra sua execução retornando erro 1." << std::endl;
 		exit( EXIT_FAILURE );
 	}
-	
+
 	// Assumir apenas vetores 3D
 	// URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
 	float x, y, z, c[ 3 ];
 	del::Point ponto;
 	std::vector<del::Point> pontos;
 	int currentLine = 0;
-	
+
 	t[ 0 ] = clock();
 	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF ) {
 		currentLine++;
@@ -86,9 +86,9 @@ int main( int argc, char* argv[] ) {
 		pontos.push_back( ponto );
 	};
 	t[ 1 ] = clock();
-	
+
 	fclose( file );
-	
+
 	std::cout << std::endl;
 	std::cout << "Total de linhas no arquivo de bloco de dados: " << currentLine << std::endl;
 	std::cout << "Total de pontos armazenados em memória: " << pontos.size() << std::endl;
@@ -120,15 +120,17 @@ int main( int argc, char* argv[] ) {
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
 
-	return EXIT_SUCCESS;
-	// compilação e utilização testada até esta linha 
-	// conteúdo abaixo não foi testado ainda! 
+
+	// compilação e utilização testada até esta linha
+	// conteúdo abaixo não foi testado ainda!
 
 	//Inicia triangulação
-	
+
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
-/*
+
+	return EXIT_SUCCESS;
+	/*
 	del::triangle_building triangle_building_obj;
 
 	del::point A; //ponto mais alto do sólido (maior z)
@@ -144,14 +146,14 @@ int main( int argc, char* argv[] ) {
 	{
 		del::T_0.swap();
 	}
-	
+
 	del::stl_module Module_0;
 	Module_0.Normal = T_0.Normal;
 	Module_0.Triangle = T_0;
 
 	//guardando primeiro módulo do arquivo stl:
 	Triangulation_with_normals.push_back(Module_0);
-			
+
 	//inicia convex_hull
 	del::convex_hull convex_hull_obj;
 
@@ -172,7 +174,7 @@ int main( int argc, char* argv[] ) {
 	convex_hull_obj.push_back(CA);
 
 	del::stl_module New_Module;
-	del::triangle_building Build; 
+	del::triangle_building Build;
 	del::triangle_Delaunay New_Triangle;
 	del::point New_Normal;
 	bool not_found;
@@ -184,9 +186,9 @@ int main( int argc, char* argv[] ) {
 	Origem.p[1]=0;
 	Origem.p[2]=0;
 
-	long unsigned int J =0;      
-	// convex_hull still have 'bool really_a_convex_hull_member = false' edges         
-	while (i<convex_hull.size() ) 
+	long unsigned int J =0;
+	// convex_hull still have 'bool really_a_convex_hull_member = false' edges
+	while (i<convex_hull.size() )
 	{
 		// varre convex_hull testando really_a_convex_hull_member para cada edge
 		del::edge working_edge = convex_hull_obj[J];
@@ -199,16 +201,16 @@ int main( int argc, char* argv[] ) {
 		}
 		if (working_edge.really_a_convex_hull_member=false)
 		{
-			
+
 			//extraindo os dois edges do New_Triangle:
 			New_Edge_1.first_point = ;
 			New_Edge_1.second_point = ;           //to be done!!!!!!!!
 			New_Edge_2.first_point = ;
 			New_Edge_2.second_point = ;
 
-			// se achou triangulo, então deve apagar do convex_hull 
-			// o edge que deu base para sua construção 
-			// e inserir os outros 2 edges do New_Triangle no convex_hull: 
+			// se achou triangulo, então deve apagar do convex_hull
+			// o edge que deu base para sua construção
+			// e inserir os outros 2 edges do New_Triangle no convex_hull:
 			convex_hull.erase(J);
 			convex_hull.insert(J,New_Edge_2);
 			convex_hull.insert(J,New_Edge_1);
@@ -219,7 +221,7 @@ int main( int argc, char* argv[] ) {
 			New_Module.Normal = New_Normal;
 			New_Module.Triangle = New_Triangle;
 			not_found = true; //marcador lógico para registrar quando o triangulo encontrado já está guardado no Triangulation_with_normals
-			
+
 			//varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
 			for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
 				{
@@ -233,12 +235,12 @@ int main( int argc, char* argv[] ) {
 					{
 					Triangulation_with_normals.push_back(New_Module);
 					}
-					
+
 				}
-				
+
 		}
 
-	} //end while: 
+	} //end while:
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
 	*/
