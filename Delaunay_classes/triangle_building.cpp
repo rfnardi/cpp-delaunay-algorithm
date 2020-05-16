@@ -1,7 +1,7 @@
 #include "./triangle_building.hpp"
 
 		//método que determina o primeiro triangulo da triangulação:
-		del::Triangle del::Triangle_building::point_based_triangle_building (del::Triangle_building::A)
+		del::Triangle del::Triangle_building.point_based_triangle_building (del::Triangle_building.A)
 		{
 
 				//encontra vizinhança do ponto A:
