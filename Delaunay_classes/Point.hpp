@@ -1,5 +1,5 @@
-#ifndef DEL_POINT_H
-#define DEL_POINT_H
+#ifndef DEL_Point_H
+#define DEL_Point_H
 #include <string>
 
 namespace del {
@@ -117,7 +117,7 @@ class Point
 		*/
 		float distancia ( Point P );
 
-}; //fim da classe point
+}; //fim da classe Point
 
 };
 #endif

@@ -16,9 +16,9 @@
 
 #include "Delaunay_classes/Point.cpp"
 #include "Delaunay_classes/Vizinhanca.cpp"
-#include "Delaunay_classes/convex_hull.cpp"
+//#include "Delaunay_classes/convex_hull.cpp"
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-#include "Delaunay_classes/triangle_building.cpp"
+//#include "Delaunay_classes/Triangle_Building.cpp"
 //#include "Delaunay_classes/triangle_recording.cpp"
 
 
@@ -131,15 +131,15 @@ int main( int argc, char* argv[] ) {
 
 	return EXIT_SUCCESS;
 	/*
-	del::triangle_building triangle_building_obj;
+	del::Triangle_Building Triangle_Building_obj;
 
-	del::point A; //ponto mais alto do sólido (maior z)
+	del::Point A; //ponto mais alto do sólido (maior z)
 
 	A.p[0] = catalogo[0][0][0];
 	A.p[1] = catalogo[0][0][1];
 	A.p[2] = catalogo[0][0][2];
 
-	del::triangle_Delaunay T_0 = triangle_building_obj.point_based_triangle_building(A);
+	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 
 	//orientando corretamente para cima a normal do primeiro triangulo:
 	if (T_0.Normal.p[2]<0)
@@ -159,29 +159,29 @@ int main( int argc, char* argv[] ) {
 
 	//constrói primeiros edges a partir do T_0 e os armazena no convex_hull_obj
 	del::edge AB;
-	AB.first_point = Module_0.Triangle.A;
-	AB.second_point = Module_0.Triangle.B;
+	AB.first_Point = Module_0.Triangle.A;
+	AB.second_Point = Module_0.Triangle.B;
 	convex_hull_obj.push_back(AB);
 
 	del::edge BC;
-	BC.first_point = Module_0.Triangle.B;
-	BC.second_point = Module_0.Triangle.C;
+	BC.first_Point = Module_0.Triangle.B;
+	BC.second_Point = Module_0.Triangle.C;
 	convex_hull_obj.push_back(BC);
 
 	del::edge CA;
-	CA.first_point = Module_0.Triangle.C;
-	CA.second_point = Module_0.Triangle.A;
+	CA.first_Point = Module_0.Triangle.C;
+	CA.second_Point = Module_0.Triangle.A;
 	convex_hull_obj.push_back(CA);
 
 	del::stl_module New_Module;
-	del::triangle_building Build;
-	del::triangle_Delaunay New_Triangle;
-	del::point New_Normal;
+	del::Triangle_Building Build;
+	del::Triangle New_Triangle;
+	del::Point New_Normal;
 	bool not_found;
 	del::edge New_Edge_1;
 	del::edge New_Edge_2;
 
-	del::point Origem;
+	del::Point Origem;
 	Origem.p[0]=0;
 	Origem.p[1]=0;
 	Origem.p[2]=0;
@@ -193,7 +193,7 @@ int main( int argc, char* argv[] ) {
 		// varre convex_hull testando really_a_convex_hull_member para cada edge
 		del::edge working_edge = convex_hull_obj[J];
 
-		New_Triangle = Build.edge_based_triangle_building_obj (working_edge);
+		New_Triangle = Build.edge_based_Triangle_Building_obj (working_edge);
 		if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem) //triângulo construído é trivial
 		{
 			working_edge.really_a_convex_hull_member = true;
@@ -203,10 +203,10 @@ int main( int argc, char* argv[] ) {
 		{
 
 			//extraindo os dois edges do New_Triangle:
-			New_Edge_1.first_point = ;
-			New_Edge_1.second_point = ;           //to be done!!!!!!!!
-			New_Edge_2.first_point = ;
-			New_Edge_2.second_point = ;
+			New_Edge_1.first_Point = ;
+			New_Edge_1.second_Point = ;           //to be done!!!!!!!!
+			New_Edge_2.first_Point = ;
+			New_Edge_2.second_Point = ;
 
 			// se achou triangulo, então deve apagar do convex_hull
 			// o edge que deu base para sua construção

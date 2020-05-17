@@ -1,6 +1,6 @@
 #include "catalogo_vizinhos.cpp"
 #include "Centro_Esfera_Aprox.cpp"
-#include "triangle_building.cpp"
+#include "Triangle_Building.cpp"
 #include "triangle_recording.cpp"
 #include "convex_hull.cpp"
 

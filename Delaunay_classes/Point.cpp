@@ -1,5 +1,5 @@
-#ifndef DEL_POINT_C
-#define DEL_POINT_C
+#ifndef DEL_Point_C
+#define DEL_Point_C
 
 #include "./Point.hpp"
 #include <math.h>
@@ -21,22 +21,22 @@ void del::Point::operator = ( del::Point P )
 
 del::Point del::Point::operator + ( del::Point P )
 {
-	del::Point point;
-	point.p[ 0 ] = this->p[ 0 ] + P.p[ 0 ];
-	point.p[ 1 ] = this->p[ 1 ] + P.p[ 1 ];
-	point.p[ 2 ] = this->p[ 2 ] + P.p[ 2 ];
+	del::Point Point;
+	Point.p[ 0 ] = this->p[ 0 ] + P.p[ 0 ];
+	Point.p[ 1 ] = this->p[ 1 ] + P.p[ 1 ];
+	Point.p[ 2 ] = this->p[ 2 ] + P.p[ 2 ];
 	
-	return point;
+	return Point;
 }
 
 del::Point del::Point::operator - ( del::Point P )
 {
-	del::Point point;
-	point.p[0] = this->p[0] - P.p[0];
-	point.p[1] = this->p[1] - P.p[1];
-	point.p[2] = this->p[2] - P.p[2];
+	del::Point Point;
+	Point.p[0] = this->p[0] - P.p[0];
+	Point.p[1] = this->p[1] - P.p[1];
+	Point.p[2] = this->p[2] - P.p[2];
 	
-	return point;
+	return Point;
 }
 
 bool del::Point::operator == (del::Point P)

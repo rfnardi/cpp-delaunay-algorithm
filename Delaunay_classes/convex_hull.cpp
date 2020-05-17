@@ -11,8 +11,8 @@ namespace del
         }
         ~edge();
 
-        del::point first_point;
-        del::point second_point;
+        del::Point first_Point;
+        del::Point second_Point;
         
         bool really_a_convex_hull_member;
 
