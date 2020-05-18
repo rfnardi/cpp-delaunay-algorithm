@@ -1,33 +1,27 @@
 namespace del
 {
-    class edge
+    class Edge
     {
     private:
         /* data */
     public:
-        edge(/* args */);
+        Edge(/* args */)
         {
             this->really_a_convex_hull_member = false;
         }
-        ~edge();
+        ~Edge();
 
         del::Point first_Point;
         del::Point second_Point;
-        
+
         bool really_a_convex_hull_member;
 
 
     };
-    
-    edge::edge(/* args */)
-    {
-    }
-    
-    edge::~edge()
-    {
-    }
-    
-    
+
+
+
+
     class convex_hull
     {
     private:
@@ -36,16 +30,8 @@ namespace del
         convex_hull(/* args */);
         ~convex_hull();
 
-        std::vector< del::edge > edge_collection;
-        
+        std::vector< del::Edge > edge_collection;
+
     };
-    
-    convex_hull::convex_hull(/* args */)
-    {
-    }
-    
-    convex_hull::~convex_hull()
-    {
-    }
-    
+
 } // namespace del
