@@ -337,7 +337,3 @@
     return New_triangle;
 
   } //Fim do método "edge_based_Triangle_Building"
-
-
-
-              //caso o triangulo seja admitido na triangulação, ENTÃO determina orientação correta dos vértices

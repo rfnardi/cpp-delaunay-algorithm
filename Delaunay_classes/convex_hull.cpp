@@ -2,10 +2,9 @@ namespace del
 {
     class Edge
     {
-    private:
-        /* data */
+
     public:
-        Edge(/* args */)
+        Edge()
         {
             this->really_a_convex_hull_member = false;
         }
@@ -24,8 +23,7 @@ namespace del
 
     class convex_hull
     {
-    private:
-        /* data */
+  
     public:
         convex_hull(/* args */);
         ~convex_hull();
