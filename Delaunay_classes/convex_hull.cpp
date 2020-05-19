@@ -6,14 +6,14 @@ namespace del
     public:
         Edge()
         {
-            this->really_a_convex_hull_member = false;
+            this->really_a_Convex_Hull_member = false;
         }
         ~Edge();
 
         del::Point first_Point;
         del::Point second_Point;
 
-        bool really_a_convex_hull_member;
+        bool really_a_Convex_Hull_member;
 
 
     };
@@ -21,12 +21,12 @@ namespace del
 
 
 
-    class convex_hull
+    class Convex_Hull
     {
   
     public:
-        convex_hull(/* args */);
-        ~convex_hull();
+        Convex_Hull(/* args */);
+        ~Convex_Hull();
 
         std::vector< del::Edge > edge_collection;
 

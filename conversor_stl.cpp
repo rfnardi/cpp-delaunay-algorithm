@@ -16,7 +16,7 @@
 
 #include "Delaunay_classes/Point.cpp"
 #include "Delaunay_classes/Vizinhanca.cpp"
-//#include "Delaunay_classes/convex_hull.cpp"
+//#include "Delaunay_classes/Convex_Hull.cpp"
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
 //#include "Delaunay_classes/Triangle_Building.cpp"
 //#include "Delaunay_classes/triangle_recording.cpp"
@@ -154,24 +154,24 @@ int main( int argc, char* argv[] ) {
 	//guardando primeiro módulo do arquivo stl:
 	Triangulation_with_normals.push_back(Module_0);
 
-	//inicia convex_hull
-	del::convex_hull convex_hull_obj;
+	//inicia Convex_Hull
+	del::Convex_Hull Convex_Hull_obj;
 
-	//constrói primeiros edges a partir do T_0 e os armazena no convex_hull_obj
+	//constrói primeiros edges a partir do T_0 e os armazena no Convex_Hull_obj
 	del::edge AB;
 	AB.first_Point = Module_0.Triangle.A;
 	AB.second_Point = Module_0.Triangle.B;
-	convex_hull_obj.push_back(AB);
+	Convex_Hull_obj.push_back(AB);
 
 	del::edge BC;
 	BC.first_Point = Module_0.Triangle.B;
 	BC.second_Point = Module_0.Triangle.C;
-	convex_hull_obj.push_back(BC);
+	Convex_Hull_obj.push_back(BC);
 
 	del::edge CA;
 	CA.first_Point = Module_0.Triangle.C;
 	CA.second_Point = Module_0.Triangle.A;
-	convex_hull_obj.push_back(CA);
+	Convex_Hull_obj.push_back(CA);
 
 	del::stl_module New_Module;
 	del::Triangle_Building Build;
@@ -187,19 +187,19 @@ int main( int argc, char* argv[] ) {
 	Origem.p[2]=0;
 
 	long unsigned int J =0;
-	// convex_hull still have 'bool really_a_convex_hull_member = false' edges
-	while (i<convex_hull.size() )
+	// Convex_Hull still have 'bool really_a_Convex_Hull_member = false' edges
+	while (i<Convex_Hull.size() )
 	{
-		// varre convex_hull testando really_a_convex_hull_member para cada edge
-		del::edge working_edge = convex_hull_obj[J];
+		// varre Convex_Hull testando really_a_Convex_Hull_member para cada edge
+		del::edge working_edge = Convex_Hull_obj[J];
 
 		New_Triangle = Build.edge_based_Triangle_Building_obj (working_edge);
 		if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem) //triângulo construído é trivial
 		{
-			working_edge.really_a_convex_hull_member = true;
-			J++; //apenas prossegue na varredura do convex_hull quando a aresta working_edge não dá origem a outro triangulo
+			working_edge.really_a_Convex_Hull_member = true;
+			J++; //apenas prossegue na varredura do Convex_Hull quando a aresta working_edge não dá origem a outro triangulo
 		}
-		if (working_edge.really_a_convex_hull_member=false)
+		if (working_edge.really_a_Convex_Hull_member=false)
 		{
 
 			//extraindo os dois edges do New_Triangle:
@@ -208,12 +208,12 @@ int main( int argc, char* argv[] ) {
 			New_Edge_2.first_Point = ;
 			New_Edge_2.second_Point = ;
 
-			// se achou triangulo, então deve apagar do convex_hull
+			// se achou triangulo, então deve apagar do Convex_Hull
 			// o edge que deu base para sua construção
-			// e inserir os outros 2 edges do New_Triangle no convex_hull:
-			convex_hull.erase(J);
-			convex_hull.insert(J,New_Edge_2);
-			convex_hull.insert(J,New_Edge_1);
+			// e inserir os outros 2 edges do New_Triangle no Convex_Hull:
+			Convex_Hull.erase(J);
+			Convex_Hull.insert(J,New_Edge_2);
+			Convex_Hull.insert(J,New_Edge_1);
 
 			// triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados
 			New_Triangle.same_curl();

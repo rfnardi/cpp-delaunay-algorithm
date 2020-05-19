@@ -2,7 +2,7 @@
 #include "Centro_Esfera_Aprox.cpp"
 #include "Triangle_Building.cpp"
 #include "triangle_recording.cpp"
-#include "convex_hull.cpp"
+#include "Convex_Hull.cpp"
 
 namespace del {
 
@@ -124,7 +124,7 @@ namespace del {
         //varrer catalogo de vizinhanças e apagar todas com exceção daquelas que tiverem pontos do convex hull:
         for (size_t VIZ = 0; VIZ < catalogo.size(); VIZ++)
         {
-            for (size_t convex_hull_index = 0; convex_hull_index < del::convex_hull.edge_collection.size(); convex_hull_index++)
+            for (size_t Convex_Hull_index = 0; Convex_Hull_index < del::Convex_Hull.edge_collection.size(); Convex_Hull_index++)
             {
                 if (/*ponto do convex hull != primeiro ponto da vizinhança*/)
                 {
@@ -134,7 +134,7 @@ namespace del {
                         
         }
         //fazer update das vizinhanças dos pontos do convex hull na nova região
-        //colocar 'FALSE' em 'bool really_a_convex_hull_member' de todos os edges que tiverem pontos cujas vizinhanças sofreram atualização
+        //colocar 'FALSE' em 'bool really_a_Convex_Hull_member' de todos os edges que tiverem pontos cujas vizinhanças sofreram atualização
         //monta todas as outras vizinhanças de pontos na nova região
         //vizinhanças que receberem novos pontos vizinhos (isto é, que sofreram atualização) devem ser ponto de partida para triangulação da região
 
