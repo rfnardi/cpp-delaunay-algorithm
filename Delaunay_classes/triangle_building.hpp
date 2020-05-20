@@ -1,5 +1,6 @@
 #ifndef TRIANGLE_BUILD_H
 #define TRIANGLE_BUILD_H
+#include <vector>
 #include "./Triangle.hpp"
 #include "./Point.hpp"
 #include "./convex_hull.hpp"
@@ -14,6 +15,10 @@
         public:
           Triangle_Building ();
           ~Triangle_Building ();
+
+          std::vector<std::vector<del::Point>> Catalogo_Viz;
+
+          void Recebe_Catalogo (std::vector<std::vector<del::Point>> neighboorhoodsBook);
 
           del::Triangle Point_based_Triangle_Building (del::Point );
 

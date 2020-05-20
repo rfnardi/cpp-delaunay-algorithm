@@ -7,16 +7,21 @@
 #include "./convex_hull.hpp"
 #include "./Vizinhanca.hpp"
 
+  void del::Triangle_Building::Recebe_Catalogo(std::vector<std::vector<del::Point>> neighboorhoodsBook)
+  {
+    this->Catalogo_Viz = neighboorhoodsBook;
+  }
+
   del::Triangle del::Triangle_Building::Point_based_Triangle_Building (del::Point A)
   {
 
     long unsigned int VIZ_A, VIZ_B, VIZ_C;
 
     //encontra vizinhança do ponto A:
-    for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++)
+    for (size_t k = 0; k < Catalogo_Viz.size(); k++)
     {
       del::Point P;
-      P = obter_catalogo_de_vizinhancas[k][0];
+      P = Catalogo_Viz[k][0];
 
       if (A == P)
       {
@@ -27,14 +32,14 @@
 
     //ponto B se localiza na segunda linha da vizinhança de A:
     del::Point B;
-    B = obter_catalogo_de_vizinhancas[VIZ_A][1];
+    B = Catalogo_Viz[VIZ_A][1];
 
 
     //encontra vizinhança do ponto B:
-    for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++)
+    for (size_t k = 0; k < Catalogo_Viz.size(); k++)
     {
       del::Point P;
-      P = obter_catalogo_de_vizinhancas[k][0];
+      P = Catalogo_Viz[k][0];
 
       if (B == P)
       {
@@ -63,16 +68,16 @@
       del::Point C;
 
       /*parte da segunda linha da tabela de vizinhos de A pq a primeira linha é o próprio A*/
-      for (size_t linha_A = 1; linha_A < obter_catalogo_de_vizinhancas[VIZ_A].size(); linha_A++)
+      for (size_t linha_A = 1; linha_A < Catalogo_Viz[VIZ_A].size(); linha_A++)
       {
         for (size_t col_A = 0; col_A < 3; col_A++)
         {
-          P1.p[col_A] = obter_catalogo_de_vizinhancas[VIZ_A][linha_A][col_A];
-          for (size_t linha_B = 1; linha_B < obter_catalogo_de_vizinhancas[VIZ_B].size(); linha_B++)
+          P1.p[col_A] = Catalogo_Viz[VIZ_A][linha_A][col_A];
+          for (size_t linha_B = 1; linha_B < Catalogo_Viz[VIZ_B].size(); linha_B++)
           {
             for (size_t col_B = 0; col_B < 3; col_B++)
             {
-              P2.p[col_B] = obter_catalogo_de_vizinhancas[VIZ_B][linha_B][col_B];
+              P2.p[col_B] = Catalogo_Viz[VIZ_B][linha_B][col_B];
               if ( (P1 == P2) && !(P1 == B) && !(P1 == A) ) //P1 == P2 é o PONTO C !!!
               {
                 C = P1;
@@ -83,10 +88,10 @@
 
                 del::Point P;
                 // encontra vizinhança do ponto C:
-                for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++)
+                for (size_t k = 0; k < Catalogo_Viz.size(); k++)
                 {
 
-                  P = obter_catalogo_de_vizinhancas[k][0];
+                  P = Catalogo_Viz[k][0];
 
                   if (C == P)
                     {
@@ -96,9 +101,9 @@
 
                 encontrou = false;
                 //procurando pontos da vizinhança de A dentro da esfera:
-                for (size_t i = 2; i < obter_catalogo_de_vizinhancas[VIZ_A].size(); i++)
+                for (size_t i = 2; i < Catalogo_Viz[VIZ_A].size(); i++)
                 {
-                  P = obter_catalogo_de_vizinhancas[VIZ_A][i];
+                  P = Catalogo_Viz[VIZ_A][i];
 
                   d = P.distancia(Centro_Circunf_ABC);
                   if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
@@ -111,9 +116,9 @@
                 //se não encontrou pto dentro da esfera na vizinhança de A, procura na vizinhança de B :
                 if (!encontrou)
                 {
-                  for (size_t i = 1; i < obter_catalogo_de_vizinhancas[VIZ_B].size(); i++)
+                  for (size_t i = 1; i < Catalogo_Viz[VIZ_B].size(); i++)
                   {
-                    P = obter_catalogo_de_vizinhancas[VIZ_B][i];
+                    P = Catalogo_Viz[VIZ_B][i];
 
                     d = P.distancia(Centro_Circunf_ABC);
                     if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
@@ -127,9 +132,9 @@
                 //se não encontrou pto dentro da esfera na vizinhança de B, procura na vizinhança de C:
                 if (!encontrou)
                 {
-                  for (size_t i = 1; i < obter_catalogo_de_vizinhancas[VIZ_C].size(); i++)
+                  for (size_t i = 1; i < Catalogo_Viz[VIZ_C].size(); i++)
                   {
-                    P = obter_catalogo_de_vizinhancas[VIZ_C][i] ;
+                    P = Catalogo_Viz[VIZ_C][i] ;
 
                     d = P.distancia(Centro_Circunf_ABC);
                     if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
@@ -175,9 +180,9 @@
 
     del::Point P;
     //encontra vizinhança do ponto A:
-    for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++)
+    for (size_t k = 0; k < Catalogo_Viz.size(); k++)
     {
-      P = obter_catalogo_de_vizinhancas[k][0];
+      P = Catalogo_Viz[k][0];
       if (A == P)
       {
         VIZ_A = k;
@@ -185,9 +190,9 @@
     }
 
     //encontra vizinhança do ponto B:
-    for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++)
+    for (size_t k = 0; k < Catalogo_Viz.size(); k++)
     {
-      P = obter_catalogo_de_vizinhancas[k][0];
+      P = Catalogo_Viz[k][0];
       if (B == P)
       {
         VIZ_B = k;
@@ -208,16 +213,16 @@
       del::Point P1;
       del::Point P2;
       del::Point C;
-      for (size_t linha_A = 0; linha_A < obter_catalogo_de_vizinhancas[VIZ_A].size(); linha_A++)//BUSCA DO PONTO C
+      for (size_t linha_A = 0; linha_A < Catalogo_Viz[VIZ_A].size(); linha_A++)//BUSCA DO PONTO C
       {
         for (size_t col_A = 0; col_A < 3; col_A++)//BUSCA DO PONTO C
         {
-          P1.p[col_A] = obter_catalogo_de_vizinhancas[VIZ_A][linha_A][col_A];
-          for (size_t linha_B = 0; linha_B < obter_catalogo_de_vizinhancas[VIZ_B].size(); linha_B++)//BUSCA DO PONTO C
+          P1.p[col_A] = Catalogo_Viz[VIZ_A][linha_A][col_A];
+          for (size_t linha_B = 0; linha_B < Catalogo_Viz[VIZ_B].size(); linha_B++)//BUSCA DO PONTO C
           {
             for (size_t col_B = 0; col_B < 3; col_B++)//BUSCA DO PONTO C
             {
-              P2.p[col_B] = obter_catalogo_de_vizinhancas[VIZ_B][linha_B][col_B];
+              P2.p[col_B] = Catalogo_Viz[VIZ_B][linha_B][col_B];
               encontrou_ponto_C = false;
               if ( (P1 == P2) && !(P1 == B) && !(P1 == A) ) //P1 == P2 é o PONTO C !!!
               {
@@ -227,9 +232,9 @@
 
                 Raio = sqrt( pow((A.p[0]-Centro_Circunf_ABC.p[0]),2) + pow((A.p[1]-Centro_Circunf_ABC.p[1]),2) + pow((A.p[2]-Centro_Circunf_ABC.p[2]),2) );
 
-                for (size_t k = 0; k < obter_catalogo_de_vizinhancas.size(); k++) // encontra vizinhança do ponto C
+                for (size_t k = 0; k < Catalogo_Viz.size(); k++) // encontra vizinhança do ponto C
                 {
-                  P = obter_catalogo_de_vizinhancas[k][0];
+                  P = Catalogo_Viz[k][0];
                   if (P1 == P)
                     {
                       VIZ_C = k;
@@ -238,9 +243,9 @@
 
                 encontrou_ponto_dentro_da_esfera = false;
                 //procurando pontos da vizinhança de A dentro da esfera:
-                for (size_t i = 2; i < obter_catalogo_de_vizinhancas[VIZ_A].size(); i++)
+                for (size_t i = 2; i < Catalogo_Viz[VIZ_A].size(); i++)
                 {
-                  P = obter_catalogo_de_vizinhancas[VIZ_A][i];
+                  P = Catalogo_Viz[VIZ_A][i];
                   d = P.distancia(Centro_Circunf_ABC);
                   if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
                   {
@@ -252,9 +257,9 @@
                 //se não encontrou pto dentro da esfera na vizinhança de A, procura na vizinhança de B :
                 if (!encontrou_ponto_dentro_da_esfera)
                 {
-                  for (size_t i = 1; i < obter_catalogo_de_vizinhancas[VIZ_B].size(); i++)
+                  for (size_t i = 1; i < Catalogo_Viz[VIZ_B].size(); i++)
                   {
-                    P = obter_catalogo_de_vizinhancas[VIZ_B][i];
+                    P = Catalogo_Viz[VIZ_B][i];
                     d = P.distancia(Centro_Circunf_ABC);
                     if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
                     {
@@ -267,9 +272,9 @@
                 if (!encontrou_ponto_dentro_da_esfera)
                 {
                   //procurando pontos da vizinhança de C dentro da esfera:
-                  for (size_t i = 1; i < obter_catalogo_de_vizinhancas[VIZ_C].size(); i++)
+                  for (size_t i = 1; i < Catalogo_Viz[VIZ_C].size(); i++)
                   {
-                    P = obter_catalogo_de_vizinhancas[VIZ_C][i];
+                    P = Catalogo_Viz[VIZ_C][i];
                     d = P.distancia(Centro_Circunf_ABC);
                     if ((d<Raio) && !(P == A) && !(P == B) && !(P == C))
                     {

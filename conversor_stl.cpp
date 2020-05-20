@@ -110,6 +110,10 @@ int main( int argc, char* argv[] ) {
 
 	// obter_catalogo_de_vizinhancas de pontos inicia aqui
 	del::Vizinhanca vizinhanca( pontos );
+	del::Triangle_Building triangle_Builder();
+
+
+
 	// vizinhanca.ativar_debug();
 	vizinhanca.desativar_debug();
 	float radius =  1.5 * delta_z;
@@ -117,14 +121,11 @@ int main( int argc, char* argv[] ) {
 
 	t[ 0 ] = clock();
 	std::vector<std::vector<del::Point>> neighboorhoodsBook = vizinhanca.obter_catalogo_de_vizinhancas();
+	triangle_Builder.Recebe_Catalogo(neighboorhoodsBook);
 	t[ 1 ] = clock();
 	appendToFile( "timer.log", std::to_string( currentLine ) + " " + std::to_string( timeBetween( t[ 0 ], t[ 1 ] ) ) + " " + std::to_string( delta_z ) );
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
-
-
-	// compilação e utilização testada até esta linha
-	// conteúdo abaixo não foi testado ainda!
 
 	//Inicia triangulação
 
@@ -132,6 +133,9 @@ int main( int argc, char* argv[] ) {
 	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
 	return EXIT_SUCCESS;
+	// compilação e utilização testada até esta linha
+	// conteúdo abaixo não foi testado ainda!
+
 	/*
 	del::Triangle_Building Triangle_Building_obj;
 
