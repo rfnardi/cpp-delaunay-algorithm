@@ -1,4 +1,4 @@
-#include "catalogo_vizinhos.cpp"
+#include "obter_catalogo_de_vizinhancas_vizinhos.cpp"
 #include "Centro_Esfera_Aprox.cpp"
 #include "Triangle_Building.cpp"
 #include "triangle_recording.cpp"
@@ -121,14 +121,14 @@ namespace del {
         ~gluing();
 
                
-        //varrer catalogo de vizinhanças e apagar todas com exceção daquelas que tiverem pontos do convex hull:
-        for (size_t VIZ = 0; VIZ < catalogo.size(); VIZ++)
+        //varrer obter_catalogo_de_vizinhancas de vizinhanças e apagar todas com exceção daquelas que tiverem pontos do convex hull:
+        for (size_t VIZ = 0; VIZ < obter_catalogo_de_vizinhancas.size(); VIZ++)
         {
             for (size_t Convex_Hull_index = 0; Convex_Hull_index < del::Convex_Hull.edge_collection.size(); Convex_Hull_index++)
             {
                 if (/*ponto do convex hull != primeiro ponto da vizinhança*/)
                 {
-                   catalogo.erase(VIZ); //apaga vizinhança do catálogo
+                   obter_catalogo_de_vizinhancas.erase(VIZ); //apaga vizinhança do catálogo
                 }
             }
                         

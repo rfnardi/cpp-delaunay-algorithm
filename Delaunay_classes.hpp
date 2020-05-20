@@ -9,17 +9,17 @@ public:
   virtual ~quadrilatero_vizinhos ();
 };
 
-class catalogo_vizinhos {
+class obter_catalogo_de_vizinhancas_vizinhos {
 private:
   /* data */
 
 public:
 <<<<<<< HEAD
-  catalogo_vizinhos (array P[3]; std::vector<float> ptos_vizinhos;);
+  obter_catalogo_de_vizinhancas_vizinhos (array P[3]; std::vector<float> ptos_vizinhos;);
 =======
-  catalogo_vizinhos (array P, std::vector<float> ptos_vizinhos );
->>>>>>> feature/catalogo-de-vizinhos
-  virtual ~catalogo_vizinhos ();
+  obter_catalogo_de_vizinhancas_vizinhos (array P, std::vector<float> ptos_vizinhos );
+>>>>>>> feature/obter_catalogo_de_vizinhancas-de-vizinhos
+  virtual ~obter_catalogo_de_vizinhancas_vizinhos ();
 };
 
 

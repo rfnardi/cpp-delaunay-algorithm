@@ -1,3 +1,9 @@
+#ifndef CONVEX_HULL
+#define CONVEX_HULL
+
+#include "./Point.hpp"
+
+
 namespace del
 {
     class Edge
@@ -23,7 +29,7 @@ namespace del
 
     class Convex_Hull
     {
-  
+
     public:
         Convex_Hull(/* args */);
         ~Convex_Hull();
@@ -33,3 +39,4 @@ namespace del
     };
 
 } // namespace del
+#endif

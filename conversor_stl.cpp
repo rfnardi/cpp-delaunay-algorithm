@@ -16,10 +16,12 @@
 
 #include "Delaunay_classes/Point.cpp"
 #include "Delaunay_classes/Vizinhanca.cpp"
-//#include "Delaunay_classes/Convex_Hull.cpp"
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-//#include "Delaunay_classes/Triangle_Building.cpp"
-//#include "Delaunay_classes/triangle_recording.cpp"
+#include "Delaunay_classes/triangle_building.cpp"
+#include "Delaunay_classes/Triangle.cpp"
+#include "Delaunay_classes/convex_hull.hpp"
+#include "Delaunay_classes/stl_module.hpp"
+//#include "Delaunay_classes/slicing_and_gluing.cpp"
 
 
 
@@ -106,7 +108,7 @@ int main( int argc, char* argv[] ) {
 	}
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
 
-	// catalogo de pontos inicia aqui
+	// obter_catalogo_de_vizinhancas de pontos inicia aqui
 	del::Vizinhanca vizinhanca( pontos );
 	// vizinhanca.ativar_debug();
 	vizinhanca.desativar_debug();
@@ -127,7 +129,7 @@ int main( int argc, char* argv[] ) {
 	//Inicia triangulação
 
 	std::cout << "Iniciando triangulação." << std::endl;
-	std::vector< del::stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
+	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
 	return EXIT_SUCCESS;
 	/*
@@ -135,9 +137,9 @@ int main( int argc, char* argv[] ) {
 
 	del::Point A; //ponto mais alto do sólido (maior z)
 
-	A.p[0] = catalogo[0][0][0];
-	A.p[1] = catalogo[0][0][1];
-	A.p[2] = catalogo[0][0][2];
+	A.p[0] = obter_catalogo_de_vizinhancas[0][0][0];
+	A.p[1] = obter_catalogo_de_vizinhancas[0][0][1];
+	A.p[2] = obter_catalogo_de_vizinhancas[0][0][2];
 
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 

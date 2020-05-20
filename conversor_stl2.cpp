@@ -11,7 +11,7 @@
 #include <fstream>
 #include <bits/stdc++.h>
 
-#include "Delaunay_classes/catalogo_vizinhos.cpp";
+#include "Delaunay_classes/obter_catalogo_de_vizinhancas_vizinhos.cpp";
 
 int main(){
 
@@ -62,12 +62,12 @@ int main(){
         std::cin >> delta_z;
 
 
-        // catalogo de pontos inicia aqui
+        // obter_catalogo_de_vizinhancas de pontos inicia aqui
         std::cout<<"Iniciando Catálogo de vizinhanças."<<'\n';
-        del::catalogo_vizinhos catalogo( pontos );
-        catalogo.define_raio_vizinhanca( 1.5 * delta_z );
+        del::obter_catalogo_de_vizinhancas_vizinhos obter_catalogo_de_vizinhancas( pontos );
+        obter_catalogo_de_vizinhancas.define_raio_vizinhanca( 1.5 * delta_z );
 
-        //Chama método da classe catalogo que monta as vizinhanças
+        //Chama método da classe obter_catalogo_de_vizinhancas que monta as vizinhanças
 
         //Inicia triangulação
         std::cout<<"Iniciando triangulação."<<'\n';
@@ -78,9 +78,9 @@ int main(){
 
         del::Point A; //ponto mais alto do sólido (maior z)
 
-        A.p[0] = catalogo[0][0][0];
-        A.p[1] = catalogo[0][0][1];
-        A.p[2] = catalogo[0][0][2];
+        A.p[0] = obter_catalogo_de_vizinhancas[0][0][0];
+        A.p[1] = obter_catalogo_de_vizinhancas[0][0][1];
+        A.p[2] = obter_catalogo_de_vizinhancas[0][0][2];
 
         del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 
