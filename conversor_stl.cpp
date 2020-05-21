@@ -142,13 +142,11 @@ int main( int argc, char* argv[] )
 
 	del::Point A; //ponto mais alto do sólido (maior z)
 
-	A = neighboorhoodsBook[0][0];
+	A = neighboorhoodsBook[0][0]; //o primeiro ponto do neighboorhoodsBook não é o ponto com maior z!!!!! Trabalhar aqui!!!!
 
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 
-	del::Point first_Normal;
-
-	first_Normal = T_0.Normal();
+	del::Point first_Normal = T_0.Normal();
 
 	//orientando corretamente para cima a normal do primeiro triangulo:
 	if (first_Normal.p[2]<0)
@@ -204,17 +202,18 @@ int main( int argc, char* argv[] )
 		//triângulo construído é trivial
 		if (New_Triangle.A == Origem && New_Triangle.B == Origem && New_Triangle.C == Origem)
 		{
-			working_edge.really_a_Convex_Hull_member = true;
+			Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member = true;
 			J++; //apenas prossegue na varredura do Convex_Hull quando a aresta working_edge não dá origem a outro triangulo
+			working_edge = Convex_Hull_obj.edge_collection[J];
 		}
-		if (working_edge.really_a_Convex_Hull_member = false)
+		if (Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member = false)
 		{
 
 			//extraindo os dois edges do New_Triangle:
-			New_Edge_1.first_Point = ;
-			New_Edge_1.second_Point = ;           //to be done!!!!!!!!
-			New_Edge_2.first_Point = ;
-			New_Edge_2.second_Point = ;
+			New_Edge_1.first_Point = working_edge.first_Point;
+			New_Edge_1.second_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
+			New_Edge_2.first_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
+			New_Edge_2.second_Point = working_edge.second_Point;
 
 			// se achou triangulo, então deve apagar do Convex_Hull
 			// o edge que deu base para sua construção
@@ -232,22 +231,21 @@ int main( int argc, char* argv[] )
 
 			//varre Triangulation_with_normals em busca de um módulo igual ao New_Module:
 			for (size_t i = 0; i < Triangulation_with_normals.size(); i++)
+			{
+				if (Triangulation_with_normals[i] == New_Module)
 				{
-					if (Triangulation_with_normals[i] == New_Module)
-					{
-					// descarta triangulo e o modulo e sai do loop
-					not_found = false;
-					break;
-					}
-					else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
-					{
-					Triangulation_with_normals.push_back(New_Module);
-					}
-
+				// descarta triangulo e o modulo e sai do loop
+				not_found = false;
+				break;
 				}
-
+				else if ((i==Triangulation_with_normals.size() - 1) && (not_found))
+				{
+				Triangulation_with_normals.push_back(New_Module);
+				}
+			}
+			working_edge = Convex_Hull_obj.edge_collection[J];
+			T_0 = New_Triangle;
 		}
-
 	} //end while:
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
@@ -256,16 +254,5 @@ int main( int argc, char* argv[] )
 	return EXIT_SUCCESS;
 	// compilação e utilização testada até esta linha
 	// conteúdo abaixo não foi testado ainda!
-
-
-
-
-
-
-
-
-
-
-
 
 }

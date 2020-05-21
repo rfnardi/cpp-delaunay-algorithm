@@ -93,4 +93,22 @@ del::Point del::Triangle::Normal ()
 
 }
 
+del::Point del::Triangle::not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(del::Triangle T)
+{
+  del::Point Output;
+  if (!(this->A == T.A) && !(this->A == T.B) && !(this->A == T.C))
+  {
+    Output = this->A;
+  }
+  else if (!(this->B == T.A) && !(this->B == T.B) && !(this->B == T.C))
+  {
+    Output = this->B;
+  }
+  else if (!(this->C == T.A) && !(this->C == T.B) && !(this->C == T.C))
+  {
+    Output = this->C;
+  }
+  return Output;
+}
+
 #endif

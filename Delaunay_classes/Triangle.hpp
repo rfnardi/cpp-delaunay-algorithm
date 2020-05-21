@@ -29,6 +29,8 @@ namespace del
 
           Point Normal ();
 
+          Point not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle (Triangle );
+
   };
 
 } // end of namespace

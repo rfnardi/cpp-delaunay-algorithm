@@ -15,7 +15,8 @@ del::Edge::Edge()
 
 del::Convex_Hull::Convex_Hull()
 {
-
+  del::Edge trivial_edge;
+  edge_collection.push_back(trivial_edge);
 }
 
 #endif
