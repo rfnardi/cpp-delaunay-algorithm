@@ -12,7 +12,7 @@ void del::Point::setCoordinates ( int dim, float coords[] )
 	}
 }
 
-void del::Point::operator = ( del::Point P ) 
+void del::Point::operator = ( del::Point P )
 {
 	this->p[ 0 ] = P.p[ 0 ];
 	this->p[ 1 ] = P.p[ 1 ];
@@ -25,7 +25,7 @@ del::Point del::Point::operator + ( del::Point P )
 	Point.p[ 0 ] = this->p[ 0 ] + P.p[ 0 ];
 	Point.p[ 1 ] = this->p[ 1 ] + P.p[ 1 ];
 	Point.p[ 2 ] = this->p[ 2 ] + P.p[ 2 ];
-	
+
 	return Point;
 }
 
@@ -35,7 +35,7 @@ del::Point del::Point::operator - ( del::Point P )
 	Point.p[0] = this->p[0] - P.p[0];
 	Point.p[1] = this->p[1] - P.p[1];
 	Point.p[2] = this->p[2] - P.p[2];
-	
+
 	return Point;
 }
 

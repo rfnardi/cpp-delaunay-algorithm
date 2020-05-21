@@ -1,5 +1,5 @@
-#ifndef CONVEX_HULL
-#define CONVEX_HULL
+#ifndef CONVEX_HULL_H
+#define CONVEX_HULL_H
 
 #include "./Point.hpp"
 
@@ -10,11 +10,9 @@ namespace del
     {
 
     public:
-        Edge()
-        {
-            this->really_a_Convex_Hull_member = false;
-        }
-        ~Edge();
+        Edge();
+
+        //~Edge();
 
         del::Point first_Point;
         del::Point second_Point;
@@ -31,8 +29,8 @@ namespace del
     {
 
     public:
-        Convex_Hull(/* args */);
-        ~Convex_Hull();
+        //Convex_Hull(/* args */);
+        //~Convex_Hull();
 
         std::vector< del::Edge > edge_collection;
 

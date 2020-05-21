@@ -136,29 +136,27 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
-	return EXIT_SUCCESS;
-	// compilação e utilização testada até esta linha
-	// conteúdo abaixo não foi testado ainda!
 
-	/*
 	del::Triangle_Building Triangle_Building_obj;
 
 	del::Point A; //ponto mais alto do sólido (maior z)
 
-	A.p[0] = obter_catalogo_de_vizinhancas[0][0][0];
-	A.p[1] = obter_catalogo_de_vizinhancas[0][0][1];
-	A.p[2] = obter_catalogo_de_vizinhancas[0][0][2];
+	A = neighboorhoodsBook[0][0];
 
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 
+	del::Point first_Normal;
+
+	first_Normal = T_0.Normal();
+
 	//orientando corretamente para cima a normal do primeiro triangulo:
-	if (T_0.Normal.p[2]<0)
+	if (first_Normal.p[2]<0)
 	{
-		del::T_0.swap();
+		T_0.swap();
 	}
 
-	del::stl_module Module_0;
-	Module_0.Normal = T_0.Normal;
+	del::Stl_module Module_0;
+	Module_0.Normal = T_0.Normal();
 	Module_0.Triangle = T_0;
 
 	//guardando primeiro módulo do arquivo stl:
@@ -166,6 +164,12 @@ int main( int argc, char* argv[] ) {
 
 	//inicia Convex_Hull
 	del::Convex_Hull Convex_Hull_obj;
+
+	return EXIT_SUCCESS;
+	// compilação e utilização testada até esta linha
+	// conteúdo abaixo não foi testado ainda!
+
+	/*
 
 	//constrói primeiros edges a partir do T_0 e os armazena no Convex_Hull_obj
 	del::edge AB;
