@@ -11,8 +11,8 @@ namespace del {
     /* data */
 
   public:
-    Center_Sphere (); //constructor
-    ~Center_Sphere (); //destructor
+    //Center_Sphere (); //constructor
+    //~Center_Sphere (); //destructor
 
     del::Point Find (del::Point, del::Point, del::Point);
 

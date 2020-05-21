@@ -10,6 +10,14 @@ del::Triangle::Triangle ( del::Point A, del::Point B, del::Point C )
     this->C = C;
 }
 
+del::Triangle::Triangle ()
+{
+  del::Point Origin;
+  this->A = Origin;
+  this->B = Origin;
+  this->C = Origin;
+}
+
 
 
 bool del::Triangle::contem ( del::Point P )

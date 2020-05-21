@@ -205,7 +205,7 @@
     float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Center_Sphere
     bool encontrou_ponto_dentro_da_esfera, encontrou_ponto_C, encontrou_triangulo_valido, criterio_Delaunay_satisfeito;
     float d;
-    float ABC[3][3]; //armazena os 3 pontos A, B e C : candidatos a triangulo de Delaunay
+    
 
     do
     {
