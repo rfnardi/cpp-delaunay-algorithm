@@ -109,19 +109,23 @@ int main( int argc, char* argv[] ) {
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
 
 	// obter_catalogo_de_vizinhancas de pontos inicia aqui
+	// primeiro instancio a classe inserindo os pontos
 	del::Vizinhanca vizinhanca( pontos );
-	del::Triangle_Building triangle_Builder();
-
-
-
+	del::Triangle_Building triangle_Builder;
+	// ativo ou desativo o debug (para leitura no console)
 	// vizinhanca.ativar_debug();
 	vizinhanca.desativar_debug();
+
+	// defino o raio da vizinhança
 	float radius =  1.5 * delta_z;
 	vizinhanca.definir_raio( radius );
 
+	// t[0] armazena a posição do tempo antes do processo de "catalogação"
 	t[ 0 ] = clock();
+	// processo de catalogação
 	std::vector<std::vector<del::Point>> neighboorhoodsBook = vizinhanca.obter_catalogo_de_vizinhancas();
 	triangle_Builder.Recebe_Catalogo(neighboorhoodsBook);
+	// t[1] armazena o tempo final do processo
 	t[ 1 ] = clock();
 	appendToFile( "timer.log", std::to_string( currentLine ) + " " + std::to_string( timeBetween( t[ 0 ], t[ 1 ] ) ) + " " + std::to_string( delta_z ) );
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;

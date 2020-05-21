@@ -13,8 +13,8 @@
         {
 
         public:
-          Triangle_Building ();
-          ~Triangle_Building ();
+          // Triangle_Building (); // necessário apenas se formos definir uma operação para o construtor
+          // ~Triangle_Building (); // necessário apenas se formos definir uma operação para o destrutor
 
           std::vector<std::vector<del::Point>> Catalogo_Viz;
 
