@@ -2,6 +2,8 @@
 #define CONVEX_HULL
 
 #include "./Point.hpp"
+#include "./convex_hull.hpp"
+#include <vector>
 
 del::Edge::Edge()
 {
@@ -9,6 +11,11 @@ del::Edge::Edge()
   del::Point Origin;
   this -> first_Point = Origin;
   this -> second_Point = Origin;
+}
+
+del::Convex_Hull::Convex_Hull()
+{
+
 }
 
 #endif

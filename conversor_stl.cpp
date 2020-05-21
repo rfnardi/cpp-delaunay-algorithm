@@ -19,8 +19,8 @@
 #include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
 #include "Delaunay_classes/triangle_building.cpp"
 #include "Delaunay_classes/Triangle.cpp"
-#include "Delaunay_classes/convex_hull.hpp"
-#include "Delaunay_classes/stl_module.hpp"
+#include "Delaunay_classes/convex_hull.cpp"
+#include "Delaunay_classes/stl_module.cpp"
 //#include "Delaunay_classes/slicing_and_gluing.cpp"
 
 
@@ -42,7 +42,8 @@ void appendToFile ( std::string fileName, std::string line ) {
 	fout.close();
 }
 
-int main( int argc, char* argv[] ) {
+int main( int argc, char* argv[] )
+{
 	time_t t[ 2 ];
 	char* filename; // char* instead string because of fopen use bellow
 	if ( argc > 3 ) {
@@ -165,55 +166,48 @@ int main( int argc, char* argv[] ) {
 	//inicia Convex_Hull
 	del::Convex_Hull Convex_Hull_obj;
 
-	return EXIT_SUCCESS;
-	// compilação e utilização testada até esta linha
-	// conteúdo abaixo não foi testado ainda!
-
-	/*
 
 	//constrói primeiros edges a partir do T_0 e os armazena no Convex_Hull_obj
-	del::edge AB;
+	del::Edge AB;
 	AB.first_Point = Module_0.Triangle.A;
 	AB.second_Point = Module_0.Triangle.B;
-	Convex_Hull_obj.push_back(AB);
+	Convex_Hull_obj.edge_collection.push_back(AB);
 
-	del::edge BC;
+	del::Edge BC;
 	BC.first_Point = Module_0.Triangle.B;
 	BC.second_Point = Module_0.Triangle.C;
-	Convex_Hull_obj.push_back(BC);
+	Convex_Hull_obj.edge_collection.push_back(BC);
 
-	del::edge CA;
+	del::Edge CA;
 	CA.first_Point = Module_0.Triangle.C;
 	CA.second_Point = Module_0.Triangle.A;
-	Convex_Hull_obj.push_back(CA);
+	Convex_Hull_obj.edge_collection.push_back(CA);
 
-	del::stl_module New_Module;
+	del::Stl_module New_Module;
 	del::Triangle_Building Build;
 	del::Triangle New_Triangle;
 	del::Point New_Normal;
 	bool not_found;
-	del::edge New_Edge_1;
-	del::edge New_Edge_2;
+	del::Edge New_Edge_1;
+	del::Edge New_Edge_2;
 
 	del::Point Origem;
-	Origem.p[0]=0;
-	Origem.p[1]=0;
-	Origem.p[2]=0;
 
 	long unsigned int J =0;
 	// Convex_Hull still have 'bool really_a_Convex_Hull_member = false' edges
-	while (i<Convex_Hull.size() )
+	while (J < Convex_Hull_obj.edge_collection.size() )
 	{
 		// varre Convex_Hull testando really_a_Convex_Hull_member para cada edge
-		del::edge working_edge = Convex_Hull_obj[J];
+		del::Edge working_edge = Convex_Hull_obj.edge_collection[J];
 
-		New_Triangle = Build.edge_based_Triangle_Building_obj (working_edge);
-		if (New_Triangle.A == Origem && New_Triangle.B == Origem &&New_Triangle.C == Origem) //triângulo construído é trivial
+		New_Triangle = Build.Edge_based_Triangle_Building (working_edge, T_0);
+		//triângulo construído é trivial
+		if (New_Triangle.A == Origem && New_Triangle.B == Origem && New_Triangle.C == Origem)
 		{
 			working_edge.really_a_Convex_Hull_member = true;
 			J++; //apenas prossegue na varredura do Convex_Hull quando a aresta working_edge não dá origem a outro triangulo
 		}
-		if (working_edge.really_a_Convex_Hull_member=false)
+		if (working_edge.really_a_Convex_Hull_member = false)
 		{
 
 			//extraindo os dois edges do New_Triangle:
@@ -225,12 +219,12 @@ int main( int argc, char* argv[] ) {
 			// se achou triangulo, então deve apagar do Convex_Hull
 			// o edge que deu base para sua construção
 			// e inserir os outros 2 edges do New_Triangle no Convex_Hull:
-			Convex_Hull.erase(J);
-			Convex_Hull.insert(J,New_Edge_2);
-			Convex_Hull.insert(J,New_Edge_1);
+			Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
+			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_2);
+			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_1);
 
 			// triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados
-			New_Triangle.same_curl();
+			New_Triangle.same_curl(T_0);
 			New_Normal = New_Triangle.Normal();
 			New_Module.Normal = New_Normal;
 			New_Module.Triangle = New_Triangle;
@@ -257,5 +251,21 @@ int main( int argc, char* argv[] ) {
 	} //end while:
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
-	*/
+
+
+	return EXIT_SUCCESS;
+	// compilação e utilização testada até esta linha
+	// conteúdo abaixo não foi testado ainda!
+
+
+
+
+
+
+
+
+
+
+
+
 }

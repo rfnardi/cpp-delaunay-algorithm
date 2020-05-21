@@ -62,7 +62,8 @@ del::Triangle del::Triangle::same_curl ( del::Triangle T ) //ACHTUNG1! T muss sc
         ! ( this->A == T.A ) && ( this->B == T.C )          //der mit der anderer Dreieck eine gemeine Kante hat.
         &&
         ! ( this->A == T.C ) && ( this->B == T.B )
-    ) {
+    )
+    {
         this->swap();
     }
     del::Triangle tr ( this->A, this->B, this->C );

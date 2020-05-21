@@ -22,7 +22,7 @@
 
           del::Triangle Point_based_Triangle_Building (del::Point );
 
-          del::Triangle Edge_based_Triangle_Building (del::Edge , Triangle );
+          del::Triangle Edge_based_Triangle_Building (del::Edge , del::Triangle );
 
 
         }; //fim da classe "triangle building"

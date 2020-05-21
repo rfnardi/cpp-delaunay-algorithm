@@ -2,6 +2,7 @@
 #define CONVEX_HULL_H
 
 #include "./Point.hpp"
+#include <vector>
 
 
 namespace del
@@ -29,7 +30,7 @@ namespace del
     {
 
     public:
-        //Convex_Hull(/* args */);
+        Convex_Hull();
         //~Convex_Hull();
 
         std::vector< del::Edge > edge_collection;

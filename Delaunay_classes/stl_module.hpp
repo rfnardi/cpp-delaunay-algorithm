@@ -1,3 +1,9 @@
+#ifndef STL_MODULE_H
+#define STL_MODULE_H
+
+#include "./Point.hpp"
+#include "./Triangle.hpp"
+
 namespace del
 {
 
@@ -11,7 +17,7 @@ namespace del
             del::Point Normal;
             del::Triangle Triangle;
 
+            bool operator == (del::Stl_module);
         };
-
-
 };
+#endif
