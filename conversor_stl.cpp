@@ -92,6 +92,7 @@ int main( int argc, char* argv[] )
 	t[ 1 ] = clock();
 
 	fclose( file );
+	//delete[] file;
 
 	std::cout << std::endl;
 	std::cout << "Total de linhas no arquivo de bloco de dados: " << currentLine << std::endl;
@@ -136,34 +137,57 @@ int main( int argc, char* argv[] )
 	//Inicia triangulação
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
-
-
+	std::cout << "Vetor de armazenamento dos módulos stl criado com sucesso." << '\n';
 	del::Triangle_Building Triangle_Building_obj;
-
+	std::cout << "Instância da classe Triangle_Building criada com sucesso." << '\n';
 	del::Find_Extremal_Points find_extremal_points_obj;
-
+	std::cout << "Instância da classe Find_Extremal_Points criada com sucesso." << '\n';
 	del::Point A = find_extremal_points_obj.Find_Z_Max(pontos);; //ponto mais alto do sólido (maior z)
-
+	std::cout << "Ponto mais alto do sólido localizado com sucesso:" << '\n';
+	std::cout << "X=" << A.p[0]<<'\n';
+	std::cout << "Y=" << A.p[1]<<'\n';
+	std::cout << "Z=" << A.p[2]<<'\n';
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
+	std::cout << "Primeiro triaângulo da triangulação determinado com sucesso:" << '\n';
+	std::cout << "Ponto A:" << "X="<<T_0.A.p[0]<<"Y="<<T_0.A.p[1]<<"Z="<<T_0.A.p[2]<<'\n';
+	std::cout << "Ponto B:" << "X="<<T_0.B.p[0]<<"Y="<<T_0.B.p[1]<<"Z="<<T_0.B.p[2]<<'\n';
+	std::cout << "Ponto C:" << "X="<<T_0.C.p[0]<<"Y="<<T_0.C.p[1]<<"Z="<<T_0.C.p[2]<<'\n';
 
 	del::Point first_Normal = T_0.Normal();
+	std::cout << "Normal ao Primeiro triângulo determinada com sucesso:" << '\n';
+	std::cout << "Normal:" << "X="<<first_Normal.p[0]<<"Y="<<first_Normal.p[1]<<"Z="<<first_Normal.p[2]<< '\n';
 
 	//orientando corretamente para cima a normal do primeiro triangulo:
 	if (first_Normal.p[2]<0)
 	{
 		T_0.swap();
 	}
+	std::cout << "Pontos do primeiro triângulo após aplicação do Swap:" << '\n';
+	std::cout << "Ponto A:" << "X="<<T_0.A.p[0]<<"Y="<<T_0.A.p[1]<<"Z="<<T_0.A.p[2]<<'\n';
+	std::cout << "Ponto B:" << "X="<<T_0.B.p[0]<<"Y="<<T_0.B.p[1]<<"Z="<<T_0.B.p[2]<<'\n';
+	std::cout << "Ponto C:" << "X="<<T_0.C.p[0]<<"Y="<<T_0.C.p[1]<<"Z="<<T_0.C.p[2]<<'\n';
+	first_Normal = T_0.Normal();
+	std::cout << "Normal ao Primeiro triângulo após aplicação do Swap:" << '\n';
+	std::cout << "Normal:" << "X="<<first_Normal.p[0]<<"Y="<<first_Normal.p[1]<<"Z="<<first_Normal.p[2]<< '\n';
 
 	del::Stl_module Module_0;
 	Module_0.Normal = T_0.Normal();
 	Module_0.Triangle = T_0;
+	std::cout << "Primeiro módulo Stl determinado com sucesso." << '\n';
 
 	//guardando primeiro módulo do arquivo stl:
 	Triangulation_with_normals.push_back(Module_0);
+	std::cout << "Primeiro módulo Stl guardado em triangulation with normals com sucesso:" << '\n';
+	std::cout << "Triangulo:" << '\n';
+	std::cout << "Ponto A:" << "X="<<Triangulation_with_normals[0].Triangle.A.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.A.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.A.p[2]<<'\n';
+	std::cout << "Ponto B:" << "X="<<Triangulation_with_normals[0].Triangle.B.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.B.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.B.p[2]<<'\n';
+	std::cout << "Ponto C:" << "X="<<Triangulation_with_normals[0].Triangle.B.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.B.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.B.p[2]<<'\n';
+	std::cout << "Normal:" << '\n';
+	std::cout << "Normal:" << "X="<<Module_0.Normal.p[0]<<"Y="<<Module_0.Normal.p[1]<<"Z="<<Module_0.Normal.p[2]<< '\n';
 
 	//inicia Convex_Hull
 	del::Convex_Hull Convex_Hull_obj;
-
+	std::cout << "Instância da classe Convex Hull criada com sucesso." << '\n';
 
 	//constrói primeiros edges a partir do T_0 e os armazena no Convex_Hull_obj
 	del::Edge AB;
@@ -180,6 +204,18 @@ int main( int argc, char* argv[] )
 	CA.first_Point = Module_0.Triangle.C;
 	CA.second_Point = Module_0.Triangle.A;
 	Convex_Hull_obj.edge_collection.push_back(CA);
+	std::cout << "Primeiras 3 arestas criadas e adicionadas ao Convex Hull com sucesso:" << '\n';
+	std::cout << "Aresta AB:" << '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<AB.first_Point.p[0]<<"Y="<<AB.first_Point.p[1]<<"Z="<<AB.first_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<AB.second_Point.p[0]<<"Y="<<AB.second_Point.p[1]<<"Z="<<AB.second_Point.p[2]<< '\n';
+
+	std::cout << "Aresta BC:" << '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<BC.first_Point.p[0]<<"Y="<<BC.first_Point.p[1]<<"Z="<<BC.first_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<BC.second_Point.p[0]<<"Y="<<BC.second_Point.p[1]<<"Z="<<BC.second_Point.p[2]<< '\n';
+
+	std::cout << "Aresta CA:" << '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<CA.first_Point.p[0]<<"Y="<<CA.first_Point.p[1]<<"Z="<<CA.first_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<CA.second_Point.p[0]<<"Y="<<CA.second_Point.p[1]<<"Z="<<CA.second_Point.p[2]<< '\n';
 
 	bool Convex_Hull_test = Convex_Hull_obj.reliability();
 
@@ -189,7 +225,7 @@ int main( int argc, char* argv[] )
 	}
 	else
 	{
-		std::cout << "Convex Hull falhou no primeiro triangulo." << '\n';
+		std::cout << "Convex Hull iniciado com erro no primeiro triângulo." << '\n';
 		exit( EXIT_FAILURE );
 	}
 
