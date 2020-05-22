@@ -19,4 +19,9 @@ del::Convex_Hull::Convex_Hull()
   edge_collection.push_back(trivial_edge);
 }
 
+bool del::Convex_Hull::reliability ()
+{
+  return (this->edge_collection[0].first_Point == this->edge_collection[this->edge_collection.size()-1].second_Point);
+}
+
 #endif

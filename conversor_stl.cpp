@@ -21,6 +21,7 @@
 #include "Delaunay_classes/Triangle.cpp"
 #include "Delaunay_classes/convex_hull.cpp"
 #include "Delaunay_classes/stl_module.cpp"
+#include "Delaunay_classes/find_z_max.cpp"
 //#include "Delaunay_classes/slicing_and_gluing.cpp"
 
 
@@ -133,16 +134,15 @@ int main( int argc, char* argv[] )
 
 
 	//Inicia triangulação
-
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 
 
 	del::Triangle_Building Triangle_Building_obj;
 
-	del::Point A; //ponto mais alto do sólido (maior z)
+	del::Find_Extremal_Points find_extremal_points_obj;
 
-	A = neighboorhoodsBook[0][0]; //o primeiro ponto do neighboorhoodsBook não é o ponto com maior z!!!!! Trabalhar aqui!!!!
+	del::Point A = find_extremal_points_obj.Find_Z_Max(pontos);; //ponto mais alto do sólido (maior z)
 
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
 
@@ -181,6 +181,18 @@ int main( int argc, char* argv[] )
 	CA.second_Point = Module_0.Triangle.A;
 	Convex_Hull_obj.edge_collection.push_back(CA);
 
+	bool Convex_Hull_test = Convex_Hull_obj.reliability();
+
+	if (Convex_Hull_test)
+	{
+		std::cout << "Convex Hull iniciado com sucesso." << '\n';
+	}
+	else
+	{
+		std::cout << "Convex Hull falhou no primeiro triangulo." << '\n';
+		exit( EXIT_FAILURE );
+	}
+
 	del::Stl_module New_Module;
 	del::Triangle_Building Build;
 	del::Triangle New_Triangle;
@@ -192,7 +204,7 @@ int main( int argc, char* argv[] )
 	del::Point Origem;
 
 	long unsigned int J =0;
-	// Convex_Hull still have 'bool really_a_Convex_Hull_member = false' edges
+	// while Convex_Hull still have 'bool really_a_Convex_Hull_member = false' edges
 	while (J < Convex_Hull_obj.edge_collection.size() )
 	{
 		// varre Convex_Hull testando really_a_Convex_Hull_member para cada edge

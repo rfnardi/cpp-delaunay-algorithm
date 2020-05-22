@@ -35,6 +35,8 @@ namespace del
 
         std::vector< del::Edge > edge_collection;
 
+        bool reliability ();
+
     };
 
 } // namespace del
