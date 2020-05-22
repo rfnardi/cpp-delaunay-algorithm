@@ -22,6 +22,8 @@ namespace del {
             */
             Vizinhanca ( std::vector<Point> conjuntoUniverso );
 
+            ~Vizinhanca ();
+
             /**
              * Apresenta as coordenadas de um ponto de forma humanamente legível no console.
              *

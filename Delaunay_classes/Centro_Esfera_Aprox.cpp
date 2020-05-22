@@ -2,6 +2,9 @@
 #include <cmath>
 #include "./Centro_Esfera_Aprox.hpp"
 
+  del::Center_Sphere::Center_Sphere (){}; //constructor
+  del::Center_Sphere::~Center_Sphere (){}; //destructor
+
   del::Point del::Center_Sphere::Find (del::Point A, del::Point B, del::Point C)
   {
 

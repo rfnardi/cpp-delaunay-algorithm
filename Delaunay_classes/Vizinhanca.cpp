@@ -9,6 +9,8 @@ del::Vizinhanca::Vizinhanca ( std::vector<del::Point> conjuntoUniverso ) {
     this->conjuntoUniverso = conjuntoUniverso;
 };
 
+del::Vizinhanca::~Vizinhanca (){};
+
 std::string del::Vizinhanca::debugar_ponto( del::Point ponto ) {
     return ponto.to_string();
 };

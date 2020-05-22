@@ -10,6 +10,9 @@ namespace del
   {
     public:
 
+    Find_Extremal_Points();
+    ~Find_Extremal_Points();
+
     del::Point Find_Z_Max(std::vector<del::Point>);
   };
 

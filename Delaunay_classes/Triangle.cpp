@@ -18,7 +18,7 @@ del::Triangle::Triangle ()
   this->C = Origin;
 }
 
-
+del::Triangle::~Triangle (){};
 
 bool del::Triangle::contem ( del::Point P )
 {

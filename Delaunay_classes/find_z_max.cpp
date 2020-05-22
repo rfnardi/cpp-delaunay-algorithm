@@ -5,6 +5,9 @@
 #include <vector>
 #include "./find_z_max.hpp"
 
+del::Find_Extremal_Points::Find_Extremal_Points(){};
+del::Find_Extremal_Points::~Find_Extremal_Points(){};
+
 del::Point del::Find_Extremal_Points::Find_Z_Max(std::vector<del::Point> pontos)
 {
   del::Point Top_point;

@@ -1,5 +1,5 @@
-#ifndef DEL_Point_H
-#define DEL_Point_H
+#ifndef DEL_POINT_H
+#define DEL_POINT_H
 #include <string>
 
 namespace del
@@ -8,8 +8,9 @@ namespace del
 class Point
 {
 	public:
-		// Point ();
-		// ~Point();
+		Point();
+		~Point();
+
 		/**
 		 * Set origin of coordinates as default Point.
 		 * This strtategy avoids the program of exiting with EXIT_FAILURE status in some situations.

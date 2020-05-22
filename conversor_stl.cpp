@@ -115,8 +115,8 @@ int main( int argc, char* argv[] )
 	del::Vizinhanca vizinhanca( pontos );
 	del::Triangle_Building triangle_Builder;
 	// ativo ou desativo o debug (para leitura no console)
-	// vizinhanca.ativar_debug();
-	vizinhanca.desativar_debug();
+	vizinhanca.ativar_debug();
+	//vizinhanca.desativar_debug();
 
 	// defino o raio da vizinhança
 	float radius =  1.5 * delta_z;

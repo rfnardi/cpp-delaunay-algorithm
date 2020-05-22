@@ -7,6 +7,9 @@
 #include "./convex_hull.hpp"
 #include "./Vizinhanca.hpp"
 
+  del::Triangle_Building::Triangle_Building (){};
+  del::Triangle_Building::~Triangle_Building (){};
+
   void del::Triangle_Building::Recebe_Catalogo(std::vector<std::vector<del::Point>> neighboorhoodsBook)
   {
     this->Catalogo_Viz = neighboorhoodsBook;
@@ -205,7 +208,7 @@
     float Raio; //variável para armazenar o raio da esfera calculada pelo método da classe Center_Sphere
     bool encontrou_ponto_dentro_da_esfera, encontrou_ponto_C, encontrou_triangulo_valido, criterio_Delaunay_satisfeito;
     float d;
-    
+
 
     do
     {

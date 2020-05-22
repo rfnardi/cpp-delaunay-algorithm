@@ -5,6 +5,9 @@
 #include <math.h>
 #include <string>
 
+del::Point::Point(){};
+del::Point::~Point(){};
+
 void del::Point::setCoordinates ( int dim, float coords[] )
 {
 	for( int i = 0; i < dim; i++ ) {

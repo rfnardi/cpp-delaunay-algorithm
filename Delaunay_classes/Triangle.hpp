@@ -15,7 +15,7 @@ namespace del
 
           Triangle ( Point A, Point B, Point C ) ;
           Triangle ();
-          // ~Triangle();
+          ~Triangle();
 
           bool contem ( Point P );
 

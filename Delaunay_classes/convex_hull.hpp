@@ -12,8 +12,7 @@ namespace del
 
     public:
         Edge();
-
-        //~Edge();
+        ~Edge();
 
         del::Point first_Point;
         del::Point second_Point;
@@ -31,7 +30,7 @@ namespace del
 
     public:
         Convex_Hull();
-        //~Convex_Hull();
+        ~Convex_Hull();
 
         std::vector< del::Edge > edge_collection;
 
