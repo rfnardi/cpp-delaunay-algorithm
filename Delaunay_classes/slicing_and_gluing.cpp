@@ -21,9 +21,9 @@ int main ()
   // URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
-  int numero_medio_de_pontos_por_chart =2;
+  int numero_medio_de_pontos_por_chart =2000;
   FILE *file;
-	file = fopen( "conjunto-teste", "r" );
+	file = fopen("parafuso_teste", "r" );
 
 	int currentLine = 0;
 	int lineIterator;
@@ -71,7 +71,7 @@ int main ()
     long number_of_charts = currentLine/numero_medio_de_pontos_por_chart;
     std::cout << "Total de cartas:" << number_of_charts <<'\n';
     float chart_depth = (z_max - z_min)/number_of_charts; //futuramente considerar fatiamento ao longo de outros eixos de acordo com as proporções do sólido
-    std::cout << "Espessura da carta ao longo de z:" << chart_depth << '\n';
+    std::cout << "Espessura da carta ao longo de z: " << chart_depth << '\n';
     unsigned long int chart_index = 0;
 
     std::vector<del::Chart> Atlas;
@@ -90,7 +90,7 @@ int main ()
       lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
       for (chart_index = 0; chart_index < number_of_charts; chart_index++)
       {
-        if (z<=(z_max - chart_index*chart_depth) && z<(z_max - (chart_index + 1)*chart_depth))
+        if (z<=(z_max - chart_index*chart_depth) && z>(z_max - (chart_index + 1)*chart_depth))
         {
           ponto.p[0]= x;
           ponto.p[1]= y;
@@ -103,6 +103,16 @@ int main ()
     } while ( lineIterator != EOF );
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
 
+    for (size_t i = 0; i < Atlas.size(); i++)
+    {
+      std::cout << "Pontos da carta " << i << ":" << '\n';
+      for (size_t j = 0; j < Atlas[i].Points.size(); j++)
+      {
+        std::cout << "x=" << Atlas[i].Points[j].p[0] << "; y=" << Atlas[i].Points[j].p[1] <<"; z=" << Atlas[i].Points[j].p[2] <<'\n';
+      }
+    }
+
+fclose(file);
 return 1;
 }
 
