@@ -21,7 +21,7 @@ int main ()
   // URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
-  int numero_medio_de_pontos_por_chart =2000;
+  int numero_medio_de_pontos_por_chart =10000;
   FILE *file;
 	file = fopen("parafuso_teste", "r" );
 
@@ -60,19 +60,19 @@ int main ()
 
     std::cout<<"Dimensões do sólido: \n";
 
-    std::cout<<"x máximo: "<< x_max <<"x mínimo: "<< x_min << '\n';
-    std::cout<<"y máximo: "<< y_max <<"y mínimo: "<< y_min << '\n';
-    std::cout<<"z máximo: "<< z_max <<"z mínimo: "<< z_min << '\n';
+    std::cout<<"x máximo: "<< x_max <<" x mínimo: "<< x_min << '\n';
+    std::cout<<"y máximo: "<< y_max <<" y mínimo: "<< y_min << '\n';
+    std::cout<<"z máximo: "<< z_max <<" z mínimo: "<< z_min << '\n';
 
     std::cout<<"Quantidade total de pontos: "<< currentLine << '\n';
 
     //aqui precisamos definir quantos pontos o programa deve pegar por vez. 200 pontos? ----->
 
-    long number_of_charts = currentLine/numero_medio_de_pontos_por_chart;
-    std::cout << "Total de cartas:" << number_of_charts <<'\n';
+    int number_of_charts = currentLine/numero_medio_de_pontos_por_chart;
+    std::cout << "Total de cartas: " << number_of_charts <<'\n';
     float chart_depth = (z_max - z_min)/number_of_charts; //futuramente considerar fatiamento ao longo de outros eixos de acordo com as proporções do sólido
     std::cout << "Espessura da carta ao longo de z: " << chart_depth << '\n';
-    unsigned long int chart_index = 0;
+    int chart_index;
 
     std::vector<del::Chart> Atlas;
     del::Chart New_Chart;
@@ -80,11 +80,15 @@ int main ()
     {
       New_Chart.Chart_index = chart_index;
       Atlas.push_back( New_Chart);
+      std::cout << "Carta " << chart_index  << " adicionada ao atlas com sucesso"<<'\n';
     }
     std::cout << "Cartas iniciadas com sucesso." << '\n';
     std::cout << "Iniciando particionamento dos pontos" << '\n';
     currentLine = 0;
     del::Point ponto;
+
+    file = freopen("parafuso_teste", "r" , stdin); //volta o stream para o início do arquivo
+
     do
     {
       lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
@@ -101,14 +105,17 @@ int main ()
 
       currentLine++;
     } while ( lineIterator != EOF );
+
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
 
     for (size_t i = 0; i < Atlas.size(); i++)
     {
-      std::cout << "Pontos da carta " << i << ":" << '\n';
-      for (size_t j = 0; j < Atlas[i].Points.size(); j++)
+      std::cout << "Quantidade de pontos na carta " << i << ": "<< Atlas[i].Points.size()<<'\n';
+
+      //std::cout << "Pontos da carta " << i << ":" << '\n';
+      //for (size_t j = 0; j < Atlas[i].Points.size(); j++)
       {
-        std::cout << "x=" << Atlas[i].Points[j].p[0] << "; y=" << Atlas[i].Points[j].p[1] <<"; z=" << Atlas[i].Points[j].p[2] <<'\n';
+        //std::cout << "x=" << Atlas[i].Points[j].p[0] << "; y=" << Atlas[i].Points[j].p[1] <<"; z=" << Atlas[i].Points[j].p[2] <<'\n';
       }
     }
 
