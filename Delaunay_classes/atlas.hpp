@@ -14,7 +14,7 @@ namespace del
     Chart (int);
     ~Chart ();
     int Chart_index;
-    std::vector<bool> Chart_connections; // Este vetor serve para dizer com quais outras cartas a presente carta possui fronteira
+    std::vector<bool> This_Chart_Connections; // Este vetor serve para dizer com quais outras cartas a presente carta possui fronteira
     std::vector<del::Point> Points;
   };
 

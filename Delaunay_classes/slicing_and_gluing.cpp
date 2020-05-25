@@ -3,6 +3,8 @@
 #include <string>
 #include <iostream>
 #include <time.h>
+#include <string>
+#include <stdlib.h>
 #include "./atlas.cpp"
 #include "./Point.cpp"
 /*
@@ -15,19 +17,53 @@
 
 
 
-int main ()
+int main (int argc, char* argv[])
 {
   //tomando dimensões do sólido para efetuar fatiamento:
-  // URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
-  int numero_medio_de_pontos_por_chart =10000;
+  int numero_medio_de_pontos_por_chart;
   FILE *file;
-	file = fopen("parafuso_teste", "r" );
+  char filename;
+  char* ptr;
+
+  if (argc==1)
+  {
+    std::cout << "Insira nome do arquivo de pontos a ser particionado." << '\n';
+    std::cin >> filename;
+    ptr = &filename; //ponteiro ptr armazena o endereço de memória da variável filename
+  	file = fopen(ptr, "r" );
+    std::cout << "Insira o número médio de pontos por região." << '\n';
+    std::cin >> numero_medio_de_pontos_por_chart;
+  }
+  else if (argc == 2)
+  {
+    filename = *argv[1];
+    file = fopen(&filename, "r" );
+    std::cout << "Insira o número médio de pontos por região." << '\n';
+    std::cin >> numero_medio_de_pontos_por_chart; //bugando aqui!!!
+  }
+  else if (argc == 3)
+  {
+    filename = *argv[1];
+    file = fopen(&filename, "r" );
+    ptr = argv[2];
+    sscanf(ptr,"%d", &numero_medio_de_pontos_por_chart); //converte o terceiro parâmetro de entrada de char para decimal
+  }
+  else if (argc>3)
+  {
+    std::cout << "Muitos argumentos inseridos." << '\n';
+    std::cout << "Sintaxe:" << '\n';
+    std::cout << "atlas-composition" << "[nome do arquivo]" << "[numero médio de pontos por carta]" << '\n';
+    exit (EXIT_FAILURE);
+  }
+
+
 
 	int currentLine = 0;
 	int lineIterator;
-	do {
+	do
+  {
 		currentLine++;
 		lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
 		if(x<x_min)
@@ -54,8 +90,6 @@ int main ()
         {
             z_max = z;
         }
-
-
 	} while ( lineIterator != EOF );
 
     std::cout<<"Dimensões do sólido: \n";
@@ -65,8 +99,6 @@ int main ()
     std::cout<<"z máximo: "<< z_max <<" z mínimo: "<< z_min << '\n';
 
     std::cout<<"Quantidade total de pontos: "<< currentLine << '\n';
-
-    //aqui precisamos definir quantos pontos o programa deve pegar por vez. 200 pontos? ----->
 
     int number_of_charts = currentLine/numero_medio_de_pontos_por_chart;
     std::cout << "Total de cartas: " << number_of_charts <<'\n';
@@ -87,7 +119,7 @@ int main ()
     currentLine = 0;
     del::Point ponto;
 
-    file = freopen("parafuso_teste", "r" , stdin); //volta o stream para o início do arquivo
+    file = freopen(&filename, "r" , stdin); //volta o stream para o início do arquivo
 
     do
     {
@@ -102,7 +134,6 @@ int main ()
           Atlas[chart_index].Points.push_back(ponto);
         }
       }
-
       currentLine++;
     } while ( lineIterator != EOF );
 
