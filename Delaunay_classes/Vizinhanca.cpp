@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <iostream>
 
-del::Vizinhanca::Vizinhanca ( std::vector<del::Point> conjuntoUniverso ) {
-    this->conjuntoUniverso = conjuntoUniverso;
+del::Vizinhanca::Vizinhanca ( std::vector<del::Point> universalSet ) {
+    this->universalSet = universalSet;
 };
 
 del::Vizinhanca::~Vizinhanca (){};
@@ -32,7 +32,7 @@ void del::Vizinhanca::definir_referencial ( del::Point ponto ) {
 };
 
 std::vector<del::Point> del::Vizinhanca::obter_vizinhos () {
-    std::vector<del::Point> pontos = this->conjuntoUniverso;
+    std::vector<del::Point> pontos = this->universalSet;
     if ( this->debug ) {
         std::cout << "Iniciando cálculo de vizinhança do ponto " << this->debugar_ponto( this->referencial ) << std::endl;
     }
@@ -50,7 +50,7 @@ std::vector<del::Point> del::Vizinhanca::obter_vizinhos () {
 std::vector<std::vector<del::Point>> del::Vizinhanca::obter_catalogo_de_vizinhancas () {
     std::vector<std::vector<del::Point>> catalago;
     std::vector<del::Point> vizinhanca;
-    std::vector<del::Point> pontos = this->conjuntoUniverso;
+    std::vector<del::Point> pontos = this->universalSet;
     if ( this->debug ) {
         std::cout << "Iniciando processo de obtenção do catálogo de vizinhanças." << std::endl;
     }

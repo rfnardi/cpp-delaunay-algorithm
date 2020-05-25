@@ -8,19 +8,20 @@ namespace del {
 
     class Vizinhanca {
         private:
-            std::vector<Point> conjuntoUniverso;
+            std::vector<Point> universalSet;
             float raio;
             Point referencial;
-            std::vector<Point> vizinhos;
+            unsigned int maxNeighborHoodSize = 5;
+            Point vizinhos[ 5 ];
             bool debug = true;
 
         public:
             /**
              * Inicializa o catálogo a partir de um conjunto de pontos no espaço.
              *
-             * @param conjuntoUniverso O conjunto de todos os pontos do sólido.
+             * @param universalSet O conjunto de todos os pontos do sólido.
             */
-            Vizinhanca ( std::vector<Point> conjuntoUniverso );
+            Vizinhanca ( std::vector<Point> universalSet );
 
             ~Vizinhanca ();
 
@@ -50,7 +51,7 @@ namespace del {
              *
              * @return vizinhança do ponto de referência.
             */
-            std::vector<Point> obter_vizinhos ();
+            Point obter_vizinhos ();
 
             /**
              * Calcula a vizinhança de todos os pontos do conjunto.
