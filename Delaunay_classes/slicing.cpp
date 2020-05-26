@@ -30,18 +30,21 @@ int main (int argc, char* argv[])
   if (argc==1)
   {
     std::cout << "Insira nome do arquivo de pontos a ser particionado." << '\n';
-    std::cin >> filename;
+		scanf("%s\n", &filename);
+    //std::cin >> filename;
     ptr = &filename; //ponteiro ptr armazena o endereço de memória da variável filename
   	file = fopen(ptr, "r" );
     std::cout << "Insira o número médio de pontos por região." << '\n';
-    std::cin >> numero_medio_de_pontos_por_chart;
+		scanf("%d \n", &numero_medio_de_pontos_por_chart);
+    //std::cin >> numero_medio_de_pontos_por_chart;
   }
   else if (argc == 2)
   {
     filename = *argv[1];
     file = fopen(&filename, "r" );
     std::cout << "Insira o número médio de pontos por região." << '\n';
-    std::cin >> numero_medio_de_pontos_por_chart; //bugando aqui!!!
+		scanf("%d \n", &numero_medio_de_pontos_por_chart); //experimentando com scanf
+		//std::cin >> numero_medio_de_pontos_por_chart; //bugando aqui!!!
   }
   else if (argc == 3)
   {
@@ -59,9 +62,12 @@ int main (int argc, char* argv[])
   }
 
 
-
-	int currentLine = 0;
+	unsigned long int Total_de_Pontos;
+	unsigned long int currentLine;
 	int lineIterator;
+
+	currentLine =0;
+
 	do
   {
 		currentLine++;
@@ -98,7 +104,9 @@ int main (int argc, char* argv[])
     std::cout<<"y máximo: "<< y_max <<" y mínimo: "<< y_min << '\n';
     std::cout<<"z máximo: "<< z_max <<" z mínimo: "<< z_min << '\n';
 
-    std::cout<<"Quantidade total de pontos: "<< currentLine << '\n';
+		Total_de_Pontos = currentLine;
+
+    std::cout<<"Quantidade total de pontos: "<< Total_de_Pontos << '\n';
 
     int number_of_charts = currentLine/numero_medio_de_pontos_por_chart;
     std::cout << "Total de cartas: " << number_of_charts <<'\n';
