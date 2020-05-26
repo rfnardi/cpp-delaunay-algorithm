@@ -22,9 +22,9 @@ int main (int argc, char* argv[])
   //tomando dimensões do sólido para efetuar fatiamento:
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
-  long* ppchart = new long;
+  long* ppchart;
   FILE *file;
-  char* filename = new char[20];
+  char* filename; //= new char[20];
   char* ptr;
 
   if (argc==1)
@@ -114,12 +114,12 @@ int main (int argc, char* argv[])
     std::cout << "Espessura da carta ao longo de z: " << chart_depth << '\n';
     int chart_index;
 
-    std::vector<del::Chart> Atlas;
+    std::vector<del::Chart> *Atlas = new std::vector<del::Chart>;
     del::Chart New_Chart;
     for (chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
       New_Chart.Chart_index = chart_index;
-      Atlas.push_back( New_Chart);
+      (*Atlas).push_back( New_Chart);
       std::cout << "Carta " << chart_index  << " adicionada ao atlas com sucesso"<<'\n';
     }
     std::cout << "Cartas iniciadas com sucesso." << '\n';
@@ -140,7 +140,7 @@ int main (int argc, char* argv[])
           ponto.p[0]= x;
           ponto.p[1]= y;
           ponto.p[2]= z;
-          Atlas[chart_index].Points.push_back(ponto);
+          (*Atlas)[chart_index].Points.push_back(ponto);
         }
       }
       currentLine++;
@@ -148,9 +148,9 @@ int main (int argc, char* argv[])
 
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
 
-    for (size_t i = 0; i < Atlas.size(); i++)
+    for (size_t i = 0; i < (*Atlas).size(); i++)
     {
-      std::cout << "Quantidade de pontos na carta " << i << ": "<< Atlas[i].Points.size()<<'\n';
+      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*Atlas)[i].Points.size()<<'\n';
 			/*
       std::cout << "Pontos da carta " << i << ":" << '\n';
       for (size_t j = 0; j < Atlas[i].Points.size(); j++)
@@ -160,9 +160,9 @@ int main (int argc, char* argv[])
 			*/
     }
 
-free(ppchart);
+//free(ppchart);
 //free(ptr);
-free(filename);
+//free(filename);
 fclose(file);
 //free(file);
 
