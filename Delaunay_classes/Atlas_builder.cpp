@@ -2,12 +2,14 @@
 #include <vector>
 #include <string>
 #include <iostream>
-//#include <time.h>
+#include <time.h>
 #include <string>
 #include <stdlib.h>
 #include <cstdio>
 #include "./atlas.cpp"
 #include "./Point.cpp"
+#include <bits/stdc++.h>
+
 /*
 #include "obter_catalogo_de_vizinhancas_vizinhos.cpp"
 #include "Centro_Esfera_Aprox.cpp"
@@ -18,14 +20,15 @@
 
 
 
-int main (int argc, char* argv[])
+int main (int argc, char* argv[40])
 {
   //tomando dimensões do sólido para efetuar fatiamento:
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
   long* ppchart;// = new long;
   FILE *file;
-  char* filename; // = new char; //= new char[20];
+  char filename[20]; // = new char; //= new char[20];
+	//char file_name[20]; // WORKING OVER HERE!!!!!!
 
   void* ptr;
 
@@ -33,28 +36,35 @@ int main (int argc, char* argv[])
   {
     std::cout << "Insira nome do arquivo de pontos a ser particionado." << '\n';
 		//std::cin >> *filename;
-		scanf("%s", filename);
+		scanf("%19s", filename);
+		//filename = (char*)(&file_name);
+		//filename =(file_name);//(char*)
     //ptr = filename; //ponteiro ptr armazena o endereço de memória da variável filename
     std::cout << "Insira o número médio de pontos por região." << '\n';
 		//printf("Insira o número médio de pontos por região.\n");
 		scanf("%ld", ppchart);
     //std::cin >> *ppchart;
+		//file = fopen(file_name, "r" );
   }
   else if (argc == 2)
   {
 		//ptr =(void*)argv[1];
-    filename = argv[1];
+		sscanf(argv[1],"%s", filename);
+    //filename = (char[20])(*argv[1]);
 		//sscanf(argv[1], "%c", filename);
     std::cout << "Insira o número médio de pontos por região." << '\n';
 		scanf("%ld", ppchart); //experimentando com scanf
 		//std::cin >> *ppchart;                     //bugando aqui!!!
+		//file = fopen(filename, "r" );
   }
   else if (argc == 3)
   {
-    filename = argv[1];
+    //filename = (char[20])(*argv[1]);
+		sscanf(argv[1],"%s", filename);
 		//sscanf(argv[1], "%c", filename);
     //ptr = argv[2];
     sscanf(argv[2],"%ld", ppchart); //converte o terceiro parâmetro de entrada de char para decimal
+		//file = fopen(filename, "r" );
   }
   else if (argc>3)
   {
@@ -66,9 +76,9 @@ int main (int argc, char* argv[])
 
 	file = fopen(filename, "r" );
 
-	unsigned long int Total_de_Pontos;
-	unsigned long int currentLine;
-	int lineIterator;
+	unsigned long Total_de_Pontos;
+	unsigned long currentLine;
+	unsigned long lineIterator;
 
 	currentLine =0;
 
