@@ -129,10 +129,10 @@ int main (int argc, char* argv[40])
     int chart_index;
 
     std::vector<del::Chart> *Atlas = new std::vector<del::Chart>;
-    del::Chart New_Chart;
+    del::Chart* New_Chart = new del::Chart;
     for (chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
-      New_Chart.Chart_index = chart_index;
+      (*New_Chart).Chart_index = chart_index;
       (*Atlas).push_back( New_Chart);
       std::cout << "Carta " << chart_index  << " adicionada ao atlas com sucesso"<<'\n';
     }
@@ -154,7 +154,7 @@ int main (int argc, char* argv[40])
           ponto.p[0]= x;
           ponto.p[1]= y;
           ponto.p[2]= z;
-          (*Atlas)[chart_index].Points.push_back(ponto);
+          (*(*Atlas)[chart_index]).Points.push_back(ponto);
         }
       }
       currentLine++;
@@ -164,7 +164,7 @@ int main (int argc, char* argv[40])
 
     for (size_t i = 0; i < (*Atlas).size(); i++)
     {
-      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*Atlas)[i].Points.size()<<'\n';
+      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*(*Atlas)[i]).Points.size()<<'\n';
 			/*
       std::cout << "Pontos da carta " << i << ":" << '\n';
       for (size_t j = 0; j < Atlas[i].Points.size(); j++)
