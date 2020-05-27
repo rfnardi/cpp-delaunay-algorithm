@@ -133,13 +133,13 @@ int main (int argc, char* argv[40])
     for (chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
       (*New_Chart).Chart_index = chart_index;
-      (*Atlas).push_back( New_Chart);
+      (*Atlas).push_back( *New_Chart);
       std::cout << "Carta " << chart_index  << " adicionada ao atlas com sucesso"<<'\n';
     }
     std::cout << "Cartas iniciadas com sucesso." << '\n';
     std::cout << "Iniciando particionamento dos pontos" << '\n';
     currentLine = 0;
-    del::Point ponto;
+    del::Point ponto ;
 
 
     file = freopen(filename, "r" , stdin); //volta o stream para o início do arquivo
@@ -154,7 +154,7 @@ int main (int argc, char* argv[40])
           ponto.p[0]= x;
           ponto.p[1]= y;
           ponto.p[2]= z;
-          (*(*Atlas)[chart_index]).Points.push_back(ponto);
+          (*Atlas)[chart_index].Points.push_back(ponto);
         }
       }
       currentLine++;
@@ -164,7 +164,7 @@ int main (int argc, char* argv[40])
 
     for (size_t i = 0; i < (*Atlas).size(); i++)
     {
-      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*(*Atlas)[i]).Points.size()<<'\n';
+      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*Atlas)[i].Points.size()<<'\n';
 			/*
       std::cout << "Pontos da carta " << i << ":" << '\n';
       for (size_t j = 0; j < Atlas[i].Points.size(); j++)
@@ -174,6 +174,7 @@ int main (int argc, char* argv[40])
 			*/
     }
 delete Atlas;
+delete New_Chart;
 //free(ppchart);
 //free(ptr);
 //free(filename);
