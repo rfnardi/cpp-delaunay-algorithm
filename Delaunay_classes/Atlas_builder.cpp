@@ -1,22 +1,9 @@
 #include <cmath>
-#include <vector>
-#include <string>
 #include <iostream>
-#include <time.h>
-#include <string>
 #include <stdlib.h>
 #include <cstdio>
-#include "./atlas.cpp"
-#include "./Point.cpp"
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
 
-/*
-#include "obter_catalogo_de_vizinhancas_vizinhos.cpp"
-#include "Centro_Esfera_Aprox.cpp"
-#include "Triangle_Building.cpp"
-#include "triangle_recording.cpp"
-#include "Convex_Hull.cpp"
-*/
 
 
 
@@ -25,7 +12,7 @@ int main (int argc, char* argv[40])
   //tomando dimensões do sólido para efetuar fatiamento:
 	float x, y, z;
   float x_min, x_max, y_min, y_max, z_min, z_max;
-  long* ppchart;// = new long;
+  int* ppchart;// = new long;
   FILE *file;
   char filename[20]; // = new char; //= new char[20];
 	//char file_name[20]; // WORKING OVER HERE!!!!!!
@@ -42,7 +29,7 @@ int main (int argc, char* argv[40])
     //ptr = filename; //ponteiro ptr armazena o endereço de memória da variável filename
     std::cout << "Insira o número médio de pontos por região." << '\n';
 		//printf("Insira o número médio de pontos por região.\n");
-		scanf("%ld", ppchart);
+		scanf("%d", ppchart);
     //std::cin >> *ppchart;
 		//file = fopen(file_name, "r" );
   }
@@ -53,7 +40,7 @@ int main (int argc, char* argv[40])
     //filename = (char[20])(*argv[1]);
 		//sscanf(argv[1], "%c", filename);
     std::cout << "Insira o número médio de pontos por região." << '\n';
-		scanf("%ld", ppchart); //experimentando com scanf
+		scanf("%d", ppchart); //experimentando com scanf
 		//std::cin >> *ppchart;                     //bugando aqui!!!
 		//file = fopen(filename, "r" );
   }
@@ -63,7 +50,7 @@ int main (int argc, char* argv[40])
 		sscanf(argv[1],"%s", filename);
 		//sscanf(argv[1], "%c", filename);
     //ptr = argv[2];
-    sscanf(argv[2],"%ld", ppchart); //converte o terceiro parâmetro de entrada de char para decimal
+    sscanf(argv[2],"%d", ppchart); //converte o terceiro parâmetro de entrada de char para decimal
 		//file = fopen(filename, "r" );
   }
   else if (argc>3)
@@ -73,6 +60,8 @@ int main (int argc, char* argv[40])
     std::cout << "atlas-composition" << "[nome do arquivo]" << "[numero médio de pontos por carta]" << '\n';
     exit (EXIT_FAILURE);
   }
+
+	int Points_per_Chart = *ppchart;
 
 	file = fopen(filename, "r" );
 
@@ -122,49 +111,46 @@ int main (int argc, char* argv[40])
 
     std::cout<<"Quantidade total de pontos: "<< Total_de_Pontos << '\n';
 
-    int number_of_charts = currentLine/(*ppchart);
+    int number_of_charts = currentLine/(Points_per_Chart);
     std::cout << "Total de cartas: " << number_of_charts <<'\n';
     float chart_depth = (z_max - z_min)/number_of_charts; //futuramente considerar fatiamento ao longo de outros eixos de acordo com as proporções do sólido
     std::cout << "Espessura da carta ao longo de z: " << chart_depth << '\n';
-    int chart_index;
 
-    std::vector<del::Chart> *Atlas = new std::vector<del::Chart>;
-    del::Chart* New_Chart = new del::Chart;
-    for (chart_index = 0; chart_index < number_of_charts; chart_index++)
-    {
-      (*New_Chart).Chart_index = chart_index;
-      (*Atlas).push_back( *New_Chart);
-      std::cout << "Carta " << chart_index  << " adicionada ao atlas com sucesso"<<'\n';
-    }
-    std::cout << "Cartas iniciadas com sucesso." << '\n';
-    std::cout << "Iniciando particionamento dos pontos" << '\n';
-    currentLine = 0;
-    del::Point ponto ;
+		//float* Atlas[number_of_charts][Points_per_Chart][3] = new float[number_of_charts][Points_per_Chart][3];
+		float*** Atlas = (float***) malloc (sizeof(float)*number_of_charts*Points_per_Chart*3 + 20);
+		int Index_Vector[number_of_charts];
+		for (size_t i = 0; i < number_of_charts; i++) {
+			Index_Vector[i]=0;
+		}
+
+		fclose(file);
+		file = freopen(filename, "r", stdin);
 
 
-    file = freopen(filename, "r" , stdin); //volta o stream para o início do arquivo
-
-    do
-    {
-      lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
-      for (chart_index = 0; chart_index < number_of_charts; chart_index++)
-      {
-        if (z<=(z_max - chart_index*chart_depth) && z>(z_max - (chart_index + 1)*chart_depth))
-        {
-          ponto.p[0]= x;
-          ponto.p[1]= y;
-          ponto.p[2]= z;
-          (*Atlas)[chart_index].Points.push_back(ponto);
-        }
-      }
-      currentLine++;
-    } while ( lineIterator != EOF );
+		do
+		{
+			lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
+			for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
+			{
+				if (z<=(z_max - chart_index*chart_depth) && z>(z_max - (chart_index + 1)*chart_depth))
+				{
+					if (Index_Vector[chart_index]<Points_per_Chart)
+					{
+						Atlas[chart_index][Index_Vector[chart_index]][0] = x;
+						Atlas[chart_index][Index_Vector[chart_index]][1] = y;
+						Atlas[chart_index][Index_Vector[chart_index]][2] = z;
+						Index_Vector[chart_index]++; // = Index_Vector[chart_index] + 1;
+					}
+				}
+			}
+			currentLine++;
+		} while ( lineIterator != EOF );
 
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
 
-    for (size_t i = 0; i < (*Atlas).size(); i++)
+    for (size_t i = 0; i < number_of_charts; i++)
     {
-      std::cout << "Quantidade de pontos na carta " << i << ": "<< (*Atlas)[i].Points.size()<<'\n';
+      std::cout << "Quantidade de pontos na carta " << i << ": "<< Index_Vector[i] <<'\n';
 			/*
       std::cout << "Pontos da carta " << i << ":" << '\n';
       for (size_t j = 0; j < Atlas[i].Points.size(); j++)
@@ -173,13 +159,18 @@ int main (int argc, char* argv[40])
       }
 			*/
     }
-delete Atlas;
-delete New_Chart;
-//free(ppchart);
-//free(ptr);
-//free(filename);
+//delete[] Atlas;
+for (size_t i = 0; i < number_of_charts; i++)
+{
+	for (size_t j = 0; j < Index_Vector[i]; j++)
+	{
+		for (size_t k = 0; k < 3; k++) {
+			free(&Atlas[i][j][k]);
+		}
+	}
+}
+
 fclose(file);
-//free(file);
 
 return 1;
 }
