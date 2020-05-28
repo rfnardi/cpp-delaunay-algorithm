@@ -18,14 +18,12 @@ int sum_sizes(int I, int* index_vec_ptr)
 }
 
 
-int main (int argc, char* argv[40])
+int main (int argc, char* argv[])
 {
 
   int* ppchart;
   FILE *file;
-  char filename[20];
-
-  void* ptr;
+  char* filename;
 
   if (argc==1)
   {
@@ -69,11 +67,20 @@ int main (int argc, char* argv[40])
 	currentLine =0;
 		{
 			float x, y, z;
+			x =0.0;
+			y =0.0;
+			z =0.0;
+			x_min =0.0;
+			y_min =0.0;
+			z_min =0.0;
+			x_max =0.0;
+			y_max =0.0;
+			z_max =0.0;
 			do
 		  {
 				currentLine++;
 				lineIterator = fscanf( file, "%E%E%E \n", &x, &y, &z );
-				if(x<x_min)
+						if(x<x_min)
 		        {
 		            x_min = x;
 		        }
@@ -101,15 +108,15 @@ int main (int argc, char* argv[40])
 		}
     std::cout<<"Dimensões do sólido: \n";
 
-    std::cout<<"x máximo: "<< x_max <<" x mínimo: "<< x_min << '\n';
-    std::cout<<"y máximo: "<< y_max <<" y mínimo: "<< y_min << '\n';
-    std::cout<<"z máximo: "<< z_max <<" z mínimo: "<< z_min << '\n';
+    std::cout<<"x máximo: "<< x_max <<" ; x mínimo: "<< x_min << '\n';
+    std::cout<<"y máximo: "<< y_max <<" ; y mínimo: "<< y_min << '\n';
+    std::cout<<"z máximo: "<< z_max <<" ; z mínimo: "<< z_min << '\n';
 
 		Total_de_Pontos = currentLine;
 
     std::cout<<"Quantidade total de pontos: "<< Total_de_Pontos << '\n';
 
-    int number_of_charts = (int) ((float)currentLine/(float)(Points_per_Chart));
+    int number_of_charts = (int) (((float)Total_de_Pontos) /((float)Points_per_Chart));
     std::cout << "Total de cartas: " << number_of_charts <<'\n';
     float chart_depth = (z_max - z_min)/ ((float) number_of_charts); //futuramente considerar fatiamento ao longo de outros eixos de acordo com as proporções do sólido
     std::cout << "Espessura da carta ao longo de z: " << chart_depth << '\n';
@@ -118,24 +125,24 @@ int main (int argc, char* argv[40])
 		float* y = (float*) malloc(sizeof(float)*Total_de_Pontos);
 		float* z = (float*) malloc(sizeof(float)*Total_de_Pontos);
 
-		fclose(file);
-		file = freopen(filename, "r", stdin);
-
+		//fclose(file);
+		//file = fopen(filename, "r"); //, stdin);
+		rewind(file);
 
 			for (size_t i = 0; i < Total_de_Pontos; i++)
 			{
-				fscanf( file, "%E%E%E \n", &x[i], &y[i], &z[i] );
+				fscanf( file, "%E%E%E \n", x+i, y+i, z+i );
 			}
 
 		fclose(file);
 
-
+		/*
 		//retornando pontos no console de bouas
 		for (size_t i = 0; i < (int) ((float) Total_de_Pontos)/4; i++)
 		{
 			std::cout << "x = " << x[i] << " , y = " << y[i] << " , z = " << z[i] <<'\n';
 		}
-
+		*/
 
 		std::cout << "Cópia dos pontos concluída com sucesso." << '\n';
 
@@ -162,11 +169,10 @@ int main (int argc, char* argv[40])
 				}
 			}
 		}
-		free(x);
-		free(y);
-		free(z);
+
 
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
+
 
     for (size_t i = 0; i < number_of_charts; i++)
     {
@@ -181,7 +187,9 @@ int main (int argc, char* argv[40])
     }
 
 
-
+		free(x);
+		free(y);
+		free(z);
 		free(Atlas);
 
 
