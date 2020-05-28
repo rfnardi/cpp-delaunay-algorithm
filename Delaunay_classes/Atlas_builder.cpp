@@ -161,9 +161,9 @@ int main (int argc, char* argv[])
 			{
 				if (z[i]<=(z_max - chart_index*chart_depth) && z[i]>(z_max - (chart_index + 1)*chart_depth) && Index_Vector[chart_index]<Points_per_Chart)
 				{
-						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 0), x+1, sizeof(float));
-						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 1), y+1, sizeof(float));
-						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 2), z+1, sizeof(float));
+						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
+						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
+						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
 
 						Index_Vector[chart_index]++;
 				}
@@ -173,18 +173,28 @@ int main (int argc, char* argv[])
 
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
 
-
-    for (size_t i = 0; i < number_of_charts; i++)
+		//Mostrando conteúdo das cartas no console:
+		int this_chart_in_particular = 5;
+		bool show_points = false;
+		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
-      std::cout << "Quantidade de pontos na carta " << i << ": "<< Index_Vector[i] <<'\n';
-
-      //std::cout << "Pontos da carta " << i << ":" << '\n';
-      //for (size_t j = 0; j < Atlas[i].Points.size(); j++)
-      //{
-      //  std::cout << "x=" << Atlas[i].Points[j].p[0] << "; y=" << Atlas[i].Points[j].p[1] <<"; z=" << Atlas[i].Points[j].p[2] <<'\n';
-      //}
-
+			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Index_Vector[chart_index] <<'\n';
+			if (show_points)
+			{
+				if(chart_index ==this_chart_in_particular) //mostra pontos da carta de número 'this_chart_in_particular' se show_points for true
+		    {
+		      std::cout << "Pontos da carta " << chart_index << ":" << '\n';
+		      for (size_t j = 0; j < Index_Vector[chart_index]; j++)
+		      {
+		        std::cout << "x = " << *(Atlas + chart_index*Points_per_Chart*3 + 3*j + 0) <<
+						" ; y = " << *(Atlas + chart_index*Points_per_Chart*3 + 3*j + 1) <<
+						" ; z = " << *(Atlas + chart_index*Points_per_Chart*3 + 3*j + 2) <<'\n';
+		      }
+				}
+			}
     }
+
+
 
 
 		free(x);
