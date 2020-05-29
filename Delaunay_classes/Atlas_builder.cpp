@@ -1,4 +1,4 @@
-#include <cmath>
+//#include <cmath>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,14 +21,14 @@ int sum_sizes(int I, int* index_vec_ptr)
 int main (int argc, char* argv[40])
 {
 
-  int* ppchart;
+  int* ppchart = new int;
   FILE *file;
-  char* filename;
+  char* filename = new char;
 
   if (argc==1)
   {
     std::cout << "Insira nome do arquivo de pontos a ser particionado." << '\n';
-		scanf("%19s", filename);
+		scanf("%s", filename);
     std::cout << "Insira o número médio de pontos por região." << '\n';
 		scanf("%d", ppchart);
 
@@ -157,12 +157,12 @@ int main (int argc, char* argv[40])
 		float* Atlas = (float*) malloc (sizeof(float)*number_of_charts*Points_per_Chart*3);
 
 		int Index_Vector[number_of_charts];
-
-		//void* Oversized_Charts = (void*) malloc(number_of_charts); // Computador não me deixa criar nem mais um array no código!!!!
+		bool* Oversized_Charts = (bool*) malloc(sizeof(bool)*number_of_charts);
 
 		for (size_t i = 0; i < number_of_charts; i++)
 		{
 			Index_Vector[i]=0;
+			Oversized_Charts[i]=false;
 		}
 
 		std::cout << "Memória para as cartas alocada com sucesso." << '\n';
@@ -179,6 +179,7 @@ int main (int argc, char* argv[40])
 
 						Index_Vector[chart_index]++;
 				}
+				//making sure the last chart will take points of the inferior border:
 				if ((chart_index == number_of_charts -1) && (z[i]<=(z_max - chart_index*chart_depth)) && z[i]>(z_max - (chart_index + 1)*chart_depth) && Index_Vector[chart_index]<Points_per_Chart)
 				{
 						memcpy((Atlas + chart_index*Points_per_Chart*3 + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
@@ -187,11 +188,15 @@ int main (int argc, char* argv[40])
 
 						Index_Vector[chart_index]++;
 				}
+				if (Index_Vector[chart_index]==Points_per_Chart)
+				{
+					Oversized_Charts[chart_index]=true;
+				}
 			}
 		}
 
 
-    std::cout << "Particionamento dos pontos concluído com sucesso." << '\n';
+    std::cout << "Particionamento dos pontos concluído com sucesso." << '\n' << '\n';
 
 		//Mostrando conteúdo das cartas no console:
 		int this_chart_in_particular = 0;
@@ -211,20 +216,23 @@ int main (int argc, char* argv[40])
 		      }
 				}
 			}
-			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Index_Vector[chart_index] << " ;    Dimensões:  z max = " << (z_max - chart_index*chart_depth) << " ; z min = " << (z_max - (chart_index + 1)*chart_depth) << '\n';
-    }
+			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Index_Vector[chart_index] <<
+			" ;    Dimensões:  z max = " << (z_max - chart_index*chart_depth) << " ; z min = " << (z_max - (chart_index + 1)*chart_depth) << '\n';
+		}
 
 		int sum;
 		sum=0;
 		for (size_t i = 0; i < number_of_charts; i++) {sum = sum + Index_Vector[i];}
-		std::cout << "Total de pontos copiados para as cartas: " << sum <<'\n';
+		std::cout << "\nTotal de pontos copiados para as cartas: " << sum <<'\n';
 
-
-		free(x);
-		free(y);
-		free(z);
+		free(Oversized_Charts);
 		free(Atlas);
-		//free(Oversized_Charts);
+		free(z);
+		free(y);
+		free(x);
+		delete filename;
+		delete ppchart;
+
 
 
 return 0;
