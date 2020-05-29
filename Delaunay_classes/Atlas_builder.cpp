@@ -157,12 +157,15 @@ int main (int argc, char* argv[40])
 		float* Atlas = (float*) malloc (sizeof(float)*number_of_charts*Points_per_Chart*3);
 
 		int Index_Vector[number_of_charts];
-		//char* Oversized_Charts = (char*) malloc (number_of_charts*sizeof(char));
-		for (size_t i = 0; i < number_of_charts; i++) {
+
+		//void* Oversized_Charts = (void*) malloc(number_of_charts); // Computador não me deixa criar nem mais um array no código!!!!
+
+		for (size_t i = 0; i < number_of_charts; i++)
+		{
 			Index_Vector[i]=0;
 		}
 
-		std::cout << "Criação de conteineres concluída com sucesso." << '\n';
+		std::cout << "Memória para as cartas alocada com sucesso." << '\n';
 
 		for (size_t i = 0; i < Total_de_Pontos; i++)
 		{
@@ -208,13 +211,13 @@ int main (int argc, char* argv[40])
 		      }
 				}
 			}
-			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Index_Vector[chart_index] << " ;    Dimensões:  z max = " << (z_max - chart_index*chart_depth) << " , z min = " << (z_max - (chart_index + 1)*chart_depth) << '\n';
+			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Index_Vector[chart_index] << " ;    Dimensões:  z max = " << (z_max - chart_index*chart_depth) << " ; z min = " << (z_max - (chart_index + 1)*chart_depth) << '\n';
     }
 
 		int sum;
 		sum=0;
 		for (size_t i = 0; i < number_of_charts; i++) {sum = sum + Index_Vector[i];}
-		std::cout << "Confirmando total de pontos: " << sum <<'\n';
+		std::cout << "Total de pontos copiados para as cartas: " << sum <<'\n';
 
 
 		free(x);
