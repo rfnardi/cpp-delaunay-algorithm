@@ -6,11 +6,13 @@
 #include <cstring>
 //#include <bits/stdc++.h>
 
-int sum;
 
-//Useful function for array of arrays with different sizes each:
+// *********************************************************************************
+// ******* Useful functions to access information inside array of arrays with different sizes each:
+// **
 int sum_sizes(int I, int* index_vec_ptr)
 {
+	int sum;
 	sum = 0;
 	if (I>0)
 	{
@@ -21,6 +23,18 @@ int sum_sizes(int I, int* index_vec_ptr)
 	}
 	return sum;
 }
+
+void Write_to_Atlas (float * Atlas_ptr, int* Chart_sizes_vec_ptr, int k, int i, int j, float Data)
+{
+	memcpy((Atlas_ptr + 3*sum_sizes(k, Chart_sizes_vec_ptr) + 3*i + j), &Data, sizeof(float));
+}
+
+float Read_from_Atlas (float * Atlas_ptr, int* Chart_sizes_vec_ptr, int k, int i, int j)
+{
+	return *(Atlas_ptr + 3*sum_sizes(k, Chart_sizes_vec_ptr) + 3*i + j);
+}
+
+// *********************************************************************************
 
 
 int main (int argc, char* argv[40])
@@ -182,28 +196,38 @@ int main (int argc, char* argv[40])
 			Index_Vector[i]=0;
 		}
 
-		//alocando pontos nas cartas: ---> O Atlas é uma coleção de matrizes (cartas), todas com 3 colunas
-		//-------------------------------> mas cada uma com uma quantidade de linhas diferente
-		//-------------------------------> a quantidade de linhas em cada carta é guardada no 'Qtd_pts_na_Carta';
-		//-------------------------------> o elemento que está na linha i e na coluna j da k-ésima carta se localiza na seguinte posição de memória:
-		//-------------------------------> (Atlas + 3*sum_sizes(k, Qtd_pts_na_Carta) + 3*i + j)
+		// **** alocando pontos nas cartas:
+		// **** O Atlas é uma coleção de matrizes (cartas), todas com 3 colunas
+		// **** mas cada uma com uma quantidade de linhas diferente.
+		// **** A quantidade de linhas em cada carta é guardada no array 'Qtd_pts_na_Carta';
+		// **** o elemento que está na linha i e na coluna j da k-ésima carta se localiza na seguinte posição de memória:
+		// **** (Atlas + 3*sum_sizes(k, Qtd_pts_na_Carta) + 3*i + j)
+
 		for (size_t i = 0; i < Total_de_Pontos; i++)
 		{
 			for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
 			{
 				if ( (chart_index != number_of_charts -1) && (z[i]<=(z_max - chart_index*chart_depth)) && z[i]>(z_max - (chart_index + 1)*chart_depth) )
 				{
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 0, *(x+i));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 1, *(y+i));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 2, *(z+i));
+
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
 					Index_Vector[chart_index]++;
 				}
 				//making sure the last chart will take points at the inferior border:
 				if ((chart_index == number_of_charts -1) && (z[i]<=(z_max - chart_index*chart_depth)) && z[i]>=(z_min) )
 				{
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
-					memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 0, *(x+i));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 1, *(y+i));
+					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 2, *(z+i));
+					
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
+					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
 					Index_Vector[chart_index]++;
 				}
 			}
@@ -226,8 +250,8 @@ int main (int argc, char* argv[40])
 
 
 		//Mostrando conteúdo das cartas no console:
-		int this_chart_in_particular = 1;
-		bool show_points = false;
+		int this_chart_in_particular = 3;
+		bool show_points = true;
 		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
 			if (show_points && (chart_index ==this_chart_in_particular))//mostra pontos da carta de número 'this_chart_in_particular' se show_points for true
@@ -253,11 +277,12 @@ int main (int argc, char* argv[40])
 			}
 		}
 
-
+		{
+		int sum;
 		sum=0;
 		for (size_t i = 0; i < number_of_charts; i++) {sum = sum + Index_Vector[i];}
 		std::cout << "\nTotal de pontos copiados para as cartas: " << sum <<'\n';
-
+		}
 
 		std::cout << "Iniciando sub-fatiamento." << '\n';
 

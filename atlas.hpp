@@ -7,12 +7,13 @@
 
 namespace del
 {
-  class Chart
+  class Atlas
   {
   public:
-    Chart ();
-    Chart (int);
-    ~Chart ();
+    int * ptr;
+    Atlas ();
+    Atlas (int , int );
+    ~Atlas ();
     int Chart_index;
     std::vector<bool> This_Chart_Connections; // Este vetor serve para dizer com quais outras cartas a presente carta possui fronteira
     std::vector<del::Point> Points;

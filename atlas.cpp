@@ -2,13 +2,17 @@
 #define ATLAS
 #include "./atlas.hpp"
 
-del::Chart::Chart (){};
+del::Atlas::Atlas (){};
 
-del::Chart::Chart (int index)
+del::Atlas::Atlas (int number_of_points , int number_of_charts)
 {
-  this->Chart_index = index;
+  this->ptr = (int*) malloc(sizeof(float)*number_of_points);
 };
 
-del::Chart::~Chart (){};
+del::Atlas::~Atlas ()
+{
+  free(this->ptr);
+  std::cout << "Atlas destruído com sucesso." << '\n';
+};
 
 #endif
