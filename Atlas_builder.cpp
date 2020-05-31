@@ -36,7 +36,62 @@ float Read_from_Atlas (float * Atlas_ptr, int* Chart_sizes_vec_ptr, int k, int i
 
 // *********************************************************************************
 
+//Função para trabalhar com tomada de dimensões de uma carta com excesso de pontos para efetuar sub-fatiamento:
+float* Taking_measures(int arrays_size , float* x_vec, float* y_vec, float* z_vec)
+	{
+		float  x_min, x_max, y_min, y_max, z_min, z_max;
+		static float result[6];
 
+		for (size_t i = 0; i < arrays_size; i++)
+		{
+			if (i ==0 ) //iniciando valores para os mins e maxs:
+			{
+				x_min = *(x_vec+i);
+				x_max = *(x_vec+i);
+				y_min = *(y_vec+i);
+				y_max = *(y_vec+i);
+				z_min = *(z_vec+i);
+				z_max = *(z_vec+i);
+				/*
+				memcpy(x_min, x_vec + i, sizeof(float));
+				memcpy(x_max, x_vec + i, sizeof(float));
+				memcpy(y_min, y_vec + i, sizeof(float));
+				memcpy(y_max, y_vec + i, sizeof(float));
+				memcpy(z_min, z_vec + i, sizeof(float));
+				memcpy(z_max, z_vec + i, sizeof(float));
+				*/
+			}
+			if(*(x_vec + i)<x_min){x_min = *(x_vec + i);}
+			if(*(x_vec + i)>x_max){x_max = *(x_vec + i);}
+			if(*(y_vec + i)<y_min){y_min = *(y_vec + i);}
+			if(*(y_vec + i)>y_max){y_max = *(y_vec + i);}
+			if(*(z_vec + i)<z_min){z_min = *(z_vec + i);}
+			if(*(z_vec + i)>z_max){z_max = *(z_vec + i);}
+			/*
+			if((x_vec + i)<x_min){memcpy(x_min, x_vec + i, sizeof(float));}
+			if((x_vec + i)>x_max){memcpy(x_max, x_vec + i, sizeof(float));}
+			if((y_vec + i)<y_min){memcpy(y_min, y_vec + i, sizeof(float));}
+			if((y_vec + i)>y_max){memcpy(y_max, y_vec + i, sizeof(float));}
+			if((z_vec + i)<z_min){memcpy(z_min, z_vec + i, sizeof(float));}
+			if((z_vec + i)>z_max){memcpy(z_max, z_vec + i, sizeof(float));}
+			*/
+		}
+		result[0] = x_min;
+		result[1] = x_max;
+		result[2] = y_min;
+		result[3] = y_max;
+		result[4] = z_min;
+		result[5] = z_max;
+
+		return result; // result = {x_min , x_max , y_min , y_max , z_min , z_max }
+	}
+
+
+
+
+
+
+// *********************************************************************************
 int main (int argc, char* argv[40])
 {
 
@@ -134,6 +189,7 @@ int main (int argc, char* argv[40])
 		float* y = (float*) malloc(sizeof(float)*Total_de_Pontos);
 		float* z = (float*) malloc(sizeof(float)*Total_de_Pontos);
 
+
 		//Armazenando pontos do arquivo em arrays sob medida:
 		rewind(file);
 
@@ -213,9 +269,6 @@ int main (int argc, char* argv[40])
 					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 1, *(y+i));
 					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 2, *(z+i));
 
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
 					Index_Vector[chart_index]++;
 				}
 				//making sure the last chart will take points at the inferior border:
@@ -224,10 +277,7 @@ int main (int argc, char* argv[40])
 					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 0, *(x+i));
 					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 1, *(y+i));
 					Write_to_Atlas (Atlas , Qtd_pts_na_Carta, chart_index, Index_Vector[chart_index], 2, *(z+i));
-					
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 0), x+i, sizeof(float));
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 1), y+i, sizeof(float));
-					//memcpy((Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*Index_Vector[chart_index] + 2), z+i, sizeof(float));
+
 					Index_Vector[chart_index]++;
 				}
 			}
@@ -235,23 +285,11 @@ int main (int argc, char* argv[40])
 
 		std::cout << "Registro de pontos nas cartas realizado com sucesso." << '\n';
 
-
-		//marcando quais são as cartas que excederam o limite de pontos:
-		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
-		{
-			if (Index_Vector[chart_index]>=Points_per_Chart)
-			{
-				Oversized_Charts[chart_index]=true;
-			}
-		}
-
-
     std::cout << "Particionamento dos pontos concluído com sucesso." << '\n' << '\n';
 
-
 		//Mostrando conteúdo das cartas no console:
-		int this_chart_in_particular = 3;
-		bool show_points = true;
+		int this_chart_in_particular = 0;
+		bool show_points = false;
 		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
     {
 			if (show_points && (chart_index ==this_chart_in_particular))//mostra pontos da carta de número 'this_chart_in_particular' se show_points for true
@@ -259,9 +297,9 @@ int main (int argc, char* argv[40])
 	      std::cout << "Pontos da carta " << chart_index << ": " << '\n';
 	      for (size_t j = 0; j < Qtd_pts_na_Carta[chart_index]; j++)
 	      {
-	        std::cout << "x = " << *(Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*j + 0) <<
-					" ; y = " << *(Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*j + 1) <<
-					" ; z = " << *(Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*j + 2) <<'\n';
+	        std::cout << "x = " << Read_from_Atlas (Atlas, Qtd_pts_na_Carta, chart_index, j, 0) /* raw way: *(Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*j + 0) */ <<
+					" ; y = " << Read_from_Atlas (Atlas, Qtd_pts_na_Carta, chart_index, j, 1) <<
+					" ; z = " << Read_from_Atlas (Atlas, Qtd_pts_na_Carta, chart_index, j, 2) <<'\n';
 	      }
 			}
 			std::cout << "Quantidade de pontos na carta " << chart_index << ": "<< Qtd_pts_na_Carta[chart_index] <<
@@ -281,13 +319,58 @@ int main (int argc, char* argv[40])
 		int sum;
 		sum=0;
 		for (size_t i = 0; i < number_of_charts; i++) {sum = sum + Index_Vector[i];}
-		std::cout << "\nTotal de pontos copiados para as cartas: " << sum <<'\n';
+		std::cout << "\nTotal de pontos copiados para as cartas: " << sum <<'\n' << '\n';
 		}
 
-		std::cout << "Iniciando sub-fatiamento." << '\n';
+		std::cout << "\nIniciando sub-divisão das cartas com excedente de pontos." << '\n';
 
-		//tomando dimensões das regiões que excederam o limite de pontos:
-		std::cout << "Iniciando medidas de densidade linear de pontos ao longo dos eixos coordenados." << '\n';
+		int Max_number_of_points;
+		Max_number_of_points = 0;
+		//marcando quais são as cartas que excederam o limite de pontos e pegando a quantidade de pontos da maior carta:
+		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
+		{
+			if (Qtd_pts_na_Carta[chart_index]>=Points_per_Chart)
+			{
+				Oversized_Charts[chart_index]=true;
+				if (Max_number_of_points<Qtd_pts_na_Carta[chart_index]){ Max_number_of_points = Qtd_pts_na_Carta[chart_index]; }
+			}
+		}
+
+
+		// ****
+		// ****
+		// **** Liberando memória para guardar apenas os pontos das cartas que excedem a quantidade de pontos:
+		float *new_x, *new_y, *new_z;
+		new_x = (float*) realloc ((void*) x, Max_number_of_points * sizeof(float));
+		new_y = (float*) realloc ((void*) y, Max_number_of_points * sizeof(float));
+		new_z = (float*) realloc ((void*) z, Max_number_of_points * sizeof(float));
+
+		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
+		{
+			if (Oversized_Charts[chart_index])
+			{
+				std::cout << "\n\nCopiando pontos da carta " << chart_index << " para array de trabalho." << '\n';
+				for (size_t i = 0; i < Qtd_pts_na_Carta[chart_index]; i++)
+				{
+					memcpy((new_x + i), (Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*i + 0), sizeof(float));
+					memcpy((new_y + i), (Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*i + 1), sizeof(float));
+					memcpy((new_z + i), (Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*i + 2), sizeof(float));
+				}
+
+				std::cout << "Tomando dimensões da carta." << '\n';
+				float * Chart_Extremes = (float*) malloc(6 * sizeof(float));
+				memcpy(Chart_Extremes , Taking_measures(Max_number_of_points , new_x, new_y, new_z), 6*sizeof(float));
+
+				std::cout << "x_min = " << *(Chart_Extremes+0) <<" ; x_max = " << *(Chart_Extremes+1) <<
+									" ; y_min = " << *(Chart_Extremes+2) <<" ; y_max = " << *(Chart_Extremes+3) <<
+									" ; z_min = " << *(Chart_Extremes+4) <<" ; z_max = " << *(Chart_Extremes+5) <<'\n';
+
+				std::cout << "Iniciando medidas de densidade linear de pontos ao longo dos eixos coordenados." << '\n';
+
+				free(Chart_Extremes);
+			}
+		}
+
 
 
 		//int* X_Linear_Points_density = (int*) malloc(    );
@@ -305,11 +388,13 @@ int main (int argc, char* argv[40])
 		//free(X_Linear_Points_density);
 		//free(Y_Linear_Points_density);
 		//free(Z_Linear_Points_density);
+		
+
 		free(Oversized_Charts);
 		free(Atlas);
-		free(z);
-		free(y);
-		free(x);
+		free(new_z);
+		free(new_y);
+		free(new_x);
 		delete filename;
 		delete ppchart;
 
