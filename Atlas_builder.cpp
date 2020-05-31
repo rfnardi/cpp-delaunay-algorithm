@@ -85,6 +85,72 @@ float* Taking_measures(int arrays_size , float* x_vec, float* y_vec, float* z_ve
 
 		return result; // result = {x_min , x_max , y_min , y_max , z_min , z_max }
 	}
+// *********************************************************************************
+
+
+//Fazendo overloading da Função 'Taking measures' para trabalhar com tomada de dimensões de um array simples:
+float* Taking_measures(int array_size , float* data_array)
+	{
+		float  min, max;
+		static float result[2];
+
+		for (size_t i = 0; i < array_size; i++)
+		{
+			if (i ==0 ) //iniciando valores para os mins e maxs:
+			{
+				min = *(data_array+i);
+				max = *(data_array+i);
+			}
+			if(*(data_array + i)<min){min = *(data_array + i);}
+			if(*(data_array + i)>max){max = *(data_array + i);}
+		}
+		result[0] = min;
+		result[1] = max;
+
+		return result; // result = {x_min , x_max }
+	}
+
+
+// *********************************************************************************
+
+
+// ***** Função de avaliação da densidade linear: Basicamente monta o histograma dos valores armazenados em data_array 1-dimensional
+// ***** localizado em array separando a contagem de pontos em 'number_of_regions'
+
+int* Linear_Density_caculator (float* data_array, int data_array_size, int number_of_regions)
+{
+	int* linear_Density = (int*) malloc(data_array_size*sizeof(int));
+	//inicializando linear_Density:
+	for (size_t j = 0; j < data_array_size; j++)
+	{
+		linear_Density[j] = 0;
+	}
+	//tomando limites dos valores contidos em data_array:
+	float Data_Extremes[2];
+	memcpy(Data_Extremes, Taking_measures(data_array_size , data_array), 2*sizeof(float));
+	float region_size = Data_Extremes[1] - Data_Extremes[0];
+
+	//determinando quantidade de pontos dentro de cada região:
+	for (size_t i = 0; i < data_array_size; i++)
+	{
+		for (size_t j = 0; j < number_of_regions; j++)
+		{
+			if ( (j != data_array_size -1) && (data_array[i]>=(Data_Extremes[0] + j*region_size)) && data_array[i]<(Data_Extremes[0] + (j + 1)*region_size) )
+			{
+				linear_Density[j]++;
+			}
+			//making sure the last region will take points at the uper border:
+			if ((j == data_array_size -1) && (data_array[i]>=(Data_Extremes[0] + j*region_size)) && data_array[i]<=(Data_Extremes[1]) )
+			{
+				linear_Density[j]++;
+			}
+		}
+	}
+	return linear_Density;
+	free(linear_Density);
+}
+
+
 
 
 
@@ -349,7 +415,7 @@ int main (int argc, char* argv[40])
 		{
 			if (Oversized_Charts[chart_index])
 			{
-				std::cout << "\n\nCopiando pontos da carta " << chart_index << " para array de trabalho." << '\n';
+				std::cout << "\n\nCopiando pontos da carta " << chart_index << " para arrays de trabalho." << '\n';
 				for (size_t i = 0; i < Qtd_pts_na_Carta[chart_index]; i++)
 				{
 					memcpy((new_x + i), (Atlas + 3*sum_sizes(chart_index, Qtd_pts_na_Carta) + 3*i + 0), sizeof(float));
@@ -388,7 +454,7 @@ int main (int argc, char* argv[40])
 		//free(X_Linear_Points_density);
 		//free(Y_Linear_Points_density);
 		//free(Z_Linear_Points_density);
-		
+
 
 		free(Oversized_Charts);
 		free(Atlas);
