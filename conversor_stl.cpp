@@ -43,56 +43,65 @@ void appendToFile ( std::string fileName, std::string line ) {
 	fout.close();
 }
 
-int main( int argc, char* argv[] )
+char* cliHandler ( int argc, char* argv[] )
 {
-	time_t t[ 2 ];
 	char* filename; // char* instead string because of fopen use bellow
-	if ( argc > 3 ) {
-		std::cout << "Muitos argumentos inseridos." << std::endl;
-		std::cout << "Conversor STL aceita apenas dois parâmetros opcionais." << std::endl;
-		std::cout << "	Sintaxe:" << std::endl;
-		std::cout << "		conversort-stl [nome do arquivo] [parametro de varredura]" << std::endl;
-		exit( EXIT_FAILURE );
-	}
-	if ( argc >= 2 ) {
-		// Utilizando arquivo inserido via linha de comando.
-		filename = argv[ 1 ];
-	} else {
+	if ( argc == 1 )
+	{
 		// Se nenhum parametro é inserido na execução, pede arquivo ao usuário.
 		std::cout << "Digite o nome do arquivo a ser triangulado." << std::endl;
 		std::cin >> filename;
 	}
-	std::cout << "Nome do arquivo inserido:" << filename << std::endl;
-	std::cout << std::endl;
-
-	FILE *file;
-	file = fopen( filename, "r" );
-	if ( file == NULL ) {
-		std::cout << "Arquivo não pode ser aberto: Não existe ou está sendo editado por outro programa." << std::endl;
-		std::cout << "Conversor STL encerra sua execução retornando erro 1." << std::endl;
+	else if ( argc == 2 )
+	{
+		// Utilizando arquivo inserido via linha de comando.
+		filename = argv[ 1 ];
+	}
+	else
+	{
+		std::cout << "Muitos argumentos inseridos." << std::endl;
+		std::cout << "Conversor STL aceita apenas um parâmetro opcional." << std::endl;
+		std::cout << "	Utilização:" << std::endl;
+		std::cout << "		conversort-stl [<nome do arquivo>]" << std::endl;
 		exit( EXIT_FAILURE );
 	}
+	return filename;
+}
 
-	// Assumir apenas vetores 3D
-	// URL fonte desta forma de leitura de arquivo - https://stackoverflow.com/a/11168756/5382576
-	float x, y, z, c[ 3 ];
-	del::Point ponto;
-	std::vector<del::Point> pontos;
-	int currentLine = 0;
 
+int main( int argc, char* argv[] )
+{
+	time_t t[ 2 ];
+	int listSize;
+	FILE* file;
+	try
+	{
+		char* filename = cliHandler( argc, argv );
+		file = fopen( filename, "r" );
+		if ( file == NULL  ) {
+			std::cout << "Arquivo não pode ser aberto: Não existe ou está sendo editado por outro programa." << std::endl;
+			std::cout << "Conversor STL encerra sua execução retornando erro 1." << std::endl;
+			exit( EXIT_FAILURE );
+		}
+		std::cout << "Nome do arquivo inserido:" << filename << std::endl;
+		std::cout << std::endl;
+		std::ifstream inFile( filename );
+		listSize = std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
+
+	del::Point* points[ listSize ];
+	float x, y, z;
 	t[ 0 ] = clock();
-	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF ) {
-		currentLine++;
-		// ponto.setCoordinates( 3, { x, y, z } );
-		ponto.p[ 0 ]= x;
-		ponto.p[ 1 ]= y;
-		ponto.p[ 2 ]= z;
-		pontos.push_back( ponto );
-	};
+	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
+	{
+		// points[]
+	}
 	t[ 1 ] = clock();
-
 	fclose( file );
-	//delete[] file;
 
 	std::cout << std::endl;
 	std::cout << "Total de linhas no arquivo de bloco de dados: " << currentLine << std::endl;
@@ -100,15 +109,7 @@ int main( int argc, char* argv[] )
 	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
 
-	float delta_z;
-	if ( argc == 3 ) {
-		// Argumento foi inserido via comando
-		delta_z = atof( argv[ 2 ] );
-	} else {
-		// Não foi inserido o segundo parametro no comando
-		std::cout << "Insira o valor do parâmetro de resolução de leitura." << std::endl;
-		std::cin >> delta_z;
-	}
+	float delta_z = 1.5;
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
 
 	// obter_catalogo_de_vizinhancas de pontos inicia aqui
@@ -135,6 +136,7 @@ int main( int argc, char* argv[] )
 
 
 	//Inicia triangulação
+	/*
 	std::cout << "Iniciando triangulação." << std::endl;
 	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
 	std::cout << "Vetor de armazenamento dos módulos stl criado com sucesso." << '\n';
@@ -298,7 +300,7 @@ int main( int argc, char* argv[] )
 	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
 
-
+	*/
 	return EXIT_SUCCESS;
 	// compilação e utilização testada até esta linha
 	// conteúdo abaixo não foi testado ainda!

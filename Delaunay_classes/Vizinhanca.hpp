@@ -11,17 +11,17 @@ namespace del {
             std::vector<Point> universalSet;
             float raio;
             Point referencial;
-            unsigned int maxNeighborHoodSize = 5;
-            Point vizinhos[ 5 ];
+            Point* vizinhos;
             bool debug = true;
+            unsigned int maxNeighboorHoodSize;
 
         public:
             /**
-             * Inicializa o catálogo a partir de um conjunto de pontos no espaço.
+             * Inicializa o catálogo a partir de um conjunto de pontos no espaço e um valor para o número máximo de vizinhos em cada vizinhança.
              *
              * @param universalSet O conjunto de todos os pontos do sólido.
             */
-            Vizinhanca ( std::vector<Point> universalSet );
+            Vizinhanca ( std::vector<Point> universalSet, unsigned int maxNeighboorHoodSize );
 
             ~Vizinhanca ();
 
@@ -51,7 +51,8 @@ namespace del {
              *
              * @return vizinhança do ponto de referência.
             */
-            Point obter_vizinhos ();
+            // std::vector<Point> obter_vizinhos ();
+            Point* obter_vizinhos ();
 
             /**
              * Calcula a vizinhança de todos os pontos do conjunto.
@@ -59,7 +60,17 @@ namespace del {
              *
              * @return obter_catalogo_de_vizinhancas de vizinhos.
             */
-            std::vector<std::vector<Point>> obter_catalogo_de_vizinhancas ();
+            // std::vector<std::vector<Point>> obter_catalogo_de_vizinhancas ();
+            std::vector<Point*> obter_catalogo_de_vizinhancas ();
+
+            /**
+             * Obtém uma listas de pontos na interseção das vizinhanças.
+             * A lista é ordenada considerando ponto de referencia o primeiro ponto da vizinhança do primeiro parametro.
+             *
+             * @return lista de pontos pertencentes a interseção das vizinhanças.
+            */
+            // std::vector<Point> obter_intersecao_entre_vizinhancas ( std::vector<Point> nhb1, std::vector<Point> nhb2 );
+            Point* obter_intersecao_entre_vizinhancas ( Point* nhb1, Point* nhb2 );
 
             /**
              * Ativa mensagens no console
@@ -112,7 +123,7 @@ namespace del {
              * @param viz vizinhança.
              * @return Vizinhança ordenada.
             */
-            std::vector<Point> ordenar_vizinhanca ( std::vector<Point> viz );
+            Point* ordenar_vizinhanca ( Point* viz );
     };
 
 };

@@ -8,8 +8,6 @@ namespace del
 class Point
 {
 	public:
-		Point();
-		~Point();
 
 		/**
 		 * Set origin of coordinates as default Point.
@@ -20,8 +18,9 @@ class Point
 		 * 1. Set default coordinates (implemented)
 		 * 2. Set constructor and obligate coordinates insertion at the object implementation (more logic, agree?).
 		*/
-		int dim = 3;
-		float p[ 3 ] = { 0, 0, 0 };
+		float x = 0;
+		float y = 0;
+		float z = 0;
 
 		/**
 		 * Inicializa Point passando uma lista de coordenadas.
@@ -29,7 +28,9 @@ class Point
 		 *
 		 * @return int
 		*/
-		void setCoordinates ( int dim, float coords[] );
+		Point( float coords[ 3 ] );
+
+		~Point();
 
 		/**
 		 * Operador de atribuição de Point.
