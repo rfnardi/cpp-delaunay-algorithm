@@ -1,27 +1,27 @@
-#include <sys/stat.h>
-#include <sys/types.h>
+//#include <sys/stat.h>
+//#include <sys/types.h>
 #include <stdio.h>
 #include <math.h>
-#include <stdlib.h>
-#include <time.h>
+//#include <stdlib.h>
 #include <string>
 #include <iostream>
+#include <functional>
 
 #include <time.h>
 #include <array>
-#include <vector>
+//#include <vector>
 #include <fstream>
 
 #include <bits/stdc++.h>
 
 #include "Delaunay_classes/Point.cpp"
-#include "Delaunay_classes/Vizinhanca.cpp"
-#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-#include "Delaunay_classes/triangle_building.cpp"
-#include "Delaunay_classes/Triangle.cpp"
-#include "Delaunay_classes/convex_hull.cpp"
-#include "Delaunay_classes/stl_module.cpp"
-#include "Delaunay_classes/find_z_max.cpp"
+//#include "Delaunay_classes/Vizinhanca.cpp"
+//#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
+//#include "Delaunay_classes/triangle_building.cpp"
+//#include "Delaunay_classes/Triangle.cpp"
+//#include "Delaunay_classes/convex_hull.cpp"
+//#include "Delaunay_classes/stl_module.cpp"
+//#include "Delaunay_classes/find_z_max.cpp"
 //#include "Delaunay_classes/slicing_and_gluing.cpp"
 
 
@@ -68,6 +68,29 @@ char* cliHandler ( int argc, char* argv[] )
 	return filename;
 }
 
+namespace del
+{
+class Set
+{
+	Point* point;
+	int size;
+	
+	Set ( Point* point, int size )
+	{
+		this->point = point;
+		this->size = size;
+	}
+	Set orderByDistanceFrom ( Point p )
+	{
+		Point* ordered[ this->size ];
+		for ( int i = 0; i < this->size; i++ )
+		{
+			// 
+		}
+	}
+};
+}
+
 
 int main( int argc, char* argv[] )
 {
@@ -87,31 +110,34 @@ int main( int argc, char* argv[] )
 		std::cout << std::endl;
 		std::ifstream inFile( filename );
 		listSize = std::count(std::istreambuf_iterator<char>(inFile), std::istreambuf_iterator<char>(), '\n');
+		std::cout << "Total de linhas no arquivo: " << listSize << std::endl;
 	}
 	catch(const std::exception& e)
 	{
 		std::cerr << e.what() << '\n';
 	}
 
-	del::Point* points[ listSize ];
+	del::Point* points = new del::Point[ listSize ];
 	float x, y, z;
 	t[ 0 ] = clock();
+	int counter = 0;
 	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
 	{
-		// points[]
+		del::Point p ( x, y, z );
+		points[ counter ] = p;
+		std::cout << p.to_string() << std::endl;
+		counter++;
 	}
 	t[ 1 ] = clock();
 	fclose( file );
 
 	std::cout << std::endl;
-	std::cout << "Total de linhas no arquivo de bloco de dados: " << currentLine << std::endl;
-	std::cout << "Total de pontos armazenados em memória: " << pontos.size() << std::endl;
 	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
+/*
 
 
 	float delta_z = 1.5;
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
-
 	// obter_catalogo_de_vizinhancas de pontos inicia aqui
 	// primeiro instancio a classe inserindo os pontos
 	del::Vizinhanca vizinhanca( pontos );

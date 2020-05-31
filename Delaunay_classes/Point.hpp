@@ -8,30 +8,61 @@ namespace del
 class Point
 {
 	public:
-
-		/**
-		 * Set origin of coordinates as default Point.
-		 * This strtategy avoids the program of exiting with EXIT_FAILURE status in some situations.
-		 * A list of defined Point doesn't sure you all these have defined coordinates (float p[3] bellow).
-		 * Require computation on Point's coordinates may cause system failure.
-		 * Solutions:
-		 * 1. Set default coordinates (implemented)
-		 * 2. Set constructor and obligate coordinates insertion at the object implementation (more logic, agree?).
-		*/
+		/****************************************************************************/
+		/*																			*/
+		/*								PROPERTIES									*/
+		/*																			*/
+		/****************************************************************************/
 		float x = 0;
 		float y = 0;
 		float z = 0;
 
+		
+		/****************************************************************************/
+		/*																			*/
+		/*								  METHODS									*/
+		/*																			*/
+		/****************************************************************************/
 		/**
 		 * Inicializa Point passando uma lista de coordenadas.
 		 * Replace this by constructor.
 		 *
 		 * @return int
 		*/
-		Point( float coords[ 3 ] );
+		Point( float x = 0, float y = 0, float z = 0 );
 
 		~Point();
 
+		/**
+		 * Representa Point em forma de string para debug.
+		 *
+		 * @return string
+		*/
+		std::string to_string ( void );
+
+		/**
+		 * Calcula a distância entre P e o ponto de referência.
+		 *
+		 * @param Point
+		 * @return float
+		*/
+		float distancia ( Point P );
+
+		/**
+		 * Calcula a distância entre dois Point quaisquer.
+		 *
+		 * @param Point
+		 * @param Point
+		 * @return float
+		*/
+		float distancia ( const Point P1, const Point P2 );
+
+
+		/****************************************************************************/
+		/*																			*/
+		/*									OPERATORS								*/
+		/*																			*/
+		/****************************************************************************/
 		/**
 		 * Operador de atribuição de Point.
 		 *
@@ -62,65 +93,6 @@ class Point
 		 * @return boolean
 		*/
 		bool operator == ( Point P );
-
-		/**
-		 * Iterador de coordenadas de Point
-		*/
-		// Make use old style of iterator (using int)
-		using iterator = std::vector<float>::iterator;
-
-		/**
-		 * Operador de incremento de iterador de coordenadas de Point.
-		 *
-		 * @param iterator
-		 * @return int
-		*/
-		// iterator operator ++ ( void );
-
-		/**
-		 * Operador de decremento de iterador de coordenadas de Point.
-		 *
-		 * @param iterator
-		 * @return int
-		*/
-		// iterator operator -- ( void );
-
-		/**
-		 * Valor da primeira coordanada de Point
-		 *
-		 * @return int
-		*/
-		int begin ( void );
-
-		/**
-		 * Valor da última coordanada de Point
-		 *
-		 * @return int
-		*/
-		int end ( void );
-
-		/**
-		 * Representa Point em forma de string para debug.
-		 *
-		 * @return string
-		*/
-		std::string to_string ( void );
-
-		/**
-		 * Retorna o número de coordenadas em Point.
-		 *
-		 * @return int
-		*/
-		int size ( void );
-
-		/**
-		 * Calcula a distância entre Points.
-		 * Implement a MetricSpace class and move all distance computation to that
-		 *
-		 * @param Point
-		 * @return float
-		*/
-		float distancia ( Point P );
 
 }; //fim da classe Point
 
