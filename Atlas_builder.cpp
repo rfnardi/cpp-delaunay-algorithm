@@ -119,28 +119,30 @@ float* Taking_measures(int array_size , float* data_array)
 
 int* Linear_Density_caculator (float* data_array, int data_array_size, int number_of_regions)
 {
-	int* linear_Density = (int*) malloc(data_array_size*sizeof(int));
+	int* linear_Density = (int*) malloc(number_of_regions*sizeof(int));
 	//inicializando linear_Density:
-	for (size_t j = 0; j < data_array_size; j++)
+	for (size_t j = 0; j < number_of_regions; j++)
 	{
-		linear_Density[j] = 0;
+		*(linear_Density +j) = 0;
 	}
 	//tomando limites dos valores contidos em data_array:
 	float Data_Extremes[2];
 	memcpy(Data_Extremes, Taking_measures(data_array_size , data_array), 2*sizeof(float));
 	float region_size = Data_Extremes[1] - Data_Extremes[0];
+	float subregion_size;
+	subregion_size = (float) (region_size/((float) number_of_regions));
 
 	//determinando quantidade de pontos dentro de cada região:
 	for (size_t i = 0; i < data_array_size; i++)
 	{
 		for (size_t j = 0; j < number_of_regions; j++)
 		{
-			if ( (j != data_array_size -1) && (data_array[i]>=(Data_Extremes[0] + j*region_size)) && data_array[i]<(Data_Extremes[0] + (j + 1)*region_size) )
+			if ( (j != number_of_regions -1) && (data_array[i]>=(Data_Extremes[0] + j*subregion_size)) && data_array[i]<(Data_Extremes[0] + (j + 1)*subregion_size) )
 			{
 				linear_Density[j]++;
 			}
 			//making sure the last region will take points at the uper border:
-			if ((j == data_array_size -1) && (data_array[i]>=(Data_Extremes[0] + j*region_size)) && data_array[i]<=(Data_Extremes[1]) )
+			if ((j == number_of_regions -1) && (data_array[i]>=(Data_Extremes[0] + j*subregion_size)) && data_array[i]<=(Data_Extremes[1]) )
 			{
 				linear_Density[j]++;
 			}
@@ -431,7 +433,38 @@ int main (int argc, char* argv[40])
 									" ; y_min = " << *(Chart_Extremes+2) <<" ; y_max = " << *(Chart_Extremes+3) <<
 									" ; z_min = " << *(Chart_Extremes+4) <<" ; z_max = " << *(Chart_Extremes+5) <<'\n';
 
+
 				std::cout << "Iniciando medidas de densidade linear de pontos ao longo dos eixos coordenados." << '\n';
+
+				int x_density[10];
+				int y_density[10];
+				int z_density[10];
+
+				memcpy (x_density , Linear_Density_caculator ( new_x, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (y_density , Linear_Density_caculator ( new_y, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (z_density , Linear_Density_caculator ( new_z, Max_number_of_points, 10), sizeof(float)*10);
+
+				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo x: " << '\n';
+
+				for (size_t i = 0; i < 10; i++)
+				{
+					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << x_density[i]<<'\n';
+				}
+
+				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo y: " << '\n';
+
+				for (size_t i = 0; i < 10; i++)
+				{
+					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << y_density[i]<<'\n';
+				}
+
+				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo z: " << '\n';
+
+				for (size_t i = 0; i < 10; i++)
+				{
+					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << z_density[i]<<'\n';
+				}
+
 
 				free(Chart_Extremes);
 			}
