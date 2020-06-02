@@ -36,7 +36,7 @@ float del::Point::distancia ( del::Point P )
 	return sqrt( pow( this->x - P.x, 2 ) + pow( this->y - P.y, 2 ) + pow( this->z - P.z, 2 ) );
 }
 
-float del::Point::distancia ( const del::Point P1, const del::Point P2 )
+float del::Point::distancia ( del::Point P1, del::Point P2 )
 {
 	return sqrt( pow( P1.x - P2.x, 2 ) + pow( P1.y - P2.y, 2 ) + pow( P1.z - P2.z, 2 ) );
 }

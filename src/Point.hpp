@@ -55,7 +55,7 @@ class Point
 		 * @param Point
 		 * @return float
 		*/
-		float distancia ( const Point P1, const Point P2 );
+		static float distancia ( Point P1, Point P2 );
 
 
 		/****************************************************************************/

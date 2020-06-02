@@ -1,15 +1,20 @@
 #include <iostream>
+#include <algorithm>
+using namespace std;
 
-int main ()
+int main()
 {
-    int* b = new int[ 2 ];
+	int arr[ 5 ] = { 6, 3, 5, 2, 8 };
+	int elem = 2;
+	int* itr = find(arr, arr + 5, elem);
 
-    for ( int i = 0; i < 3; i++ )
-    {
-        b[ i ] = i;
-    }
-    printf( "values: (%i,%i)\n", *b, *(b + 1) );
+	if (itr != end(arr)) {
+		cout << "Element " << elem << " is present at index "
+			<< distance(arr, itr) << " in the given array";
+	}
+	else {
+		cout << "Element is not present in the given array";
+	}
 
-    delete[] b;
-    return 0;
+	return 0;
 }

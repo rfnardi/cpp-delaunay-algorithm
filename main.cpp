@@ -14,7 +14,8 @@
 
 #include <bits/stdc++.h>
 
-#include "Delaunay_classes/Point.cpp"
+#include "src/Point.cpp"
+#include "src/Set.cpp"
 //#include "Delaunay_classes/Vizinhanca.cpp"
 //#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
 //#include "Delaunay_classes/triangle_building.cpp"
@@ -24,7 +25,7 @@
 //#include "Delaunay_classes/find_z_max.cpp"
 //#include "Delaunay_classes/slicing_and_gluing.cpp"
 
-
+#define NEIGHBOORHOOD_MAX_SIZE 6
 
 
 long timeBetween( long before, long after ) {
@@ -68,28 +69,6 @@ char* cliHandler ( int argc, char* argv[] )
 	return filename;
 }
 
-namespace del
-{
-class Set
-{
-	Point* point;
-	int size;
-	
-	Set ( Point* point, int size )
-	{
-		this->point = point;
-		this->size = size;
-	}
-	Set orderByDistanceFrom ( Point p )
-	{
-		Point* ordered[ this->size ];
-		for ( int i = 0; i < this->size; i++ )
-		{
-			// 
-		}
-	}
-};
-}
 
 
 int main( int argc, char* argv[] )
@@ -118,23 +97,34 @@ int main( int argc, char* argv[] )
 	}
 
 	del::Point* points = new del::Point[ listSize ];
-	float x, y, z;
-	t[ 0 ] = clock();
-	int counter = 0;
-	while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
+	
 	{
-		del::Point p ( x, y, z );
-		points[ counter ] = p;
-		std::cout << p.to_string() << std::endl;
-		counter++;
+		float x, y, z;
+		t[ 0 ] = clock();
+		int counter = 0;
+		while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
+		{
+			del::Point p ( x, y, z );
+			points[ counter ] = p;
+			counter++;
+		}
+		t[ 1 ] = clock();
 	}
-	t[ 1 ] = clock();
 	fclose( file );
+
+	del::Point* neighbhd[ NEIGHBOORHOOD_MAX_SIZE ]; // = new[] del::Point[ listSize ][ NEIGHBOORHOOD_MAX_SIZE ];
+	del::Set set ( points, listSize );
+	std::cout << set.to_string() << std::endl;
+
+	set.orderByDistance( del::Point (0,0,0) );
+	std::cout << set.to_string() << std::endl;
 
 	std::cout << std::endl;
 	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
-/*
 
+	delete[] points;
+
+/*
 
 	float delta_z = 1.5;
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
