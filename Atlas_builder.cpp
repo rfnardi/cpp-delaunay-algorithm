@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <malloc.h>
 #include <cstring>
+#include <cmath>
 //#include <bits/stdc++.h>
 
 
@@ -151,6 +152,40 @@ int* Linear_Density_caculator (float* data_array, int data_array_size, int numbe
 	return linear_Density;
 	free(linear_Density);
 }
+// *********************************************************************************
+
+double Shannon_Entropy(int* data_array, int array_size)
+{
+	int sum;
+	sum =0;
+	for (size_t i = 0; i < array_size; i++)
+	{
+		sum = sum + *(data_array+i);
+	}
+	double* stat_weights = (double*) malloc(sizeof(double)*array_size);
+
+	for (size_t i = 0; i < array_size; i++)
+	{
+		*(stat_weights + i) = ((double) *(data_array + i))/( (double) sum) ;
+	}
+
+	double Entropy;
+	Entropy = 0.0;
+	for (size_t i = 0; i < array_size; i++)
+	{
+		if (*(stat_weights +i) != 0)
+		{
+			Entropy = Entropy -  *(stat_weights +i)*log(*(stat_weights+i));
+		}
+	}
+
+	return Entropy;
+
+	free(stat_weights);
+}
+
+
+
 
 
 
@@ -320,6 +355,8 @@ int main (int argc, char* argv[40])
 			Index_Vector[i]=0;
 		}
 
+		std::cout << "Entropia associada à distribuição dos pontos nas cartas: " << Shannon_Entropy (Qtd_pts_na_Carta, number_of_charts) <<'\n';
+
 		// **** alocando pontos nas cartas:
 		// **** O Atlas é uma coleção de matrizes (cartas), todas com 3 colunas
 		// **** mas cada uma com uma quantidade de linhas diferente.
@@ -436,34 +473,73 @@ int main (int argc, char* argv[40])
 
 				std::cout << "Iniciando medidas de densidade linear de pontos ao longo dos eixos coordenados." << '\n';
 
-				int x_density[10];
-				int y_density[10];
-				int z_density[10];
+				//reunindo num único array todas as densidades lineares na seguinte ordem: (x_density[10], y_density[10], z_density[10])
+				int linear_density[30];
 
-				memcpy (x_density , Linear_Density_caculator ( new_x, Max_number_of_points, 10), sizeof(float)*10);
-				memcpy (y_density , Linear_Density_caculator ( new_y, Max_number_of_points, 10), sizeof(float)*10);
-				memcpy (z_density , Linear_Density_caculator ( new_z, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (linear_density , Linear_Density_caculator ( new_x, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (linear_density + 10, Linear_Density_caculator ( new_y, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (linear_density + 20, Linear_Density_caculator ( new_z, Max_number_of_points, 10), sizeof(float)*10);
+
+
 
 				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo x: " << '\n';
+				for (size_t i = 0; i < 10; i++)	{	std::cout << "Quantidade de pontos na faixa "<< i << " : " << linear_density[i]<<'\n';}
+				std::cout << "Entropia associada à distribuição dos pontos ao longo do eixo x : " << Shannon_Entropy(linear_density, 10) << '\n';
 
-				for (size_t i = 0; i < 10; i++)
-				{
-					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << x_density[i]<<'\n';
-				}
 
 				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo y: " << '\n';
+				for (size_t i = 10; i < 20; i++){std::cout << "Quantidade de pontos na faixa "<< i << " : " << linear_density[i]<<'\n';}
+				std::cout << "Entropia associada à distribuição dos pontos ao longo do eixo y : " << Shannon_Entropy(linear_density + 10, 10) << '\n';
 
-				for (size_t i = 0; i < 10; i++)
-				{
-					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << y_density[i]<<'\n';
-				}
 
 				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo z: " << '\n';
+				for (size_t i = 20; i < 30; i++){std::cout << "Quantidade de pontos na faixa "<< i << " : " << linear_density[i]<<'\n';}
+				std::cout << "Entropia associada à distribuição dos pontos ao longo do eixo z : " << Shannon_Entropy(linear_density + 20, 10) << '\n';
 
-				for (size_t i = 0; i < 10; i++)
+				int leading_density[10]; //associada ao maior espalhamento das coordenadas
+				int body_density[10];
+				int tail_density[10]; //associada ao menor espalhamento das coordenadas (valores mais reunidos )
+				int keeping_track_of_which_dimension[3];
+
+				for (size_t i = 0; i < 3; i++)
 				{
-					std::cout << "Quantidaded de pontos na faixa "<< i << " : " << z_density[i]<<'\n';
+					if (Shannon_Entropy(linear_density + i*10 , 10) > Shannon_Entropy(linear_density + ((i+1)%3)*10 , 10)
+								&& Shannon_Entropy(linear_density + i*10 , 10) > Shannon_Entropy(linear_density + ((i+2)%3)*10 , 10))
+					{
+						memcpy(leading_density , linear_density + i*10, 10*sizeof(int));
+						keeping_track_of_which_dimension[0] = i; //guardando qual das distribuições lineares apresenta maior entropia (maior distribuição linear de valores)
+					}
 				}
+
+
+				for (size_t i = 0; i < 3; i++)
+				{
+					if ( (Shannon_Entropy(linear_density + i*10 , 10) < Shannon_Entropy(linear_density + ((i+1)%3)*10 , 10)
+								&& Shannon_Entropy(linear_density + i*10 , 10) > Shannon_Entropy(linear_density + ((i+2)%3)*10 , 10))
+							| (Shannon_Entropy(linear_density + i*10 , 10) > Shannon_Entropy(linear_density + ((i+1)%3)*10 , 10)
+										&& Shannon_Entropy(linear_density + i*10 , 10) < Shannon_Entropy(linear_density + ((i+2)%3)*10 , 10)))
+					{
+						memcpy(body_density , linear_density + i*10, 10*sizeof(int));
+						keeping_track_of_which_dimension[1] = i; //guardando qual das distribuições lineares apresenta o valor intermediário de entropia
+					}
+				}
+
+
+
+				for (size_t i = 0; i < 3; i++)
+				{
+					if (Shannon_Entropy(linear_density + i*10 , 10) < Shannon_Entropy(linear_density + ((i+1)%3)*10 , 10)
+								&& Shannon_Entropy(linear_density + i*10 , 10) < Shannon_Entropy(linear_density + ((i+2)%3)*10 , 10))
+					{
+						memcpy(tail_density , linear_density + i*10, 10*sizeof(int));
+						keeping_track_of_which_dimension[2] = i; //guardando qual das distribuições lineares apresenta menor entropia (maior concentração linear de valores)
+					}
+				}
+
+				std::cout << "Leading dimension: " <<  keeping_track_of_which_dimension[0] << '\n';
+				std::cout << "Intermediate dimension: " <<  keeping_track_of_which_dimension[1] << '\n';
+				std::cout << "Tail dimension: " <<  keeping_track_of_which_dimension[2] << '\n';
+
 
 
 				free(Chart_Extremes);
