@@ -183,6 +183,51 @@ double Shannon_Entropy(int* data_array, int array_size)
 
 	free(stat_weights);
 }
+// *********************************************************************************
+//função que detecta se a região é ou não simplesmente conexa
+bool checking_connectiveness(int* histogram, int histogram_size)
+{
+	bool result;
+	result = true;
+	for (size_t i = 0; i < histogram_size; i++)
+	{
+		if (*(histogram + i) == 0)
+		{
+			result = false;
+		}
+	}
+	return result;
+}
+
+// *********************************************************************************
+
+//merging subrregions
+
+float* merge_subregions(float* array1 , int size_array1, float* array2, int size_array2, float new_ptr)
+{
+	new_ptr = (float*) realloc( (void*) array1, sizeof(float)*(size_array1 + size_array2));
+	memcpy(new_ptr + size_array1, array2, sizeof(float)*size_array2);
+
+	return new_ptr;
+	free (new_ptr);
+}
+
+
+// *********************************************************************************
+
+defining_subregions(int* data_array, int data_array_size, int number_of_points_per_region)
+{
+	for (size_t i = 0; i < data_array_size; i++)
+	{
+		if (data_array[i]<number_of_points_per_region)  //pontos das subregiões ainda não estão separados em arrays diferentes
+		{																								//ou em setores diferentes do mesmo array. É necessário fazer isso para depois mexer aqui.
+			if () 																				//Seguindo a lógica da função definida acima ( merge_subregions),
+			{																							//a ideia é definir cada subregião num array diferente.
+				/* code */																	//Mas se os pontos já estão enfileirados nos arrays new_x, new_y e new_z,
+			}																							//seria mais lógico apenas alterar o tamanho das regiões e permitir o índice
+		}																								//prosseguir até posições de memória que estariam na próxima região.
+	}																									//de qqr modo, é necessário um array de trabalho para armazenar os pontos
+}																										//temporariamente até realocalos em new_x, new_y e new_z
 
 
 
