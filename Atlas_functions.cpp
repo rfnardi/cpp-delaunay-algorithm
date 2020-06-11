@@ -198,20 +198,26 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 				k++;
 				Sum = sum;
 				sum = sum + linear_density[j+k];
-			}while (sum < max_number_of_points_per_region);
+			}
+			while (sum < max_number_of_points_per_region && j+k < max_number_of_points_per_region);
 			new_linear_density[l] = Sum;
+
+			std::cout << "copiada a soma dos itens desde " << j << " até "<< j+k << " do array líder para a componente " << l << " do array reorganizado." << '\n';
+
 			sizes[l] = k;
-			l++;
 			j += k;
+			l++;
 		}
 		if (linear_density[j] >= max_number_of_points_per_region)
 		{
 			*(new_linear_density + l) = linear_density[j];
+			std::cout << "copiado item excedente " << j << " do array líder para a componente " << l << " do array reorganizado." << '\n';
 			k = 1;
 			sizes[l] = k;
-			l++;
 			j++;
+			l++;
 		}
+
   }
 
 

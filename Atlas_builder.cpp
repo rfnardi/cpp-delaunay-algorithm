@@ -362,7 +362,8 @@ int main (int argc, char* argv[40])
 				std::cout << "Intermediate dimension: " <<  keeping_track_of_which_dimension[1] << '\n';
 				std::cout << "Tail dimension: " <<  keeping_track_of_which_dimension[2] << '\n';
 
-        memcpy(resized_regions , resize_regions(leading_density, 10, 10000) , 10);
+        //memcpy(resized_regions , resize_regions(leading_density, 10, 10000) , 10);
+        resized_regions = resize_regions(leading_density, 10, 10000);
 
         std::cout << "Dimensão Líder reorganizada:" << '\n';
         for (size_t i = 0; i < 10; i++)
