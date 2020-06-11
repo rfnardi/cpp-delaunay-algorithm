@@ -157,6 +157,7 @@ double Shannon_Entropy(int* data_array, int array_size)
 
 	free(stat_weights);
 }
+
 // *********************************************************************************
 //função que detecta se a região é ou não simplesmente conexa
 bool checking_connectiveness(int* histogram, int histogram_size)
@@ -174,73 +175,52 @@ bool checking_connectiveness(int* histogram, int histogram_size)
 }
 
 // *********************************************************************************
-
-//merging subrregions
-
-float* merge_subregions(float* array1 , int size_array1, float* array2, int size_array2, float* new_ptr)
+int* resize_regions (int* linear_density, int number_of_regions, int max_number_of_points_per_region /* = 10000 no exemplo usado*/ )
 {
-	new_ptr = (float*) realloc( (void*) array1, sizeof(float)*(size_array1 + size_array2));
-	memcpy(new_ptr + size_array1, array2, sizeof(float)*size_array2);
+  int* new_linear_density = (int*) malloc(number_of_regions*sizeof(int));
+	for (size_t i = 0; i < number_of_regions; i++)
+	{
+		new_linear_density[i] = 0;
+	}
+	int* sizes = (int*) malloc(number_of_regions*sizeof(int));
 
-	return new_ptr;
-	free (new_ptr);
-}
-
-
-// *********************************************************************************
-//esta função separa os pontos em regiões de valores
-float* splitting_into_regions (float* data_array, int data_array_size, int number_of_regions)
-{
-	float* splitted_array = (float*) malloc(data_array_size*sizeof(float));
-	int* number_of_points_per_region;
-  number_of_points_per_region = Linear_Density_caculator ( data_array, data_array_size, number_of_regions);
-  float* min_max = Taking_measures(data_array_size, data_array);
-  float regions_size = min_max[1]-min_max[0];
-  int* Index_Vector = (int*) malloc(number_of_regions*sizeof(int));
-  for (size_t i = 0; i < number_of_regions; i++) {
-    Index_Vector[i] = 0;
+  int Sum, sum, j, k, l;
+  j=0;
+	l=0;
+  while (j<number_of_regions)
+  {
+		if (linear_density[j]<max_number_of_points_per_region)
+		{
+			sum = linear_density[j];
+			k = 0;
+			do
+			{
+				k++;
+				Sum = sum;
+				sum = sum + linear_density[j+k];
+			}while (sum < max_number_of_points_per_region);
+			new_linear_density[l] = Sum;
+			sizes[l] = k;
+			l++;
+			j += k;
+		}
+		if (linear_density[j] >= max_number_of_points_per_region)
+		{
+			*(new_linear_density + l) = linear_density[j];
+			k = 1;
+			sizes[l] = k;
+			l++;
+			j++;
+		}
   }
 
-  for (size_t k = 0; k < data_array_size; k++)
-	{
-    for (size_t i = 0; i < number_of_regions; i++)
-    {
-      if ((i != (number_of_regions-1)) && *(data_array+k)>=min_max[0]&& *(data_array+k) < min_max[0] + regions_size*(i+1)) //trabalhando aqui!!!!!!!
-      {
-        memcpy(splitted_array + *(number_of_points_per_region+i) + Index_Vector[i], data_array+k, sizeof(float));
-        Index_Vector[i]++;
-      }
 
-      if ((i == (number_of_regions-1)) && *(data_array+k)>=min_max[0]&& *(data_array+k) <= min_max[1]) //trabalhando aqui!!!!!!!
-      {
-        memcpy(splitted_array + *(number_of_points_per_region+i) + Index_Vector[i], data_array+k, sizeof(float));
-        Index_Vector[i]++;
-      }
-    }
-	}
+  return new_linear_density; //work here!
 
-return splitted_array;
-  free(Index_Vector);
-	free(splitted_array);
+  free(new_linear_density);
+	free(sizes);
 }
 
 
 
-
-
 // *********************************************************************************
-
-
-void defining_subregions(int* data_array, int data_array_size, int number_of_points_per_region)
-{
-	for (size_t i = 0; i < data_array_size; i++)
-	{
-		if (data_array[i]<number_of_points_per_region)  //pontos das subregiões ainda não estão separados em arrays diferentes
-		{																								//ou em setores diferentes do mesmo array. É necessário fazer isso para depois mexer aqui.
-			//if () 																				//Seguindo a lógica da função definida acima ( merge_subregions),
-			{																							//a ideia é definir cada subregião num array diferente.
-				/* code */																	//Mas se os pontos já estão enfileirados nos arrays new_x, new_y e new_z,
-			}																							//seria mais lógico apenas alterar o tamanho das regiões e permitir o índice
-		}																								//prosseguir até posições de memória que estariam na próxima região.
-	}																									//de qqr modo, é necessário um array de trabalho para armazenar os pontos
-}																										//temporariamente até realocalos em new_x, new_y e new_z

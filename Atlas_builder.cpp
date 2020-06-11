@@ -268,7 +268,12 @@ int main (int argc, char* argv[40])
 
 		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
 		{
-			if (Oversized_Charts[chart_index])
+      int* resized_regions = (int*) malloc (10*sizeof(int)); // array para armazenar dados da leading dimension reorganizada
+      for (size_t i = 0; i < 10; i++)
+      {
+        resized_regions[i] = 0; //inicializando array
+      }
+      if (Oversized_Charts[chart_index])
 			{
 				std::cout << "\n\nCopiando pontos da carta " << chart_index << " para arrays de trabalho." << '\n';
 				for (size_t i = 0; i < Qtd_pts_na_Carta[chart_index]; i++)
@@ -317,6 +322,7 @@ int main (int argc, char* argv[40])
 				int tail_density[10]; //associada ao menor espalhamento das coordenadas (valores mais reunidos )
 				int keeping_track_of_which_dimension[3];
 
+        //classificando distribuição de valores das coordenadas de acordo com a entropia:
 				for (size_t i = 0; i < 3; i++)
 				{
 					if (Shannon_Entropy(linear_density + i*10 , 10) > Shannon_Entropy(linear_density + ((i+1)%3)*10 , 10)
@@ -356,10 +362,18 @@ int main (int argc, char* argv[40])
 				std::cout << "Intermediate dimension: " <<  keeping_track_of_which_dimension[1] << '\n';
 				std::cout << "Tail dimension: " <<  keeping_track_of_which_dimension[2] << '\n';
 
+        memcpy(resized_regions , resize_regions(leading_density, 10, 10000) , 10);
+
+        std::cout << "Dimensão Líder reorganizada:" << '\n';
+        for (size_t i = 0; i < 10; i++)
+        {
+          std::cout << "Quantidade de pontos na região " << i << " : " << resized_regions[i] << '\n';
+        }
 
 
 				free(Chart_Extremes);
 			}
+      free(resized_regions);
 		}
 
 
