@@ -180,13 +180,20 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
   int* new_linear_density = (int*) malloc(number_of_regions*sizeof(int));
 	for (size_t i = 0; i < number_of_regions; i++)
 	{
-		new_linear_density[i] = 0;
+		*(new_linear_density +i) = 0;
 	}
 	int* sizes = (int*) malloc(number_of_regions*sizeof(int));
+	for (size_t i = 0; i < number_of_regions; i++)
+	{
+		*(sizes +i) = 0;
+	}
 
   int Sum, sum, j, k, l;
   j=0;
 	l=0;
+	k=0;
+	sum =0;
+	Sum =0;
   while (j<number_of_regions)
   {
 		if (linear_density[j]<max_number_of_points_per_region)
@@ -195,17 +202,19 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 			k = 0;
 			do
 			{
-				k++;
 				Sum = sum;
-				sum = sum + linear_density[j+k];
+				k++;
+				j += k;
+				if (j >= number_of_regions){ break;}
+				sum = sum + linear_density[j];
 			}
-			while (sum < max_number_of_points_per_region && j+k < number_of_regions);
+			while (sum < max_number_of_points_per_region );
 			new_linear_density[l] = Sum;
 
 			std::cout << "copiada a soma dos itens desde " << j << " até "<< j+k << " do array líder para a componente " << l << " do array reorganizado." << '\n';
 
 			sizes[l] = k;
-			j += k;
+
 			l++;
 		}
 		if (linear_density[j] >= max_number_of_points_per_region)
@@ -217,7 +226,6 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 			j++;
 			l++;
 		}
-
   }
 
 
