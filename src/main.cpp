@@ -14,8 +14,8 @@
 
 #include <bits/stdc++.h>
 
-#include "src/Point.cpp"
-#include "src/Set.cpp"
+#include "Point.cpp"
+#include "Set.hpp"
 //#include "Delaunay_classes/Vizinhanca.cpp"
 //#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
 //#include "Delaunay_classes/triangle_building.cpp"
@@ -99,7 +99,7 @@ int main( int argc, char* argv[] )
 	del::Point* points = new del::Point[ listSize ];
 	
 	{
-		float x, y, z;
+		del::coordinate x, y, z;
 		t[ 0 ] = clock();
 		int counter = 0;
 		while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
@@ -116,7 +116,7 @@ int main( int argc, char* argv[] )
 	del::Set set ( points, listSize );
 	std::cout << set.to_string() << std::endl;
 
-	set.orderByDistance( del::Point (0,0,0) );
+	set.orderByDistance( del::Point (0,0,8) );
 	std::cout << set.to_string() << std::endl;
 
 	std::cout << std::endl;

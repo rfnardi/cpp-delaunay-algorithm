@@ -10,7 +10,7 @@
 /*								  METHODS									*/
 /*																			*/
 /****************************************************************************/
-del::Point::Point ( float x, float y, float z )
+del::Point::Point ( del::coordinate x, del::coordinate y, del::coordinate z )
 {
 	this->x = x;
 	this->y = y;
@@ -31,14 +31,29 @@ std::string del::Point::to_string( void )
     return str;
 }
 
-float del::Point::distancia ( del::Point P )
+del::distance del::Point::distancia ( del::Point P )
 {
-	return sqrt( pow( this->x - P.x, 2 ) + pow( this->y - P.y, 2 ) + pow( this->z - P.z, 2 ) );
+	del::distance Dx = pow( this->x - P.x, 2 );
+	del::distance Dy = pow( this->y - P.y, 2 );
+	del::distance Dz = pow( this->z - P.z, 2 );
+	del::distance squareRoot = sqrt( Dx + Dy + Dz );
+	// std::cout << "Dx: " << Dx << std::endl;
+	// std::cout << "Dy: " << Dy << std::endl;
+	// std::cout << "Dz: " << Dz << std::endl;
+	// std::cout << "Dx + Dy + Dz = " << Dx + Dy + Dz << std::endl;
+	// std::cout << "Distância = " << squareRoot << std::endl;
+	return squareRoot;
 }
 
-float del::Point::distancia ( del::Point P1, del::Point P2 )
+del::distance del::Point::distancia ( del::Point P1, del::Point P2 )
 {
-	return sqrt( pow( P1.x - P2.x, 2 ) + pow( P1.y - P2.y, 2 ) + pow( P1.z - P2.z, 2 ) );
+	del::distance Dx = pow( P1.x - P2.x, 2 );
+	del::distance Dy = pow( P1.y - P2.y, 2 );
+	del::distance Dz = pow( P1.z - P2.z, 2 );
+	// std::cout << "Dx: " << Dx << std::endl;
+	// std::cout << "Dy: " << Dy << std::endl;
+	// std::cout << "Dz: " << Dz << std::endl;
+	return sqrt( Dx + Dy + Dz );
 }
 
 /****************************************************************************/
@@ -56,18 +71,18 @@ void del::Point::operator = ( del::Point P )
 
 del::Point del::Point::operator + ( del::Point P )
 {
-	float x = this->x + P.x;
-	float y = this->y + P.y;
-	float z = this->z + P.z;
+	del::coordinate x = this->x + P.x;
+	del::coordinate y = this->y + P.y;
+	del::coordinate z = this->z + P.z;
 
 	return Point( x, y, z );
 }
 
 del::Point del::Point::operator - ( del::Point P )
 {
-	float x = this->x - P.x;
-	float y = this->y - P.y;
-	float z = this->z - P.z;
+	del::coordinate x = this->x - P.x;
+	del::coordinate y = this->y - P.y;
+	del::coordinate z = this->z - P.z;
 
 	return Point( x, y, z );
 }

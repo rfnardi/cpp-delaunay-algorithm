@@ -4,8 +4,11 @@
 namespace del
 {
 // making the code more semantical
+#ifndef distance
 typedef float distance;
+#endif
 
+template <typename T>
 class Set
 {
 
@@ -15,8 +18,8 @@ class Set
 		/*								PROPERTIES									*/
 		/*																			*/
 		/****************************************************************************/
-		Point* points;
-		int size;
+		T* points;
+		size_t size;
 
 		
 		/****************************************************************************/
@@ -30,7 +33,7 @@ class Set
 		 * @param points
 		 * @param size
 		*/
-		Set( Point* points, int size );
+		Set( T* points, int size );
 
 		/**
 		 * Representa Set em forma de string para debug.
@@ -40,14 +43,30 @@ class Set
 		std::string to_string ( void );
 
 		/**
+		 * Troca a posição entre dois pontos da lista.
+		 *
+		 * @param pos1
+		 * @param pos2
+		*/
+		void exchangeListPositions ( T* pos1, T* pos2 );
+
+		/**
 		 * Calcula a distâncias entre P e os pontos da lista.
 		 *
-		 * @param Point
-		 * @return distance pointer
+		 * @param T
 		*/
-		void orderByDistance ( Point p );
+		void orderByDistance ( T p );
+
+		/**
+		 * Gera um subconjunto a partir dos primeiros elementos da lista.
+		 *
+		 * @param points
+		 * @param int
+		*/
+		Set subSetFromTop ( T* points, int size );
 
 }; //fim da classe Set
 
 }
+#include "Set.cpp"
 #endif

@@ -5,6 +5,14 @@
 namespace del
 {
 
+// making the code more semantical
+#ifndef distance
+typedef float distance;
+#endif
+#ifndef coordinate
+typedef float coordinate;
+#endif
+
 class Point
 {
 	public:
@@ -13,9 +21,9 @@ class Point
 		/*								PROPERTIES									*/
 		/*																			*/
 		/****************************************************************************/
-		float x = 0;
-		float y = 0;
-		float z = 0;
+		coordinate x = 0;
+		coordinate y = 0;
+		coordinate z = 0;
 
 		
 		/****************************************************************************/
@@ -29,7 +37,7 @@ class Point
 		 *
 		 * @return int
 		*/
-		Point( float x = 0, float y = 0, float z = 0 );
+		Point( coordinate x = 0, coordinate y = 0, coordinate z = 0 );
 
 		~Point();
 
@@ -46,7 +54,7 @@ class Point
 		 * @param Point
 		 * @return float
 		*/
-		float distancia ( Point P );
+		distance distancia ( Point P );
 
 		/**
 		 * Calcula a distância entre dois Point quaisquer.
@@ -55,7 +63,7 @@ class Point
 		 * @param Point
 		 * @return float
 		*/
-		static float distancia ( Point P1, Point P2 );
+		static distance distancia ( Point P1, Point P2 );
 
 
 		/****************************************************************************/
