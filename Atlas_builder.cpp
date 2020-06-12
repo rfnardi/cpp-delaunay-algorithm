@@ -268,7 +268,7 @@ int main (int argc, char* argv[40])
 
 		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
 		{
-      int* resized_regions = (int*) malloc (10*sizeof(int)); // array para armazenar dados da leading dimension reorganizada
+      int* resized_regions = (int*) malloc (2*10*sizeof(int)); // array para armazenar dados da leading dimension reorganizada
       for (size_t i = 0; i < 10; i++)
       {
         resized_regions[i] = 0; //inicializando array
@@ -370,7 +370,10 @@ int main (int argc, char* argv[40])
         {
           std::cout << "Quantidade de pontos na região " << i << " : " << resized_regions[i] << '\n';
         }
-
+        for (size_t i = 10; i < 20; i++)
+        {
+          std::cout << "Quantidade de regiões que se fundiram para formar a região " << i-10 << " : "  << resized_regions[i] << '\n';
+        }
 
 				free(Chart_Extremes);
 			}
