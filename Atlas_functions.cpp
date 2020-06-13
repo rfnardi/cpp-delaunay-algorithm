@@ -235,10 +235,18 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 
 // *********************************************************************************
 
-float* sub_charts_building(float* x, float* y, float* z, int number_of_points, float* mins_and_maxs, int* keeping_track_of_which_dimension,
-														 int number_of_pre_reorganized_regions, int number_of_reorganized_regions, int* sizes_and_fusions, int global_max_pts_per_chart)
+float* sub_charts_building (float* x, float* y, float* z,
+															int number_of_points, //tamanho dos arrays x, y e z
+															float* mins_and_maxs, //mins_and_maxs[0] = menor valor de x, mins_and_maxs[1] = maior valor de x , etc
+															int* keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
+																																		 //keeping_track_of_which_dimension[1] = body_density;
+																																		 //keeping_track_of_which_dimension[2] = tail_density;
+														  int number_of_pre_reorganized_regions, //tamanho da leading_density antes de passar pela função resize_regions
+															int number_of_reorganized_regions, 		 //tamanho da leading_density após passar pela resize_regions
+															int* sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
+															int global_max_pts_per_chart)					 //número máximo de pontos por carta definido globalmente no programa
 {
-	float* result = (float*) malloc(3*number_of_points*sizeof(float));
+	float* sub_atlas = (float*) malloc(3*number_of_points*sizeof(float));
 
 	float = x_width = mins_and_maxs[1]-mins_and_maxs[0];
 	float = y_width = mins_and_maxs[3]-mins_and_maxs[2];
@@ -246,22 +254,20 @@ float* sub_charts_building(float* x, float* y, float* z, int number_of_points, f
 
 
 	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
-	float* oversized_regions = (float*) malloc(number_of_reorganized_regions*sizeof(float));
 
 	int number_of_sub_charts;
 	number_of_sub_charts =0;
 
+	//contando o número de sub-cartas total:
 	for (size_t i = 0; i < number_of_reorganized_regions; i++)
 	{
 		if (sizes_and_fusions[i]<global_max_pts_per_chart)
 		{
 			size_regions_rate[i] = 0.0;
-			oversized_regions[i] = false;
 			number_of_sub_charts++;
 		}
 		else
 		{
-			oversized_regions[i] = false;
 			size_regions_rate[i] = sizes_and_fusions[i]/global_max_pts_per_chart;
 			number_of_sub_charts += 1 + (int) size_regions_rate[i];
 		}
@@ -270,29 +276,32 @@ float* sub_charts_building(float* x, float* y, float* z, int number_of_points, f
 	int Index_Vector[number_of_reorganized_regions];
 	int New_Index_Vector[number_of_sub_charts];
 
-	for (size_t i = 0; i < number_of_sub_charts; i++)
+	for (size_t i = 0; i < number_of_reorganized_regions; i++)
 	{
-		Index_Vector[i] = 0;
+		*(Index_Vector+i) = 0;
 	}
 
+	for (size_t i = 0; i < number_of_sub_charts; i++)
+	{
+		*(New_Index_Vector+i) = 0;
+	}
 
+	//------------------------------------------------------------------------------------------------
+	//contando a quantidade de pontos em cada carta:
 	switch (keeping_track_of_which_dimension[0])
 	{
 		case 0:
 		for (size_t l = 0; l < number_of_points; l++)
 		{
-			//for (size_t k = 0; k < number_of_reorganized_regions; k++) //plays the role of chart_index
-
 			size_t k, j;
 			k=0;
 			j=0;
-			while(k < number_of_reorganized_regions)
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
 			{
-				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[10+k])*x_width/number_of_pre_reorganized_regions )
+				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*x_width/number_of_pre_reorganized_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
-						//Write_to_Atlas (result, sizes_and_fusions, k, Index_Vector[i], 0, x[l]);
 						Index_Vector[k]++;
 						New_Index_Vector[j]++;
 					}
@@ -343,21 +352,386 @@ float* sub_charts_building(float* x, float* y, float* z, int number_of_points, f
 		}
 		break;
 
-
 		case 1:
-		break;
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			{
+				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_reorganized_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*y_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
 
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 2:
+									step2 = z_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]<= mins_and_maxs[5])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
+		break;
 
 		case 2:
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			{
+				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_reorganized_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*z_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 1:
+									step2 = y_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]<= mins_and_maxs[5])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
 		break;
+
+	}
+	//------------------------------------------------------------------------------------------------
+
+	int* chart_sizes = (int*) malloc(number_of_sub_charts*sizeof(int));
+	memcpy(chart_sizes , New_Index_Vector, number_of_sub_charts*sizeof(int));
+
+	for (size_t i = 0; i < number_of_sub_charts; i++)
+	{
+		*(New_Index_Vector+i) = 0;
 	}
 
+	//------------------------------------------------------------------------------------------------
+	//alocando pontos nas subcartas:
+	switch (keeping_track_of_which_dimension[0])
+	{
+		case 0:
+		for (size_t l = 0; l < number_of_points; l++)
+		{
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			{
+				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*x_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 1:
+									step2 = y_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 2:
+									step2 = z_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]<= mins_and_maxs[5])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
+		break;
+
+		case 1:
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			{
+				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_reorganized_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*y_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 2:
+									step2 = z_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]<= mins_and_maxs[5])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
+		break;
+
+		case 2:
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			{
+				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_reorganized_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*z_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+						Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 1:
+									step2 = y_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]<= mins_and_maxs[5])
+										{
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 0, x[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 1, y[l]);
+											Write_to_Atlas (sub_atlas, chart_sizes, k, New_Index_Vector[j], 2, z[l]);
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
+		break;
+
+	}
+	//------------------------------------------------------------------------------------------------
 
 
-	return result;
-	free(oversized_regions);
+	return sub_atlas;
+
+	free(chart_sizes);
 	free(size_regions_rate);
-	free(result);
+	free(sub_atlas);
 }
 
 

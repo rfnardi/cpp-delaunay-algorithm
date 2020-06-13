@@ -116,12 +116,145 @@ float* sub_charts_building(float* x, float* y, float* z, int number_of_points, f
 		break;
 
 
+
+
+
+
 		case 1:
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			//for (size_t k = 0; k < number_of_reorganized_regions; k++) //plays the role of chart_index
+
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions)
+			{
+				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_reorganized_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[10+k])*y_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						//Write_to_Atlas (result, sizes_and_fusions, k, Index_Vector[i], 0, x[l]);
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 2:
+									step2 = z_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]<= mins_and_maxs[5])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
 		break;
+
+
+
+
 
 
 		case 2:
+    for (size_t l = 0; l < number_of_points; l++)
+		{
+			//for (size_t k = 0; k < number_of_reorganized_regions; k++) //plays the role of chart_index
+
+			size_t k, j;
+			k=0;
+			j=0;
+			while(k < number_of_reorganized_regions)
+			{
+				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_reorganized_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[10+k])*z_width/number_of_pre_reorganized_regions )
+				{
+					if (size_regions_rate[k] == 0.0)
+					{
+						//Write_to_Atlas (result, sizes_and_fusions, k, Index_Vector[i], 0, x[l]);
+						Index_Vector[k]++;
+						New_Index_Vector[j]++;
+					}
+
+					if (size_regions_rate[k] != 0.0)
+					{
+						float step2;
+						switch (keeping_track_of_which_dimension[1])
+						{
+							case 1:
+									step2 = y_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+
+							case 0:
+									step2 = x_width/(1 + (int) size_regions_rate[k]);
+									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
+									{
+										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]< mins_and_maxs[4] + (b + 1)*step2)
+										{
+											New_Index_Vector[j]++;
+										}
+										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]<= mins_and_maxs[5])
+										{
+											New_Index_Vector[j]++;
+										}
+										j++;
+									}
+							break;
+						}
+					}
+					k++;
+					j++;
+				}
+			}
+
+		}
 		break;
+
 	}
 
 
@@ -134,6 +267,7 @@ float* sub_charts_building(float* x, float* y, float* z, int number_of_points, f
 
 int main()
 {
-
+  float* sub_charts_building(float* x, float* y, float* z, int number_of_points, float* mins_and_maxs, int* keeping_track_of_which_dimension,
+  														 int number_of_pre_reorganized_regions, int number_of_reorganized_regions, int* sizes_and_fusions, int global_max_pts_per_chart)
   return 0;
 }
