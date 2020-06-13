@@ -358,8 +358,19 @@ int main (int argc, char* argv[40])
 				std::cout << "Intermediate dimension: " <<  keeping_track_of_which_dimension[1] << '\n';
 				std::cout << "Tail dimension: " <<  keeping_track_of_which_dimension[2] << '\n';
 
-        //memcpy(resized_regions , resize_regions(leading_density, 10, 10000) , 10);
         resized_regions = resize_regions(leading_density, 10, 10000);
+        int number_of_resized_regions;
+        number_of_resized_regions = 0;
+        for (size_t i = 0; i < 10; i++)
+        {
+          if (resized_regions[i]!=0)
+          {number_of_resized_regions++;}
+          else {break;}
+        }
+
+        float *sizes_and_fusions = (float*) malloc(number_of_resized_regions*sizeof(float)*2);
+        memcpy(sizes_and_fusions, resized_regions, number_of_resized_regions*sizeof(float));
+        memcpy(sizes_and_fusions + number_of_resized_regions, resized_regions + 10, number_of_resized_regions*sizeof(float));
 
         std::cout << "Dimensão Líder reorganizada:" << '\n';
         for (size_t i = 0; i < 10; i++)
@@ -371,28 +382,33 @@ int main (int argc, char* argv[40])
           std::cout << "Quantidade de regiões que se fundiram para formar a região " << i-10 << " : "  << resized_regions[i] << '\n';
         }
 
+        //-----------------------------------------------Até aqui tudo testado e funcionando.-----------------------------------------------//
+
+
+        float* partial_atlas = (float*) malloc(Qtd_pts_na_Carta[chart_index]*sizeof(float));
+        partial_atlas = float* sub_charts_building (new_x, new_y, new_z,
+        															Qtd_pts_na_Carta[chart_index], //tamanho dos arrays x, y e z
+        															Chart_Extremes, //mins_and_maxs[0] = menor valor de x, mins_and_maxs[1] = maior valor de x , etc
+        															keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
+        																																		 //keeping_track_of_which_dimension[1] = body_density;
+        																																		 //keeping_track_of_which_dimension[2] = tail_density;
+        														  10, //tamanho da leading_density antes de passar pela função resize_regions
+        															number_of_resized_regions, 		 //tamanho da leading_density após passar pela resize_regions
+        															sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
+        															Points_per_Chart);				 //número máximo de pontos por carta definido globalmente no programa
+
+
+
+        //passando as subcartas e seus tamanhos para o Atlas:
+        memcpy(Atlas + sum_sizes(chart_index, Qtd_pts_na_Carta), partial_atlas, Qtd_pts_na_Carta[chart_index]*sizeof(float));
+        memcpy(Qtd_pts_na_Carta + chart_index, sizes_and_fusions, );
+
+        free(sizes_and_fusions);
+        free(partial_atlas);
 				free(Chart_Extremes);
 			}
       free(resized_regions);
 		}
-
-
-
-		//int* X_Linear_Points_density = (int*) malloc(    );
-		//int* Y_Linear_Points_density = (int*) malloc(    );
-		//int* Z_Linear_Points_density = (int*) malloc(    );
-
-
-
-
-
-
-
-
-
-		//free(X_Linear_Points_density);
-		//free(Y_Linear_Points_density);
-		//free(Z_Linear_Points_density);
 
 
 		free(Oversized_Charts);

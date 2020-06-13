@@ -256,7 +256,7 @@ float* sub_charts_building (float* x, float* y, float* z,
 	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
 
 	int number_of_sub_charts;
-	number_of_sub_charts =0;
+	number_of_sub_charts = 0;
 
 	//contando o número de sub-cartas total:
 	for (size_t i = 0; i < number_of_reorganized_regions; i++)
