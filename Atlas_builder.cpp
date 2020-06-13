@@ -1,4 +1,3 @@
-//#include <cmath>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -45,6 +44,11 @@ int main (int argc, char* argv[40])
     std::cout << "atlas-composition" << "[nome do arquivo]" << "[numero médio de pontos por carta]" << '\n';
     exit (EXIT_FAILURE);
   }
+
+  // *******************************************************************************
+
+
+
 
 	int Points_per_Chart = *ppchart;
 
@@ -118,14 +122,6 @@ int main (int argc, char* argv[40])
 			}
 
 		fclose(file);
-
-		/*
-		//retornando pontos no console de bouas
-		for (size_t i = 0; i < (int) ((float) Total_de_Pontos)/4; i++)
-		{
-			std::cout << "x = " << x[i] << " , y = " << y[i] << " , z = " << z[i] <<'\n';
-		}
-		*/
 
 		std::cout << "Cópia dos pontos concluída com sucesso." << '\n'<< '\n';
 
