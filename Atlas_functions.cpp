@@ -727,6 +727,15 @@ float* sub_charts_building (float* x, float* y, float* z,
 	//------------------------------------------------------------------------------------------------
 
 
+	float* SubAtlas;
+	SubAtlas = (float*) realloc((void*) sub_atlas , 3*number_of_points*sizeof(float) + number_of_sub_charts*sizeof(float) + 1);
+
+	memmove ( SubAtlas + number_of_sub_charts*sizeof(float) + 1, SubAtlas, 3*number_of_points*sizeof(float) ); //FAZER TESTE DISSO
+	memcpy(SubAtlas, chart_sizes, number_of_sub_charts*sizeof(int));
+	*(SubAtlas + number_of_sub_charts*sizeof(int)+1) = -42; //MARCADOR DO FIM DO CHART_SIZES
+
+
+
 	return sub_atlas;
 
 	free(chart_sizes);
