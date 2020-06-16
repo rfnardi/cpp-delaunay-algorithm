@@ -92,9 +92,8 @@ float* Taking_measures(int array_size , float* data_array)
 // ***** Função de avaliação da densidade linear: Basicamente monta o histograma dos valores armazenados em data_array 1-dimensional
 // ***** localizado em array separando a contagem de pontos em 'number_of_regions'
 
-int* Linear_Density_caculator (float* data_array, int data_array_size, int number_of_regions)
+int* Linear_Density_caculator ( int* linear_Density /*!!!! ARRAY DE RESULTADO !!!! TAMANHO: number_of_regions */ , float* data_array, int data_array_size, int number_of_regions)
 {
-	int* linear_Density = (int*) malloc(number_of_regions*sizeof(int));
 	//inicializando linear_Density:
 	for (size_t j = 0; j < number_of_regions; j++)
 	{
@@ -124,7 +123,7 @@ int* Linear_Density_caculator (float* data_array, int data_array_size, int numbe
 		}
 	}
 	return linear_Density;
-	free(linear_Density);
+
 }
 // *********************************************************************************
 
@@ -175,11 +174,14 @@ bool checking_connectiveness(int* histogram, int histogram_size)
 }
 
 // *********************************************************************************
-int* resize_regions (int* linear_density, int number_of_regions, int max_number_of_points_per_region /* = 10000 no exemplo usado*/ )
+int* resize_regions ( int* new_linear_density_plus_sizes /* !!!!ARRAY DE RESULTADO!!!! */ , int* linear_density, int number_of_regions, int max_number_of_points_per_region /* = 10000 no exemplo usado*/ )
 {
   //na primeira metate deste array são armazenadas as quantidades de pontos de cada região reorganizada;
   //na segunda metade deste array são armazenadas a quantidade de regiões que se fundiram para formar a presente região
-  int* new_linear_density_plus_sizes = (int*) malloc(2*number_of_regions*sizeof(int));
+	std::cout << "Em resize_regions. ******************" << '\n';
+
+
+  //int* new_linear_density_plus_sizes = (int*) malloc(2*number_of_regions*sizeof(int));
 
 
 	for (size_t i = 0; i < number_of_regions; i++)
@@ -206,21 +208,20 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 				if (j+k >= number_of_regions){ break;}
 				sum = sum + linear_density[j+k];
         if (sum >= max_number_of_points_per_region ){ break;}
-        //std::cout << "k = " << k << '\n';
+        std::cout << "k = " << k << '\n';
 			}
 
 			new_linear_density_plus_sizes[l] = Sum;
 
-			//std::cout << "copiada a soma dos itens desde " << j << " até "<< j+k << " do array líder para a componente " << l << " do array reorganizado." << '\n';
+			std::cout << "copiada a soma dos itens desde " << j << " até "<< j+k << " do array líder para a componente " << l << " do array reorganizado." << '\n';
       j += k;
 			new_linear_density_plus_sizes[number_of_regions+l] = k;
-
 			l++;
 		}
 		if (linear_density[j] >= max_number_of_points_per_region)
 		{
 			*(new_linear_density_plus_sizes + l) = linear_density[j];
-			//std::cout << "copiado item excedente " << j << " do array líder para a componente " << l << " do array reorganizado." << '\n';
+			std::cout << "copiado item excedente " << j << " do array líder para a componente " << l << " do array reorganizado." << '\n';
 			k = 1;
       new_linear_density_plus_sizes[number_of_regions+l] = k;
 			j++;
@@ -228,37 +229,29 @@ int* resize_regions (int* linear_density, int number_of_regions, int max_number_
 		}
   }
 
+	std::cout << "Saindo de resize_regions. ******************** " << '\n';
+
   return new_linear_density_plus_sizes;
 
-  free(new_linear_density_plus_sizes);
+  //free(new_linear_density_plus_sizes);
+
 }
 
 // *********************************************************************************
-
-float* sub_charts_building (float* x, float* y, float* z,
-															int number_of_points, //tamanho dos arrays x, y e z
-															float* mins_and_maxs, //mins_and_maxs[0] = menor valor de x, mins_and_maxs[1] = maior valor de x , etc
-															int* keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
-																																		 //keeping_track_of_which_dimension[1] = body_density;
-																																		 //keeping_track_of_which_dimension[2] = tail_density;
-														  int number_of_pre_reorganized_regions, //tamanho da leading_density antes de passar pela função resize_regions
-															int number_of_reorganized_regions, 		 //tamanho da leading_density após passar pela resize_regions
-															int* sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
-															int global_max_pts_per_chart)					 //número máximo de pontos por carta definido globalmente no programa
+//contando o número de sub-cartas total:
+int sub_charts_counting(int number_of_reorganized_regions, int* sizes_and_fusions, int global_max_pts_per_chart)
 {
-	float* sub_atlas = (float*) malloc(3*number_of_points*sizeof(float));
-
-	float = x_width = mins_and_maxs[1]-mins_and_maxs[0];
-	float = y_width = mins_and_maxs[3]-mins_and_maxs[2];
-	float = z_width = mins_and_maxs[5]-mins_and_maxs[4];
-
-
-	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
+	std::cout << "Em sub_charts_counting. Valores dos parâmetros passados para a função:" << '\n';
+	std::cout << "number_of_reorganized_regions: " << number_of_reorganized_regions << '\n';
+	std::cout << "global_max_pts_per_chart: " << global_max_pts_per_chart << '\n';
+	for (size_t i = 0; i < number_of_reorganized_regions*2; i++)
+	{
+		std::cout << "sizes_and_fusions [" << i << "] : "<<  sizes_and_fusions[i] << '\n';
+	}
 
 	int number_of_sub_charts;
-	number_of_sub_charts = 0;
+	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
 
-	//contando o número de sub-cartas total:
 	for (size_t i = 0; i < number_of_reorganized_regions; i++)
 	{
 		if (sizes_and_fusions[i]<global_max_pts_per_chart)
@@ -273,6 +266,56 @@ float* sub_charts_building (float* x, float* y, float* z,
 		}
 	}
 
+	return number_of_sub_charts;
+	free(size_regions_rate);
+}
+
+// *********************************************************************************
+
+float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* sub_atlas = (float*) malloc(3*number_of_points*sizeof(float));*/ ,
+															float* x, float* y, float* z,
+															int number_of_points, //tamanho dos arrays x, y e z
+															float* mins_and_maxs, //mins_and_maxs[0] = menor valor de x, mins_and_maxs[1] = maior valor de x , etc
+															int* keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
+																																		 //keeping_track_of_which_dimension[1] = body_density;
+																																		 //keeping_track_of_which_dimension[2] = tail_density;
+														  int number_of_pre_reorganized_regions, //tamanho da leading_density antes de passar pela função resize_regions
+															int number_of_reorganized_regions, 		 //tamanho da leading_density após passar pela resize_regions
+															int* sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
+															int global_max_pts_per_chart)					 //número máximo de pontos por carta definido globalmente no programa
+{
+
+	std::cout << "\n\nEm sub_charts_building. ******************************************************* \n" << '\n';
+
+	float x_width = mins_and_maxs[1]-mins_and_maxs[0];
+	float y_width = mins_and_maxs[3]-mins_and_maxs[2];
+	float z_width = mins_and_maxs[5]-mins_and_maxs[4];
+
+
+	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
+
+	int number_of_sub_charts;
+	number_of_sub_charts = 0;
+
+	std::cout << "number_of_reorganized_regions = " << number_of_reorganized_regions << '\n';
+
+	//contando o número de sub-cartas total:
+	for (size_t i = 0; i < number_of_reorganized_regions; i++)
+	{
+		if (sizes_and_fusions[i]<global_max_pts_per_chart)
+		{
+			*(size_regions_rate + i) = 0.0;
+			number_of_sub_charts++;
+		}
+		else
+		{
+			*(size_regions_rate + i) = ((float) sizes_and_fusions[i])/((float) global_max_pts_per_chart);
+			number_of_sub_charts += 1 + (int) size_regions_rate[i];
+		}
+	}
+
+	std::cout << "Em sub_charts_building: contagem de subcartas realizada com sucesso. number_of_sub_charts = " << number_of_sub_charts << '\n';
+
 	int Index_Vector[number_of_reorganized_regions];
 	int New_Index_Vector[number_of_sub_charts];
 
@@ -286,17 +329,26 @@ float* sub_charts_building (float* x, float* y, float* z,
 		*(New_Index_Vector+i) = 0;
 	}
 
+	std::cout << "Iniciando contagem de pontos em cada subcarta." << '\n';
 	//------------------------------------------------------------------------------------------------
+
+
+
 	//contando a quantidade de pontos em cada carta:
-	switch (keeping_track_of_which_dimension[0])
-	{
-		case 0:
-		for (size_t l = 0; l < number_of_points; l++)
+
+	// ********************* TORNAR ESTE BLOCO UMA FUNÇÃO SEPARADA *************************vvvvvvvvv
+
+
+
+		size_t k, j;
+		size_t l;
+		l = 0;
+		//for (size_t l = 0; l < number_of_points ; l++)
+		while(l<number_of_points)
 		{
-			size_t k, j;
 			k=0;
 			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			while(j < number_of_sub_charts) //j plays the role of chart_index
 			{
 				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*x_width/number_of_pre_reorganized_regions )
 				{
@@ -304,6 +356,10 @@ float* sub_charts_building (float* x, float* y, float* z,
 					{
 						Index_Vector[k]++;
 						New_Index_Vector[j]++;
+						j++;
+						k++;
+						std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: k = " << k << " ; j = "<< j << '\n';
+						break;
 					}
 
 					if (size_regions_rate[k] != 0.0)
@@ -312,171 +368,63 @@ float* sub_charts_building (float* x, float* y, float* z,
 						switch (keeping_track_of_which_dimension[1])
 						{
 							case 1:
-									step2 = y_width/(1 + (int) size_regions_rate[k]);
+									step2 = y_width/ ((float) (1 + (int) size_regions_rate[k]));
 									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
 									{
 										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
 										{
 											New_Index_Vector[j]++;
+											j++;
+											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
+
 										}
 										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
 										{
 											New_Index_Vector[j]++;
+											j++;
+											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
+
 										}
-										j++;
 									}
 							break;
 
 							case 2:
-									step2 = z_width/(1 + (int) size_regions_rate[k]);
+									step2 = z_width/((float) (1 + (int) size_regions_rate[k]));
 									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
 									{
 										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]< mins_and_maxs[4] + (b + 1)*step2)
 										{
 											New_Index_Vector[j]++;
+											j++;
+											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
+											break;
 										}
 										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]<= mins_and_maxs[5])
 										{
 											New_Index_Vector[j]++;
+											j++;
+											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
+											break;
 										}
-										j++;
 									}
 							break;
 						}
 					}
-					k++;
-					j++;
 				}
 			}
-
+			l++;
 		}
-		break;
 
-		case 1:
-    for (size_t l = 0; l < number_of_points; l++)
-		{
-			size_t k, j;
-			k=0;
-			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
-			{
-				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_reorganized_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*y_width/number_of_pre_reorganized_regions )
-				{
-					if (size_regions_rate[k] == 0.0)
-					{
-						Index_Vector[k]++;
-						New_Index_Vector[j]++;
-					}
 
-					if (size_regions_rate[k] != 0.0)
-					{
-						float step2;
-						switch (keeping_track_of_which_dimension[1])
-						{
-							case 0:
-									step2 = x_width/(1 + (int) size_regions_rate[k]);
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-										}
-										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
-										{
-											New_Index_Vector[j]++;
-										}
-										j++;
-									}
-							break;
+		// ********************* TORNAR ESTE BLOCO UMA FUNÇÃO SEPARADA *************************^^^^^
 
-							case 2:
-									step2 = z_width/(1 + (int) size_regions_rate[k]);
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]< mins_and_maxs[4] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-										}
-										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && z[l]<= mins_and_maxs[5])
-										{
-											New_Index_Vector[j]++;
-										}
-										j++;
-									}
-							break;
-						}
-					}
-					k++;
-					j++;
-				}
-			}
 
-		}
-		break;
 
-		case 2:
-    for (size_t l = 0; l < number_of_points; l++)
-		{
-			size_t k, j;
-			k=0;
-			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
-			{
-				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_reorganized_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*z_width/number_of_pre_reorganized_regions )
-				{
-					if (size_regions_rate[k] == 0.0)
-					{
-						Index_Vector[k]++;
-						New_Index_Vector[j]++;
-					}
 
-					if (size_regions_rate[k] != 0.0)
-					{
-						float step2;
-						switch (keeping_track_of_which_dimension[1])
-						{
-							case 1:
-									step2 = y_width/(1 + (int) size_regions_rate[k]);
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-										}
-										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
-										{
-											New_Index_Vector[j]++;
-										}
-										j++;
-									}
-							break;
 
-							case 0:
-									step2 = x_width/(1 + (int) size_regions_rate[k]);
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]< mins_and_maxs[4] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-										}
-										if (b == (int) size_regions_rate[k] && x[l]>=mins_and_maxs[4]+ b*step2 && x[l]<= mins_and_maxs[5])
-										{
-											New_Index_Vector[j]++;
-										}
-										j++;
-									}
-							break;
-						}
-					}
-					k++;
-					j++;
-				}
-			}
 
-		}
-		break;
 
-	}
+
 	//------------------------------------------------------------------------------------------------
 
 	int* chart_sizes = (int*) malloc(number_of_sub_charts*sizeof(int));
@@ -488,6 +436,7 @@ float* sub_charts_building (float* x, float* y, float* z,
 	}
 
 	//------------------------------------------------------------------------------------------------
+	std::cout << "Iniciando alocação de pontos nas cartas." << '\n';
 	//alocando pontos nas subcartas:
 	switch (keeping_track_of_which_dimension[0])
 	{
@@ -564,6 +513,7 @@ float* sub_charts_building (float* x, float* y, float* z,
 					k++;
 					j++;
 				}
+				l++;
 			}
 
 		}
@@ -641,6 +591,7 @@ float* sub_charts_building (float* x, float* y, float* z,
 					k++;
 					j++;
 				}
+				l++;
 			}
 
 		}
@@ -718,6 +669,7 @@ float* sub_charts_building (float* x, float* y, float* z,
 					k++;
 					j++;
 				}
+				l++;
 			}
 
 		}
@@ -726,21 +678,23 @@ float* sub_charts_building (float* x, float* y, float* z,
 	}
 	//------------------------------------------------------------------------------------------------
 
+	std::cout << "Alocação de pontos realizada com sucesso." << '\n';
 
-	float* SubAtlas;
-	SubAtlas = (float*) realloc((void*) sub_atlas , 3*number_of_points*sizeof(float) + number_of_sub_charts*sizeof(float) + 1);
+	std::cout << "Alocando dados em array de resultado." << '\n';
 
-	memmove ( SubAtlas + number_of_sub_charts*sizeof(float) + 1, SubAtlas, 3*number_of_points*sizeof(float) ); //FAZER TESTE DISSO
-	memcpy(SubAtlas, chart_sizes, number_of_sub_charts*sizeof(int));
-	*(SubAtlas + number_of_sub_charts*sizeof(int)+1) = -42; //MARCADOR DO FIM DO CHART_SIZES
+	sub_atlas = (float*) realloc((void*) sub_atlas , 3*number_of_points*sizeof(float) + number_of_sub_charts*sizeof(float) + 1);
 
-
-
-	return sub_atlas;
+	memmove ( sub_atlas + number_of_sub_charts*sizeof(float) + 1, sub_atlas, 3*number_of_points*sizeof(float) ); //FAZER TESTE DISSO
+	memcpy(sub_atlas, chart_sizes, number_of_sub_charts*sizeof(int));
+	*(sub_atlas + number_of_sub_charts*sizeof(int)) = -42; //MARCADOR DO FIM DO CHART_SIZES
 
 	free(chart_sizes);
 	free(size_regions_rate);
-	free(sub_atlas);
+
+	return sub_atlas;
+
+
+
 }
 
 

@@ -160,10 +160,10 @@ int main (int argc, char* argv[40])
 
 		//passando o conteúdo do vetor de índices para Qtd_pts_na_Carta
 		// e reinicializando-o para orientar o armazenamento dos pontos na carta:
-		int Qtd_pts_na_Carta[number_of_charts];
+		int* Qtd_pts_na_Carta = (int*) malloc(number_of_charts*sizeof(int));
 		for (size_t i = 0; i < number_of_charts; i++)
 		{
-			Qtd_pts_na_Carta[i] = Index_Vector[i];
+			*(Qtd_pts_na_Carta + i) = Index_Vector[i];
 			Index_Vector[i]=0;
 		}
 
@@ -265,7 +265,7 @@ int main (int argc, char* argv[40])
 		for (size_t chart_index = 0; chart_index < number_of_charts; chart_index++)
 		{
       int* resized_regions = (int*) malloc (2*10*sizeof(int)); // array para armazenar dados da leading dimension reorganizada
-      for (size_t i = 0; i < 10; i++)
+      for (size_t i = 0; i < 20; i++)
       {
         resized_regions[i] = 0; //inicializando array
       }
@@ -293,11 +293,17 @@ int main (int argc, char* argv[40])
 				//reunindo num único array todas as densidades lineares na seguinte ordem: (x_density[10], y_density[10], z_density[10])
 				int linear_density[30];
 
-				memcpy (linear_density , Linear_Density_caculator ( new_x, Max_number_of_points, 10), sizeof(float)*10);
-				memcpy (linear_density + 10, Linear_Density_caculator ( new_y, Max_number_of_points, 10), sizeof(float)*10);
-				memcpy (linear_density + 20, Linear_Density_caculator ( new_z, Max_number_of_points, 10), sizeof(float)*10);
+        int* x_linear_density = (int*) malloc(10*sizeof(int));
+        int* y_linear_density = (int*) malloc(10*sizeof(int));
+        int* z_linear_density = (int*) malloc(10*sizeof(int));
 
+				memcpy (linear_density , Linear_Density_caculator (x_linear_density, new_x, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (linear_density + 10, Linear_Density_caculator (y_linear_density, new_y, Max_number_of_points, 10), sizeof(float)*10);
+				memcpy (linear_density + 20, Linear_Density_caculator (z_linear_density, new_z, Max_number_of_points, 10), sizeof(float)*10);
 
+        free(x_linear_density);
+        free(y_linear_density);
+        free(z_linear_density);
 
 				std::cout << "\nMostrando distribuição dos pontos ao longo do eixo x: " << '\n';
 				for (size_t i = 0; i < 10; i++)	{	std::cout << "Quantidade de pontos na faixa "<< i << " : " << linear_density[i]<<'\n';}
@@ -358,7 +364,8 @@ int main (int argc, char* argv[40])
 				std::cout << "Intermediate dimension: " <<  keeping_track_of_which_dimension[1] << '\n';
 				std::cout << "Tail dimension: " <<  keeping_track_of_which_dimension[2] << '\n';
 
-        resized_regions = resize_regions(leading_density, 10, 10000);
+        resized_regions = resize_regions( resized_regions, leading_density, 10, 10000);
+
         int number_of_resized_regions;
         number_of_resized_regions = 0;
         for (size_t i = 0; i < 10; i++)
@@ -368,9 +375,9 @@ int main (int argc, char* argv[40])
           else {break;}
         }
 
-        float *sizes_and_fusions = (float*) malloc(number_of_resized_regions*sizeof(float)*2);
-        memcpy(sizes_and_fusions, resized_regions, number_of_resized_regions*sizeof(float));
-        memcpy(sizes_and_fusions + number_of_resized_regions, resized_regions + 10, number_of_resized_regions*sizeof(float));
+        int *Sizes_and_Fusions = (int*) malloc(number_of_resized_regions*sizeof(float)*2);
+        memcpy(Sizes_and_Fusions, resized_regions, number_of_resized_regions*sizeof(float));
+        memcpy(Sizes_and_Fusions + number_of_resized_regions, resized_regions + 10, number_of_resized_regions*sizeof(float));
 
         std::cout << "Dimensão Líder reorganizada:" << '\n';
         for (size_t i = 0; i < 10; i++)
@@ -384,9 +391,12 @@ int main (int argc, char* argv[40])
 
         //-----------------------------------------------Até aqui tudo testado e funcionando.-----------------------------------------------//
 
+        int sub_charts_number = sub_charts_counting(number_of_resized_regions, Sizes_and_Fusions, Points_per_Chart);
+
+        std::cout << "Contagem de subcartas associadas à carta " << chart_index << " realizada com sucesso: " << sub_charts_number << " subcartas." << '\n';
 
         float* partial_atlas = (float*) malloc(Qtd_pts_na_Carta[chart_index]*sizeof(float));
-        partial_atlas = float* sub_charts_building (new_x, new_y, new_z,
+        partial_atlas = sub_charts_building (partial_atlas, new_x, new_y, new_z,
         															Qtd_pts_na_Carta[chart_index], //tamanho dos arrays x, y e z
         															Chart_Extremes, //mins_and_maxs[0] = menor valor de x, mins_and_maxs[1] = maior valor de x , etc
         															keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
@@ -394,21 +404,34 @@ int main (int argc, char* argv[40])
         																																		 //keeping_track_of_which_dimension[2] = tail_density;
         														  10, //tamanho da leading_density antes de passar pela função resize_regions
         															number_of_resized_regions, 		 //tamanho da leading_density após passar pela resize_regions
-        															sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
+        															Sizes_and_Fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
         															Points_per_Chart);				 //número máximo de pontos por carta definido globalmente no programa
 
+        int sub_charts_sizes[sub_charts_number];
 
+        memcpy(sub_charts_sizes, (int*) partial_atlas, sub_charts_number*sizeof(float));
 
         //passando as subcartas e seus tamanhos para o Atlas:
         memcpy(Atlas + sum_sizes(chart_index, Qtd_pts_na_Carta), partial_atlas, Qtd_pts_na_Carta[chart_index]*sizeof(float));
-        memcpy(Qtd_pts_na_Carta + chart_index, sizes_and_fusions, );
 
-        free(sizes_and_fusions);
+        //próximo passo: reorganizar 'Qtd_pts_na_Carta' para listar a distribuição nas subcartas tbm.
+        //		int* Qtd_pts_na_Carta = (int*) malloc(number_of_charts*sizeof(int));
+
+        Qtd_pts_na_Carta = (int*) realloc (Qtd_pts_na_Carta, number_of_charts*sizeof(int) + sub_charts_number*sizeof(int));
+        memmove(Qtd_pts_na_Carta + sub_charts_number + chart_index, Qtd_pts_na_Carta + chart_index , number_of_charts*sizeof(int) - chart_index*sizeof(int));
+
+        memcpy(Qtd_pts_na_Carta + chart_index, sub_charts_sizes, sub_charts_number*sizeof(int));
+
+        free(Sizes_and_Fusions);
         free(partial_atlas);
 				free(Chart_Extremes);
 			}
       free(resized_regions);
+      free(Qtd_pts_na_Carta);
 		}
+
+    std::cout << " Tamanho de todas as cartas: " << '\n'<< '\n';
+
 
 
 		free(Oversized_Charts);
