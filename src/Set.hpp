@@ -36,6 +36,12 @@ class Set
 		Set( T* points, int size );
 
 		/**
+		 * Copia os valores de um ponteiro para o ponteiro interno.
+		 *
+		*/
+		void copyList ( T* points, size_t size );
+
+		/**
 		 * Representa Set em forma de string para debug.
 		 *
 		 * @return string
@@ -63,8 +69,21 @@ class Set
 		 * @param points
 		 * @param int
 		*/
-		Set subSetFromTop ( T* points, int size );
+		void subSetFromTop ( Set subset );
 
+
+		/****************************************************************************/
+		/*																			*/
+		/*								  OPERATORS									*/
+		/*																			*/
+		/****************************************************************************/
+		/**
+		 * Operador de Interseção entre Set.
+		 *
+		 * @param Point
+		 * @return Point
+		*/
+		// Set operator - ( Point P );
 }; //fim da classe Set
 
 }

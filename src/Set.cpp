@@ -12,15 +12,24 @@
 template <typename T>
 del::Set<T>::Set ( T* points, int size )
 {
-	this->points = points;
 	this->size = size;
+	this->copyList( points, size );
+}
+
+template <typename T>
+void del::Set<T>::copyList ( T* points, size_t size )
+{
+	for ( size_t i = 0; i < size; i++ )
+	{
+		*( this->points + i ) = *( points + i );
+	}
 }
 
 template <typename T>
 std::string del::Set<T>::to_string( void )
 {
 	std::string str = "[\n";
-	for ( int i = 0; i < this->size; i++ )
+	for ( size_t i = 0; i < this->size; i++ )
 	{
 		str += this->points[ i ].to_string() + "\n";
 	}
@@ -70,13 +79,12 @@ void del::Set<T>::orderByDistance ( T p )
 }
 
 template <typename T>
-del::Set<T> del::Set<T>::subSetFromTop ( T* points, int size )
+void del::Set<T>::subSetFromTop ( del::Set<T> subset )
 {
-	for ( size_t i = 0; i < size; i++ )
+	for ( size_t i = 0; i < subset.size; i++ )
 	{
-		*( points ) = *( this->points + i );
+		*( subset.points + i ) = *( this->points + i );
 	}
-	return del::Set<T> ( points, size );
 }
 
 #endif

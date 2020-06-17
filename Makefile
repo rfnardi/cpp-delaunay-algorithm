@@ -57,7 +57,7 @@ clean:
 
 test: $(BIN_TEST)
 	@ echo "Iniciando testes"
-	@ ./$(BIN_TEST) --reporter compact --success
+	@ ./$(BIN_TEST) --reporter console --success
 
 $(BIN_TEST): $(TEST_FILES)
 	@ echo "Construindo binário de teste a partir do linker do GCC: $@"

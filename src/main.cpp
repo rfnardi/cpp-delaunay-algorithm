@@ -97,16 +97,18 @@ int main( int argc, char* argv[] )
 	}
 
 	del::Point* points = new del::Point[ listSize ];
+	del::Point pointsCopy[ listSize ];
 	
 	{
 		del::coordinate x, y, z;
 		t[ 0 ] = clock();
-		int counter = 0;
+		int i = 0;
 		while ( fscanf( file, "%E%E%E \n", &x, &y, &z ) != EOF )
 		{
 			del::Point p ( x, y, z );
-			points[ counter ] = p;
-			counter++;
+			points[ i ] = p;
+			pointsCopy[ i ] = p;
+			i++;
 		}
 		t[ 1 ] = clock();
 	}
@@ -116,7 +118,16 @@ int main( int argc, char* argv[] )
 	del::Set set ( points, listSize );
 	std::cout << set.to_string() << std::endl;
 
-	set.orderByDistance( del::Point (0,0,8) );
+
+	for ( size_t i = 0; i < listSize; i++ )
+	{
+		for ( size_t j = 0; j < listSize; j++ )
+		{
+			set.orderByDistance( del::Point (0,0,8) );
+		}
+	}
+
+
 	std::cout << set.to_string() << std::endl;
 
 	std::cout << std::endl;
