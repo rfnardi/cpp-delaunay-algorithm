@@ -279,7 +279,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 															int* keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
 																																		 //keeping_track_of_which_dimension[1] = body_density;
 																																		 //keeping_track_of_which_dimension[2] = tail_density;
-														  int number_of_pre_re_shaped_regions, //tamanho da leading_density antes de passar pela função resize_regions
+														  int number_of_original_regions, //tamanho da leading_density antes de passar pela função resize_regions
 															int number_of_re_shaped_regions, 		 //tamanho da leading_density após passar pela resize_regions
 															int* sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
 															int global_max_pts_per_chart)					 //número máximo de pontos por carta definido globalmente no programa
@@ -349,9 +349,9 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			sub_chart_index=0;
 			while(l<number_of_points)
 			{
-				while(sub_chart_index < number_of_sub_charts)
+				while(sub_chart_index < number_of_sub_charts && region_index < number_of_re_shaped_regions)
 				{
-					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_pre_re_shaped_regions && x[l]< mins_and_maxs[0] + (region_index + sizes_and_fusions[number_of_pre_re_shaped_regions+region_index])*x_width/number_of_pre_re_shaped_regions )
+					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_original_regions && x[l]< mins_and_maxs[0] + (region_index + sizes_and_fusions[number_of_original_regions+region_index])*x_width/number_of_original_regions )
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -387,7 +387,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 
 						}
 					}
-					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_pre_re_shaped_regions && x[l]<= mins_and_maxs[1] )
+					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_original_regions && x[l]<= mins_and_maxs[1] )
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -434,9 +434,9 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			sub_chart_index=0;
 			while(l<number_of_points)
 			{
-				while(sub_chart_index < number_of_sub_charts)
+				while(sub_chart_index < number_of_sub_charts && region_index < number_of_re_shaped_regions)
 				{
-					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_pre_re_shaped_regions && y[l]< mins_and_maxs[2] + (region_index + sizes_and_fusions[number_of_pre_re_shaped_regions+region_index])*y_width/number_of_pre_re_shaped_regions )
+					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_original_regions && y[l]< mins_and_maxs[2] + (region_index + sizes_and_fusions[number_of_original_regions+region_index])*y_width/number_of_original_regions )
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -472,7 +472,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 
 						}
 					}
-					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_pre_re_shaped_regions && y[l]<= mins_and_maxs[3] )
+					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_original_regions && y[l]<= mins_and_maxs[3] )
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -545,7 +545,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			j=0;
 			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_re_shaped_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*x_width/number_of_pre_re_shaped_regions )
+				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_original_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_original_regions+k])*x_width/number_of_original_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
@@ -624,7 +624,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			j=0;
 			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_re_shaped_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*y_width/number_of_pre_re_shaped_regions )
+				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_original_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_original_regions+k])*y_width/number_of_original_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
@@ -702,7 +702,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			j=0;
 			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_re_shaped_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*z_width/number_of_pre_re_shaped_regions )
+				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_original_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_original_regions+k])*z_width/number_of_original_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
