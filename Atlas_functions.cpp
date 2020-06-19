@@ -239,20 +239,20 @@ int* resize_regions ( int* new_linear_density_plus_sizes /* !!!!ARRAY DE RESULTA
 
 // *********************************************************************************
 //contando o número de sub-cartas total:
-int sub_charts_counting(int number_of_reorganized_regions, int* sizes_and_fusions, int global_max_pts_per_chart)
+int sub_charts_counting(int number_of_re_shaped_regions, int* sizes_and_fusions, int global_max_pts_per_chart)
 {
 	std::cout << "Em sub_charts_counting. Valores dos parâmetros passados para a função:" << '\n';
-	std::cout << "number_of_reorganized_regions: " << number_of_reorganized_regions << '\n';
+	std::cout << "number_of_re_shaped_regions: " << number_of_re_shaped_regions << '\n';
 	std::cout << "global_max_pts_per_chart: " << global_max_pts_per_chart << '\n';
-	for (size_t i = 0; i < number_of_reorganized_regions*2; i++)
+	for (size_t i = 0; i < number_of_re_shaped_regions*2; i++)
 	{
 		std::cout << "sizes_and_fusions [" << i << "] : "<<  sizes_and_fusions[i] << '\n';
 	}
 
 	int number_of_sub_charts;
-	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
+	float* size_regions_rate = (float*) malloc(number_of_re_shaped_regions*sizeof(float));
 
-	for (size_t i = 0; i < number_of_reorganized_regions; i++)
+	for (size_t i = 0; i < number_of_re_shaped_regions; i++)
 	{
 		if (sizes_and_fusions[i]<global_max_pts_per_chart)
 		{
@@ -279,8 +279,8 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 															int* keeping_track_of_which_dimension, //keeping_track_of_which_dimension[0] = leading_density;
 																																		 //keeping_track_of_which_dimension[1] = body_density;
 																																		 //keeping_track_of_which_dimension[2] = tail_density;
-														  int number_of_pre_reorganized_regions, //tamanho da leading_density antes de passar pela função resize_regions
-															int number_of_reorganized_regions, 		 //tamanho da leading_density após passar pela resize_regions
+														  int number_of_pre_re_shaped_regions, //tamanho da leading_density antes de passar pela função resize_regions
+															int number_of_re_shaped_regions, 		 //tamanho da leading_density após passar pela resize_regions
 															int* sizes_and_fusions, 							 //quantidade de pontos em cada região e número de fusões ocorridas ao passar pela resize_regions
 															int global_max_pts_per_chart)					 //número máximo de pontos por carta definido globalmente no programa
 {
@@ -292,15 +292,15 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 	float z_width = mins_and_maxs[5]-mins_and_maxs[4];
 
 
-	float* size_regions_rate = (float*) malloc(number_of_reorganized_regions*sizeof(float));
+	float* size_regions_rate = (float*) malloc(number_of_re_shaped_regions*sizeof(float));
 
 	int number_of_sub_charts;
 	number_of_sub_charts = 0;
 
-	std::cout << "number_of_reorganized_regions = " << number_of_reorganized_regions << '\n';
+	std::cout << "number_of_re_shaped_regions = " << number_of_re_shaped_regions << '\n';
 
 	//contando o número de sub-cartas total:
-	for (size_t i = 0; i < number_of_reorganized_regions; i++)
+	for (size_t i = 0; i < number_of_re_shaped_regions; i++)
 	{
 		if (sizes_and_fusions[i]<global_max_pts_per_chart)
 		{
@@ -316,10 +316,10 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 
 	std::cout << "Em sub_charts_building: contagem de subcartas realizada com sucesso. number_of_sub_charts = " << number_of_sub_charts << '\n';
 
-	int Index_Vector[number_of_reorganized_regions];
+	int Index_Vector[number_of_re_shaped_regions];
 	int New_Index_Vector[number_of_sub_charts];
 
-	for (size_t i = 0; i < number_of_reorganized_regions; i++)
+	for (size_t i = 0; i < number_of_re_shaped_regions; i++)
 	{
 		*(Index_Vector+i) = 0;
 	}
@@ -340,81 +340,178 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 
 
 
-		size_t k, j;
-		size_t l;
+		size_t region_index, sub_chart_index, l;
 		l = 0;
-		//for (size_t l = 0; l < number_of_points ; l++)
-		while(l<number_of_points)
+
+		if (keeping_track_of_which_dimension[0] = 0) // se x for a dimensão líder
 		{
-			k=0;
-			j=0;
-			while(j < number_of_sub_charts) //j plays the role of chart_index
+			region_index=0;
+			sub_chart_index=0;
+			while(l<number_of_points)
 			{
-				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*x_width/number_of_pre_reorganized_regions )
+				while(sub_chart_index < number_of_sub_charts)
 				{
-					if (size_regions_rate[k] == 0.0)
+					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_pre_re_shaped_regions && x[l]< mins_and_maxs[0] + (region_index + sizes_and_fusions[number_of_pre_re_shaped_regions+region_index])*x_width/number_of_pre_re_shaped_regions )
 					{
-						Index_Vector[k]++;
-						New_Index_Vector[j]++;
-						j++;
-						k++;
-						std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: k = " << k << " ; j = "<< j << '\n';
-						break;
-					}
-
-					if (size_regions_rate[k] != 0.0)
-					{
-						float step2;
-						switch (keeping_track_of_which_dimension[1])
+						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
-							case 1:
-									step2 = y_width/ ((float) (1 + (int) size_regions_rate[k]));
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-											j++;
-											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
-
-										}
-										if (b == (int) size_regions_rate[k] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
-										{
-											New_Index_Vector[j]++;
-											j++;
-											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
-
-										}
-									}
+							Index_Vector[region_index]++;
+							New_Index_Vector[sub_chart_index]++;
+							sub_chart_index++;
+							region_index++;
+							std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: region_index = " << region_index << " ; sub_chart_index = "<< sub_chart_index << '\n';
 							break;
+						}
 
-							case 2:
-									step2 = z_width/((float) (1 + (int) size_regions_rate[k]));
-									for (size_t b = 0; b < (1 + (int) size_regions_rate[k]); b++)
-									{
-										if (b != (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]< mins_and_maxs[4] + (b + 1)*step2)
-										{
-											New_Index_Vector[j]++;
-											j++;
-											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
-											break;
-										}
-										if (b == (int) size_regions_rate[k] && z[l]>=mins_and_maxs[4]+ b*step2 && y[l]<= mins_and_maxs[5])
-										{
-											New_Index_Vector[j]++;
-											j++;
-											std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: k = " << k << " ; j = " << j << " ; b = " << b << '\n';
-											break;
-										}
-									}
+						if (size_regions_rate[region_index] != 0.0)
+						{
+							float step2;
+							step2 = y_width/ ((float) (1 + (int) size_regions_rate[region_index]));
+							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
+							{
+								if (b != (int) size_regions_rate[region_index] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+								if (b == (int) size_regions_rate[region_index] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+							}
+
+						}
+					}
+					if (sub_chart_index != (number_of_sub_charts - 1) && x[l]>=mins_and_maxs[0] + region_index*x_width/number_of_pre_re_shaped_regions && x[l]<= mins_and_maxs[1] )
+					{
+						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
+						{
+							Index_Vector[region_index]++;
+							New_Index_Vector[sub_chart_index]++;
+							sub_chart_index++;
+							region_index++;
+							std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: region_index = " << region_index << " ; sub_chart_index = "<< sub_chart_index << '\n';
 							break;
+						}
+
+						if (size_regions_rate[region_index] != 0.0)
+						{
+							float step2;
+							step2 = y_width/ ((float) (1 + (int) size_regions_rate[region_index]));
+							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
+							{
+								if (b != (int) size_regions_rate[region_index] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]< mins_and_maxs[2] + (b + 1)*step2)
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+								if (b == (int) size_regions_rate[region_index] && y[l]>=mins_and_maxs[2]+ b*step2 && y[l]<= mins_and_maxs[3])
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+							}
+
 						}
 					}
 				}
+				l++;
 			}
-			l++;
 		}
 
+		if (keeping_track_of_which_dimension[0] = 1) // se y for a dimensão líder
+		{
+			region_index=0;
+			sub_chart_index=0;
+			while(l<number_of_points)
+			{
+				while(sub_chart_index < number_of_sub_charts)
+				{
+					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_pre_re_shaped_regions && y[l]< mins_and_maxs[2] + (region_index + sizes_and_fusions[number_of_pre_re_shaped_regions+region_index])*y_width/number_of_pre_re_shaped_regions )
+					{
+						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
+						{
+							Index_Vector[region_index]++;
+							New_Index_Vector[sub_chart_index]++;
+							sub_chart_index++;
+							region_index++;
+							std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: region_index = " << region_index << " ; sub_chart_index = "<< sub_chart_index << '\n';
+							break;
+						}
+
+						if (size_regions_rate[region_index] != 0.0)
+						{
+							float step2;
+							step2 = x_width/ ((float) (1 + (int) size_regions_rate[region_index]));
+							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
+							{
+								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+								if (b == (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+							}
+
+						}
+					}
+					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + region_index*y_width/number_of_pre_re_shaped_regions && y[l]<= mins_and_maxs[3] )
+					{
+						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
+						{
+							Index_Vector[region_index]++;
+							New_Index_Vector[sub_chart_index]++;
+							sub_chart_index++;
+							region_index++;
+							std::cout << "Em sub_charts_building. Encontrou ponto em carta secundária: region_index = " << region_index << " ; sub_chart_index = "<< sub_chart_index << '\n';
+							break;
+						}
+
+						if (size_regions_rate[region_index] != 0.0)
+						{
+							float step2;
+							step2 = x_width/ ((float) (1 + (int) size_regions_rate[region_index]));
+							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
+							{
+								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]< mins_and_maxs[2] + (b + 1)*step2)
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+								if (b == (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[2]+ b*step2 && x[l]<= mins_and_maxs[3])
+								{
+									New_Index_Vector[sub_chart_index]++;
+									sub_chart_index++;
+									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
+									break;
+								}
+							}
+
+						}
+					}
+				}
+				l++;
+			}
+		}
 
 		// ********************* TORNAR ESTE BLOCO UMA FUNÇÃO SEPARADA *************************^^^^^
 
@@ -446,9 +543,9 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			size_t k, j;
 			k=0;
 			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_reorganized_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*x_width/number_of_pre_reorganized_regions )
+				if (x[l]>=mins_and_maxs[0]+ k*x_width/number_of_pre_re_shaped_regions && x[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*x_width/number_of_pre_re_shaped_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
@@ -525,9 +622,9 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			size_t k, j;
 			k=0;
 			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_reorganized_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*y_width/number_of_pre_reorganized_regions )
+				if (y[l]>=mins_and_maxs[0]+ k*y_width/number_of_pre_re_shaped_regions && y[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*y_width/number_of_pre_re_shaped_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
@@ -603,9 +700,9 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 			size_t k, j;
 			k=0;
 			j=0;
-			while(k < number_of_reorganized_regions) //k plays the role of chart_index
+			while(k < number_of_re_shaped_regions) //k plays the role of chart_index
 			{
-				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_reorganized_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_reorganized_regions+k])*z_width/number_of_pre_reorganized_regions )
+				if (z[l]>=mins_and_maxs[0]+ k*z_width/number_of_pre_re_shaped_regions && z[l]< mins_and_maxs[0] + (k + sizes_and_fusions[number_of_pre_re_shaped_regions+k])*z_width/number_of_pre_re_shaped_regions )
 				{
 					if (size_regions_rate[k] == 0.0)
 					{
