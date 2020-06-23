@@ -9,7 +9,7 @@ int sum_sizes(int I, int* index_vec_ptr)
 	{
 		for (size_t i = 0; i < I; i++)
 		{
-			sum = sum + (int) index_vec_ptr[i];
+			sum = sum + (int) *(index_vec_ptr + i);
 		}
 	}
 	return sum;
@@ -362,7 +362,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 				sub_chart_index=0;
 				while(sub_chart_index < number_of_sub_charts && region_index < number_of_re_shaped_regions)
 				{
-					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + sum_sizes(region_index, sizes_and_fusions + number_of_original_regions)*step1 && y[l]< mins_and_maxs[2] + (sum_sizes(region_index + 1, sizes_and_fusions + number_of_original_regions))*step1)
+					if (sub_chart_index != (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + sum_sizes(region_index, sizes_and_fusions + number_of_re_shaped_regions)*step1 && y[l]< mins_and_maxs[2] + (sum_sizes(region_index + 1, sizes_and_fusions + number_of_re_shaped_regions))*step1)
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -379,7 +379,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
 							{
 								sub_chart_index++;
-								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[1] + (b + 1)*step2)
+								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[0] + (b + 1)*step2)
 								{
 									New_Index_Vector[sub_chart_index]++;
 									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
@@ -394,7 +394,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 							}
 						}
 					}
-					if (sub_chart_index == (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + sum_sizes(region_index, sizes_and_fusions + number_of_original_regions)*step1 && y[l]<= mins_and_maxs[3] )
+					if (sub_chart_index == (number_of_sub_charts - 1) && y[l]>=mins_and_maxs[2] + sum_sizes(region_index, sizes_and_fusions + number_of_re_shaped_regions)*step1 && y[l]<= mins_and_maxs[3] )
 					{
 						if (size_regions_rate[region_index] == 0.0)//happens when the number of points doesn't exceed the max per chart
 						{
@@ -411,7 +411,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
 							{
 								sub_chart_index++;
-								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[1] + (b + 1)*step2)
+								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[0] + (b + 1)*step2)
 								{
 									New_Index_Vector[sub_chart_index]++;
 									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
