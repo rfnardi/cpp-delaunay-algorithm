@@ -59,9 +59,14 @@ test: $(BIN_TEST)
 	@ echo "Iniciando testes"
 	@ ./$(BIN_TEST) --reporter console --success
 
+testlog: $(BIN_TEST)
+	@ echo "Iniciando testes..."
+	@ echo "Armazenando em $(TEST_DIR)/testlog-$(date).log"
+	@ ./$(BIN_TEST) --reporter console --success > "$(TEST_DIR)/testlog-$(date).log"
+
 $(BIN_TEST): $(TEST_FILES)
 	@ echo "Construindo binário de teste a partir do linker do GCC: $@"
 	$(CC) $^ $(CC_TEST_FLAGS) -o $@
 	@ echo " "
 
-.PHONY: all clean test
+.PHONY: all clean test testlog

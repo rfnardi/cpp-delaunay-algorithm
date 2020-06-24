@@ -3,14 +3,23 @@
 
 #include <math.h>
 #include "./Set.hpp"
-
 /****************************************************************************/
 /*																			*/
 /*								  METHODS									*/
 /*																			*/
 /****************************************************************************/
 template <typename T>
-del::Set<T>::Set ( T* points, int size )
+del::Set<T>::Set ( int size )
+{
+	this->size = size;
+	for ( int i = 0; i < size; i++ )
+	{
+		this->points[ i ] = del::Point();
+	}
+}
+
+template <typename T>
+del::Set<T>::Set ( int size, T* points )
 {
 	this->size = size;
 	this->copyList( points, size );
@@ -21,7 +30,11 @@ void del::Set<T>::copyList ( T* points, size_t size )
 {
 	for ( size_t i = 0; i < size; i++ )
 	{
-		*( this->points + i ) = *( points + i );
+		std::cout << "the pointers inside set ( memory addresses ):" << std::endl;
+		std::cout << &this->points[ i ] << std::endl;
+		std::cout << &points[ i ] << std::endl;
+		// *( this->points + i ) = *( points + i );
+		this->points[ i ] = points[ i ];
 	}
 }
 

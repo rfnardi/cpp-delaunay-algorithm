@@ -28,12 +28,19 @@ class Set
 		/*																			*/
 		/****************************************************************************/
 		/**
+		 * Inicializa Set passando o tamanho da lista de pontos.
+		 *
+		 * @param size
+		*/
+		Set( int size );
+
+		/**
 		 * Inicializa Set passando uma lista de pontos.
 		 *
 		 * @param points
 		 * @param size
 		*/
-		Set( T* points, int size );
+		Set( int size, T* points );
 
 		/**
 		 * Copia os valores de um ponteiro para o ponteiro interno.

@@ -33,10 +33,6 @@ void fillWithRandomPoints ( del::Point* pointer, size_t size )
 
 
 
-
-
-
-
 TEST_CASE( "Validando operador igualdade.", "[point]" )
 {
     for ( int i = 0; i < SET_SIZE; i++ )
@@ -54,6 +50,16 @@ TEST_CASE( "Instância sem valores para construtor deve ser (0,0,0).", "[point]"
     del::Point p2 ( 0, 0, 0 );
     bool comparison = ( p1 == p2 );
     REQUIRE( true == comparison );
+}
+
+TEST_CASE( "Instância sem valores para construtor em array deve preencher nulos.", "[point]" )
+{
+    del::Point p1[ SET_SIZE ];
+		for ( int i = 0; i < SET_SIZE; i++ )
+	 	{
+			bool isP1Null = ( p1[ i ] == del::Point() );
+			REQUIRE( true == isP1Null );
+		}
 }
 
 TEST_CASE( "Distâncias iguais para mesmos pontos entre os métodos estáticos e não estáticos.", "[point]" )
@@ -80,27 +86,48 @@ TEST_CASE( "Cálculo de distâncias deve ser simétrico.", "[point]" )
 
 
 
-
-
-
-
+TEST_CASE( "Construtor Set deve encher de nulos caso não receba ponteiro.", "[set]" )
+{
+	del::Set<del::Point> set ( SET_SIZE );
+	del::Point p;
+	for ( int i = 0; i < SET_SIZE; i++ )
+	{
+		bool isNullPoint = ( p == set.points[ i ] );
+		REQUIRE( isNullPoint == true );
+	}
+}
 
 
 TEST_CASE( "Construtor Set deve fazer uma cópia dos valores inseridos para o ponteiro interno.", "[set]" )
 {
     del::Point points[ SET_SIZE ];
     fillWithRandomPoints( points, SET_SIZE );
-    del::Set<del::Point> set ( points, SET_SIZE );
+    del::Set<del::Point> set ( SET_SIZE, points );
     for ( int i = 0; i < SET_SIZE; i ++ )
     {
-        /*
-        CHECK( set.size == SET_SIZE );
-        bool sameValues = points[ i ] == set.points[ i ];
-        std::cout << points[ i ].to_string() << " vs " << set.points[ i ].to_string() << std::endl;
-        */
-        std::cout << points[ i ].to_string() << std::endl;
-        CHECK( true == true );
+				del::Point* pMem = &points[ i ];
+				del::Point* sMem = &set.points[ i ];
+				CHECK_FALSE( sMem == pMem );
     }
+}
+
+TEST_CASE( "Após instanciar Set, este  não depende do ponteiro inserido inicialmente, podendo recebe-lo em outra stack 'filha'.", "[set]" )
+{
+    del::Set<del::Point> set ( SET_SIZE );
+		del::Point p = randomPoint();
+		{
+			del::Point pointer[ SET_SIZE ];
+			for ( int i = 0; i < SET_SIZE; i++ )
+			{
+				pointer[ i ] = p;
+			}
+			set.copyList( pointer, SET_SIZE );
+		}
+		for ( int i = 0; i < SET_SIZE; i++ )
+		{
+			bool comparison = ( set.points[ i ] == p );
+			CHECK( comparison == true );
+		}
 }
 
 /*
@@ -123,7 +150,7 @@ TEST_CASE( "Validando reordenação de Set em relação a um ponto (0,0,0)", "[p
         
         
     }
-    del::Set<del::Point> set ( ul, SET_SIZE );
+    del::Set<del::Point> set ( SET_SIZE, ul );
     std::cout << set.to_string() << std::endl;
     set.orderByDistance( del::Point ( 0, 0, 0 ) );
     for ( int i = 0; i < SET_SIZE; i++ )
@@ -140,7 +167,7 @@ TEST_CASE( "Após reordenação por distância, Set torna-se uma sequência não
     del::Point P = randomPoint();
     del::Point points[ SET_SIZE ];
     fillWithRandomPoints( points, SET_SIZE );
-    del::Set<del::Point> set ( points, SET_SIZE );
+    del::Set<del::Point> set ( SET_SIZE, points );
     set.orderByDistance( P );
     for ( size_t i = 1; i < SET_SIZE; i++ )
     {
@@ -153,14 +180,14 @@ TEST_CASE( "Após reordenação por distância, Set torna-se uma sequência não
 TEST_CASE( "Subset creation.", "[set]" )
 {
     del::Point points[ SUBSET_SIZE ];
-    del::Set<del::Point> subset ( points, SUBSET_SIZE );
+    del::Set<del::Point> subset ( SUBSET_SIZE, points );
     del::Point morePoints[ SET_SIZE ];
     fillWithRandomPoints( morePoints, SET_SIZE );
     for ( size_t i = 0; i < SUBSET_SIZE; i++ )
     {
         points[ i ] = morePoints[ i ];
     }
-    del::Set<del::Point> set ( morePoints, SET_SIZE );
+    del::Set<del::Point> set ( SET_SIZE, morePoints );
     set.subSetFromTop( subset );
 }
 
