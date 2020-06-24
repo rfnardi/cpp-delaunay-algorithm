@@ -196,23 +196,23 @@ with expansion:
   true == true
 
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78b0
-0x7ffedb5c7690
+0x7ffc9002ec80
+0x7ffc9002ea60
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78bc
-0x7ffedb5c769c
+0x7ffc9002ec8c
+0x7ffc9002ea6c
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78c8
-0x7ffedb5c76a8
+0x7ffc9002ec98
+0x7ffc9002ea78
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78d4
-0x7ffedb5c76b4
+0x7ffc9002eca4
+0x7ffc9002ea84
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78e0
-0x7ffedb5c76c0
+0x7ffc9002ecb0
+0x7ffc9002ea90
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78ec
-0x7ffedb5c76cc
+0x7ffc9002ecbc
+0x7ffc9002ea9c
 -------------------------------------------------------------------------------
 Construtor Set deve fazer uma cópia dos valores inseridos para o ponteiro
 interno.
@@ -223,51 +223,51 @@ tests/test.cpp:101
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78b0 == 0x00007ffedb5c7690)
+  !(0x00007ffc9002ec80 == 0x00007ffc9002ea60)
 
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78bc == 0x00007ffedb5c769c)
+  !(0x00007ffc9002ec8c == 0x00007ffc9002ea6c)
 
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78c8 == 0x00007ffedb5c76a8)
+  !(0x00007ffc9002ec98 == 0x00007ffc9002ea78)
 
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78d4 == 0x00007ffedb5c76b4)
+  !(0x00007ffc9002eca4 == 0x00007ffc9002ea84)
 
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78e0 == 0x00007ffedb5c76c0)
+  !(0x00007ffc9002ecb0 == 0x00007ffc9002ea90)
 
 tests/test.cpp:110: PASSED:
   CHECK_FALSE( sMem == pMem )
 with expansion:
-  !(0x00007ffedb5c78ec == 0x00007ffedb5c76cc)
+  !(0x00007ffc9002ecbc == 0x00007ffc9002ea9c)
 
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78b0
-0x7ffedb5c7690
+0x7ffc9002ec80
+0x7ffc9002ea60
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78bc
-0x7ffedb5c769c
+0x7ffc9002ec8c
+0x7ffc9002ea6c
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78c8
-0x7ffedb5c76a8
+0x7ffc9002ec98
+0x7ffc9002ea78
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78d4
-0x7ffedb5c76b4
+0x7ffc9002eca4
+0x7ffc9002ea84
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78e0
-0x7ffedb5c76c0
+0x7ffc9002ecb0
+0x7ffc9002ea90
 the pointers inside set ( memory addresses ):
-0x7ffedb5c78ec
-0x7ffedb5c76cc
+0x7ffc9002ecbc
+0x7ffc9002ea9c
 -------------------------------------------------------------------------------
 Após instanciar Set, este  não depende do ponteiro inserido inicialmente,
 podendo recebe-lo em outra stack 'filha'.
