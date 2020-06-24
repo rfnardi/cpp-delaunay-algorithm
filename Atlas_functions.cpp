@@ -347,8 +347,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 
 
 
-	//------------------------------------------------------------------------------------------------
-
+	
 	int* chart_sizes = (int*) malloc(number_of_sub_charts*sizeof(int));
 	memcpy(chart_sizes , New_Index_Vector, number_of_sub_charts*sizeof(int));
 
