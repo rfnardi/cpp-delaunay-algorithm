@@ -378,7 +378,6 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 							step2 = x_width/ ((float) (1 + (int) size_regions_rate[region_index]));         //OK
 							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
 							{
-								sub_chart_index++;
 								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[0] + (b + 1)*step2)
 								{
 									New_Index_Vector[sub_chart_index]++;
@@ -391,6 +390,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
 									break;
 								}
+								sub_chart_index++;
 							}
 						}
 					}
@@ -410,7 +410,6 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 							step2 = x_width/ ((float) (1 + (int) size_regions_rate[region_index]));
 							for (size_t b = 0; b < (1 + (int) size_regions_rate[region_index]); b++)
 							{
-								sub_chart_index++;
 								if (b != (int) size_regions_rate[region_index] && x[l]>=mins_and_maxs[0]+ b*step2 && x[l]< mins_and_maxs[0] + (b + 1)*step2)
 								{
 									New_Index_Vector[sub_chart_index]++;
@@ -423,6 +422,7 @@ float* sub_charts_building (float* sub_atlas /* !!!!!ARRAY DE RESULTADO: float* 
 									std::cout << "Em sub_charts_building. Encontrou ponto em carta terciária: region_index = " << region_index << " ; sub_chart_index = " << sub_chart_index << " ; b = " << b << '\n';
 									break;
 								}
+								sub_chart_index++;
 							}
 						}
 					}
