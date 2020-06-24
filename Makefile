@@ -61,8 +61,8 @@ test: $(BIN_TEST)
 
 testlog: $(BIN_TEST)
 	@ echo "Iniciando testes..."
-	@ echo "Armazenando em $(TEST_DIR)/testlog-$(date).log"
-	@ ./$(BIN_TEST) --reporter console --success > "$(TEST_DIR)/testlog-$(date).log"
+	@ echo "Armazenando em $(TEST_DIR)/testlog.md"
+	@ ./$(BIN_TEST) --reporter console --success > "$(TEST_DIR)/testlog.md"
 
 $(BIN_TEST): $(TEST_FILES)
 	@ echo "Construindo binário de teste a partir do linker do GCC: $@"
