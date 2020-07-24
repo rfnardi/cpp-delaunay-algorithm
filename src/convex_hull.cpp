@@ -25,6 +25,8 @@ del::Convex_Hull::Convex_Hull()
 
 bool del::Convex_Hull::reliability ()
 {
+	// é necessário alterar este método. O convex_hull pode ser formado por mais do que um anel de edges.
+	//
   return (this->edge_collection[0].first_Point == this->edge_collection[this->edge_collection.size()-1].second_Point);
 }
 

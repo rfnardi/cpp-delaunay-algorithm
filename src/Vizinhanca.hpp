@@ -20,6 +20,8 @@ namespace del {
              * Inicializa o catálogo a partir de um conjunto de pontos no espaço e um valor para o número máximo de vizinhos em cada vizinhança.
              *
              * @param universalSet O conjunto de todos os pontos do sólido.
+			 *
+			 * @param maxNeighboorHoodSize quantidade de pontos em cada vizinhança
             */
             Vizinhanca ( std::vector<Point> universalSet, unsigned int maxNeighboorHoodSize );
 

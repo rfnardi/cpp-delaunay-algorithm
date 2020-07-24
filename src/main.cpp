@@ -1,5 +1,6 @@
-//#include <sys/stat.h>
-//#include <sys/types.h>
+#include <cstddef>
+#include <sys/stat.h>
+#include <sys/types.h>
 #include <stdio.h>
 #include <math.h>
 //#include <stdlib.h>
@@ -9,21 +10,21 @@
 
 #include <time.h>
 #include <array>
-//#include <vector>
+#include <vector>
 #include <fstream>
 
 #include <bits/stdc++.h>
 
 #include "Point.cpp"
+#include "Point.hpp"
 #include "Set.hpp"
-//#include "Delaunay_classes/Vizinhanca.cpp"
-//#include "Delaunay_classes/Centro_Esfera_Aprox.cpp"
-//#include "Delaunay_classes/triangle_building.cpp"
-//#include "Delaunay_classes/Triangle.cpp"
-//#include "Delaunay_classes/convex_hull.cpp"
-//#include "Delaunay_classes/stl_module.cpp"
-//#include "Delaunay_classes/find_z_max.cpp"
-//#include "Delaunay_classes/slicing_and_gluing.cpp"
+#include "Vizinhanca.cpp"
+#include "Centro_Esfera_Aprox.cpp"
+#include "triangle_building.cpp"
+#include "Triangle.cpp"
+#include "convex_hull.cpp"
+#include "stl_module.cpp"
+#include "find_z_max.cpp"
 
 #define NEIGHBOORHOOD_MAX_SIZE 6
 
@@ -73,6 +74,9 @@ char* cliHandler ( int argc, char* argv[] )
 
 int main( int argc, char* argv[] )
 {
+
+	/*
+	
 	time_t t[ 2 ];
 	int listSize;
 	FILE* file;
@@ -133,15 +137,13 @@ int main( int argc, char* argv[] )
 	std::cout << std::endl;
 	std::cout << std::endl << "Operação de leitura do arquivo realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
-	delete[] points;
 
-/*
 
 	float delta_z = 1.5;
 	std::cout << "Parâmetro de resolução de leitura: " << delta_z << std::endl;
-	// obter_catalogo_de_vizinhancas de pontos inicia aqui
-	// primeiro instancio a classe inserindo os pontos
-	del::Vizinhanca vizinhanca( pontos );
+	// obter_catalogo_de_vizinhancas de points inicia aqui
+	// primeiro instancio a classe inserindo os points
+	del::Vizinhanca vizinhanca( points , 7);
 	del::Triangle_Building triangle_Builder;
 	// ativo ou desativo o debug (para leitura no console)
 	vizinhanca.ativar_debug();
@@ -161,43 +163,63 @@ int main( int argc, char* argv[] )
 	appendToFile( "timer.log", std::to_string( currentLine ) + " " + std::to_string( timeBetween( t[ 0 ], t[ 1 ] ) ) + " " + std::to_string( delta_z ) );
 	std::cout << std::endl << "Operação de catalogação das vizinhanças realizada em " << timeBetween( t[ 0 ], t[ 1 ] ) << " ms" << std::endl << std::endl;
 
+	delete[] points;
+
+
+
+	Todo este bloco inicial deve ser repensado com base no formato de saída do NBHBB
+	
+	*/
+
 
 	//Inicia triangulação
-	/*
+
 	std::cout << "Iniciando triangulação." << std::endl;
-	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triangulos de Delaunay e suas respectivas normais
+	std::vector< del::Stl_module> Triangulation_with_normals; //Armazena todos os triângulos de Delaunay e suas respectivas normais
 	std::cout << "Vetor de armazenamento dos módulos stl criado com sucesso." << '\n';
 	del::Triangle_Building Triangle_Building_obj;
 	std::cout << "Instância da classe Triangle_Building criada com sucesso." << '\n';
-	del::Find_Extremal_Points find_extremal_points_obj;
-	std::cout << "Instância da classe Find_Extremal_Points criada com sucesso." << '\n';
-	del::Point A = find_extremal_points_obj.Find_Z_Max(pontos);; //ponto mais alto do sólido (maior z)
-	std::cout << "Ponto mais alto do sólido localizado com sucesso:" << '\n';
-	std::cout << "X=" << A.p[0]<<'\n';
-	std::cout << "Y=" << A.p[1]<<'\n';
-	std::cout << "Z=" << A.p[2]<<'\n';
+
+
+
+	//*******************************************************************************
+	//del::Find_Extremal_Points find_extremal_points_obj;
+	//std::cout << "Instância da classe Find_Extremal_Points criada com sucesso." << '\n';
+	//del::Point A = find_extremal_points_obj.Find_Z_Max(points);; //ponto mais alto do sólido (maior z)
+	//std::cout << "Ponto mais alto do sólido localizado com sucesso:" << '\n';
+	//std::cout << "X=" << A.x<<'\n';
+	//std::cout << "Y=" << A.y<<'\n';
+	//std::cout << "Z=" << A.z<<'\n';
+	//
+	// Necessário repensar este bloco baseado no formato da saída do construtor de vizinhanças: 
+	// cada par (carta + shadow) deve dar origem a uma coleção de vizinhanças (NBHB)
+	//
+	//*******************************************************************************
+	
+
+	del::Point A;
 	del::Triangle T_0 = Triangle_Building_obj.Point_based_Triangle_Building(A);
-	std::cout << "Primeiro triaângulo da triangulação determinado com sucesso:" << '\n';
-	std::cout << "Ponto A:" << "X="<<T_0.A.p[0]<<"Y="<<T_0.A.p[1]<<"Z="<<T_0.A.p[2]<<'\n';
-	std::cout << "Ponto B:" << "X="<<T_0.B.p[0]<<"Y="<<T_0.B.p[1]<<"Z="<<T_0.B.p[2]<<'\n';
-	std::cout << "Ponto C:" << "X="<<T_0.C.p[0]<<"Y="<<T_0.C.p[1]<<"Z="<<T_0.C.p[2]<<'\n';
+	std::cout << "Primeiro triângulo da triangulação determinado com sucesso:" << '\n';
+	std::cout << "Ponto A:" << "X="<<T_0.A.x<<"Y="<<T_0.A.y<<"Z="<<T_0.A.z<<'\n';
+	std::cout << "Ponto B:" << "X="<<T_0.B.x<<"Y="<<T_0.B.y<<"Z="<<T_0.B.z<<'\n';
+	std::cout << "Ponto C:" << "X="<<T_0.C.x<<"Y="<<T_0.C.y<<"Z="<<T_0.C.z<<'\n'; 
 
 	del::Point first_Normal = T_0.Normal();
 	std::cout << "Normal ao Primeiro triângulo determinada com sucesso:" << '\n';
-	std::cout << "Normal:" << "X="<<first_Normal.p[0]<<"Y="<<first_Normal.p[1]<<"Z="<<first_Normal.p[2]<< '\n';
+	std::cout << "Normal:" << "X="<<first_Normal.x<<"Y="<<first_Normal.y<<"Z="<<first_Normal.z<< '\n';
 
 	//orientando corretamente para cima a normal do primeiro triangulo:
-	if (first_Normal.p[2]<0)
+	if (first_Normal.z<0)
 	{
 		T_0.swap();
 	}
 	std::cout << "Pontos do primeiro triângulo após aplicação do Swap:" << '\n';
-	std::cout << "Ponto A:" << "X="<<T_0.A.p[0]<<"Y="<<T_0.A.p[1]<<"Z="<<T_0.A.p[2]<<'\n';
-	std::cout << "Ponto B:" << "X="<<T_0.B.p[0]<<"Y="<<T_0.B.p[1]<<"Z="<<T_0.B.p[2]<<'\n';
-	std::cout << "Ponto C:" << "X="<<T_0.C.p[0]<<"Y="<<T_0.C.p[1]<<"Z="<<T_0.C.p[2]<<'\n';
+	std::cout << "Ponto A:" << "X="<<T_0.A.x<<"Y="<<T_0.A.y<<"Z="<<T_0.A.z<<'\n';
+	std::cout << "Ponto B:" << "X="<<T_0.B.x<<"Y="<<T_0.B.y<<"Z="<<T_0.B.z<<'\n';
+	std::cout << "Ponto C:" << "X="<<T_0.C.x<<"Y="<<T_0.C.y<<"Z="<<T_0.C.z<<'\n';
 	first_Normal = T_0.Normal();
 	std::cout << "Normal ao Primeiro triângulo após aplicação do Swap:" << '\n';
-	std::cout << "Normal:" << "X="<<first_Normal.p[0]<<"Y="<<first_Normal.p[1]<<"Z="<<first_Normal.p[2]<< '\n';
+	std::cout << "Normal:" << "X="<<first_Normal.x<<"Y="<<first_Normal.y<<"Z="<<first_Normal.z<< '\n';
 
 	del::Stl_module Module_0;
 	Module_0.Normal = T_0.Normal();
@@ -207,12 +229,14 @@ int main( int argc, char* argv[] )
 	//guardando primeiro módulo do arquivo stl:
 	Triangulation_with_normals.push_back(Module_0);
 	std::cout << "Primeiro módulo Stl guardado em triangulation with normals com sucesso:" << '\n';
-	std::cout << "Triangulo:" << '\n';
-	std::cout << "Ponto A:" << "X="<<Triangulation_with_normals[0].Triangle.A.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.A.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.A.p[2]<<'\n';
-	std::cout << "Ponto B:" << "X="<<Triangulation_with_normals[0].Triangle.B.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.B.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.B.p[2]<<'\n';
-	std::cout << "Ponto C:" << "X="<<Triangulation_with_normals[0].Triangle.B.p[0]<<"Y="<<Triangulation_with_normals[0].Triangle.B.p[1]<<"Z="<<Triangulation_with_normals[0].Triangle.B.p[2]<<'\n';
+
+
+	std::cout << "Primeiro triângulo:" << '\n';
+	std::cout << "Ponto A:" << "X="<<Triangulation_with_normals[0].Triangle.A.x<<"Y="<<Triangulation_with_normals[0].Triangle.A.y<<"Z="<<Triangulation_with_normals[0].Triangle.A.z<<'\n';
+	std::cout << "Ponto B:" << "X="<<Triangulation_with_normals[0].Triangle.B.x<<"Y="<<Triangulation_with_normals[0].Triangle.B.y<<"Z="<<Triangulation_with_normals[0].Triangle.B.z<<'\n';
+	std::cout << "Ponto C:" << "X="<<Triangulation_with_normals[0].Triangle.B.x<<"Y="<<Triangulation_with_normals[0].Triangle.B.y<<"Z="<<Triangulation_with_normals[0].Triangle.B.z<<'\n';
 	std::cout << "Normal:" << '\n';
-	std::cout << "Normal:" << "X="<<Module_0.Normal.p[0]<<"Y="<<Module_0.Normal.p[1]<<"Z="<<Module_0.Normal.p[2]<< '\n';
+	std::cout << "Normal:" << "X="<<Module_0.Normal.x<<"Y="<<Module_0.Normal.y<<"Z="<<Module_0.Normal.z<< '\n';
 
 	//inicia Convex_Hull
 	del::Convex_Hull Convex_Hull_obj;
@@ -235,20 +259,19 @@ int main( int argc, char* argv[] )
 	Convex_Hull_obj.edge_collection.push_back(CA);
 	std::cout << "Primeiras 3 arestas criadas e adicionadas ao Convex Hull com sucesso:" << '\n';
 	std::cout << "Aresta AB:" << '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<AB.first_Point.p[0]<<"Y="<<AB.first_Point.p[1]<<"Z="<<AB.first_Point.p[2]<< '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<AB.second_Point.p[0]<<"Y="<<AB.second_Point.p[1]<<"Z="<<AB.second_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<AB.first_Point.x<<"Y="<<AB.first_Point.y<<"Z="<<AB.first_Point.z<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<AB.second_Point.x<<"Y="<<AB.second_Point.y<<"Z="<<AB.second_Point.z<< '\n';
 
 	std::cout << "Aresta BC:" << '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<BC.first_Point.p[0]<<"Y="<<BC.first_Point.p[1]<<"Z="<<BC.first_Point.p[2]<< '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<BC.second_Point.p[0]<<"Y="<<BC.second_Point.p[1]<<"Z="<<BC.second_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<BC.first_Point.x<<"Y="<<BC.first_Point.y<<"Z="<<BC.first_Point.z<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<BC.second_Point.x<<"Y="<<BC.second_Point.y<<"Z="<<BC.second_Point.z<< '\n';
 
 	std::cout << "Aresta CA:" << '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<CA.first_Point.p[0]<<"Y="<<CA.first_Point.p[1]<<"Z="<<CA.first_Point.p[2]<< '\n';
-	std::cout << "Primeiro Ponto:" << "X="<<CA.second_Point.p[0]<<"Y="<<CA.second_Point.p[1]<<"Z="<<CA.second_Point.p[2]<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<CA.first_Point.x<<"Y="<<CA.first_Point.y<<"Z="<<CA.first_Point.z<< '\n';
+	std::cout << "Primeiro Ponto:" << "X="<<CA.second_Point.x<<"Y="<<CA.second_Point.y<<"Z="<<CA.second_Point.z<< '\n';
 
-	bool Convex_Hull_test = Convex_Hull_obj.reliability();
 
-	if (Convex_Hull_test)
+	if (Convex_Hull_obj.reliability())
 	{
 		std::cout << "Convex Hull iniciado com sucesso." << '\n';
 	}
@@ -268,22 +291,22 @@ int main( int argc, char* argv[] )
 
 	del::Point Origem;
 
-	long unsigned int J =0;
+	size_t J =0;
 	// while Convex_Hull still have 'bool really_a_Convex_Hull_member = false' edges
 	while (J < Convex_Hull_obj.edge_collection.size() )
 	{
 		// varre Convex_Hull testando really_a_Convex_Hull_member para cada edge
 		del::Edge working_edge = Convex_Hull_obj.edge_collection[J];
-
 		New_Triangle = Build.Edge_based_Triangle_Building (working_edge, T_0);
 		//triângulo construído é trivial
-		if (New_Triangle.A == Origem && New_Triangle.B == Origem && New_Triangle.C == Origem)
+		//não entendirrrr!!!
+		if (New_Triangle.A ==  New_Triangle.B  && New_Triangle.B == New_Triangle.C)
 		{
 			Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member = true;
 			J++; //apenas prossegue na varredura do Convex_Hull quando a aresta working_edge não dá origem a outro triangulo
 			working_edge = Convex_Hull_obj.edge_collection[J];
 		}
-		if (Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member = false)
+		if (Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member == false)
 		{
 
 			//extraindo os dois edges do New_Triangle:
@@ -324,10 +347,10 @@ int main( int argc, char* argv[] )
 			T_0 = New_Triangle;
 		}
 	} //end while:
-	//leia a segunda faixa de dados e adicione os pontos da borda superior ao conjunto
+	//leia a segunda faixa de dados e adicione os points da borda superior ao conjunto
 	//repita até computar todas as faixas de dados
 
-	*/
+
 	return EXIT_SUCCESS;
 	// compilação e utilização testada até esta linha
 	// conteúdo abaixo não foi testado ainda!

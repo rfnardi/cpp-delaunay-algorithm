@@ -77,16 +77,16 @@ del::Point del::Triangle::Normal ()
 
     del::Point NORMAL ;
 
-    NORMAL.p[0] = X.p[ 1 ] * Y.p[ 2 ] - X.p[ 2 ] * Y.p[ 1 ];
-    NORMAL.p[1] = X.p[ 2 ] * Y.p[ 0 ] - X.p[ 0 ] * Y.p[ 2 ];
-    NORMAL.p[2] = X.p[ 0 ] * Y.p[ 1 ] - X.p[ 1 ] * Y.p[ 0 ];
+    NORMAL.x = X.p[ 1 ] * Y.p[ 2 ] - X.p[ 2 ] * Y.p[ 1 ];
+    NORMAL.y = X.p[ 2 ] * Y.p[ 0 ] - X.p[ 0 ] * Y.p[ 2 ];
+    NORMAL.z = X.p[ 0 ] * Y.p[ 1 ] - X.p[ 1 ] * Y.p[ 0 ];
 
 
     float norm = sqrt( pow( NORMAL.p[ 0 ], 2 ) + pow( NORMAL.p[ 1 ], 2 ) + pow( NORMAL.p[ 2 ], 2) );
     //normalização de N:
-    NORMAL.p[0] = NORMAL.p[0]/norm;
-    NORMAL.p[1] = NORMAL.p[1]/norm;
-    NORMAL.p[2] = NORMAL.p[2]/norm;
+    NORMAL.x = NORMAL.p[0]/norm;
+    NORMAL.y = NORMAL.p[1]/norm;
+    NORMAL.z = NORMAL.p[2]/norm;
 
 
     return NORMAL;

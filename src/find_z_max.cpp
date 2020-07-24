@@ -14,9 +14,9 @@ del::Point del::Find_Extremal_Points::Find_Z_Max(std::vector<del::Point> pontos)
   float z_max = 0.0;
   for(size_t i=0 ; i<pontos.size() ; i++)
   {
-    if (pontos[i].p[2]>z_max)
+    if (pontos[i].z>z_max)
     {
-      z_max = pontos[i].p[2];
+      z_max = pontos[i].z;
       Top_point = pontos[i];
     }
   }
