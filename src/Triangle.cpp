@@ -1,6 +1,8 @@
 #ifndef TRIANGLE
 #define TRIANGLE
 #include "./Triangle.hpp"
+#include "convex_hull.hpp"
+#include <cstddef>
 #include <math.h>
 
 del::Triangle::Triangle ( del::Point A, del::Point B, del::Point C )
@@ -92,7 +94,7 @@ del::Point del::Triangle::Normal ()
     return NORMAL;
 
 }
-
+// Localiza qual ponto do triângulo instanciado não é comum com o triângulo T
 del::Point del::Triangle::not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(del::Triangle T)
 {
   del::Point Output;
@@ -109,6 +111,23 @@ del::Point del::Triangle::not_common_point_in_this_triangle_comparing_to_the_sha
     Output = this->C;
   }
   return Output;
+}
+
+bool del::Triangle::all_points_in_convex_hull(del::Convex_Hull::edge_collection C_H )
+{
+	bool A_check = false;
+	bool B_check = false;
+	bool C_check = false;
+	bool all_check = false;
+	for (i = 0; i < C_H.size(); ++i) 
+	{
+		if ( C_H[i].first_Point == this->A){A_check=true}
+		if ( C_H[i].first_Point == this->B){B_check=true}
+		if ( C_H[i].first_Point == this->C){C_check=true}
+	}
+	if (A_check && B_check && C_check){all_check = true};
+
+	return all_check;
 }
 
 #endif

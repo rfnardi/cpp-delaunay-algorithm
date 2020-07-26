@@ -298,8 +298,10 @@ int main( int argc, char* argv[] )
 		// varre Convex_Hull testando really_a_Convex_Hull_member para cada edge
 		del::Edge working_edge = Convex_Hull_obj.edge_collection[J];
 		New_Triangle = Build.Edge_based_Triangle_Building (working_edge, T_0);
-		//triângulo construído é trivial
-		//não entendirrrr!!!
+
+
+		//triângulo construído trivial é retornado pela função Edge_based_Triangle_Building caso
+		//não haja nenhum ponto dentro das vizinhanças dos pontos do working_edge
 		if (New_Triangle.A ==  New_Triangle.B  && New_Triangle.B == New_Triangle.C)
 		{
 			Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member = true;
@@ -309,15 +311,22 @@ int main( int argc, char* argv[] )
 		if (Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member == false)
 		{
 
+			// CRIAR AQUI A ESTRUTURA CONDICIONAL PARA VERIFICAR SE O TRIANGULO MONTADO JÁ POSSUI TODOS OS PONTOS EM EDGES DO CONVEX HULL
+			// CASO ASSIM SEJA, ELE DEVE APAGAR DOIS EDGES DO CONVEX HULL E ADICIONAR UM ÚNICO. 
+			// CASO CONTRÁRIO ELE DEVE ADICIONAR DOIS EDGES E DELETAR UM EDGE DO CONVEX HULL
+			//
+			//
+			// se achou triangulo, então deve apagar do Convex_Hull
+			// o edge que deu base para sua construção
+			// e inserir os outros 2 edges do New_Triangle no Convex_Hull:
+			del::Point New_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
+
 			//extraindo os dois edges do New_Triangle:
 			New_Edge_1.first_Point = working_edge.first_Point;
 			New_Edge_1.second_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
 			New_Edge_2.first_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
 			New_Edge_2.second_Point = working_edge.second_Point;
 
-			// se achou triangulo, então deve apagar do Convex_Hull
-			// o edge que deu base para sua construção
-			// e inserir os outros 2 edges do New_Triangle no Convex_Hull:
 			Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
 			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_2);
 			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_1);

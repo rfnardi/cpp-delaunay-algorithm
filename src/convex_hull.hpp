@@ -3,7 +3,7 @@
 
 #include "./Point.hpp"
 #include <vector>
-
+#include "./Triangle.hpp"
 
 namespace del
 {
@@ -36,7 +36,9 @@ namespace del
 
         bool reliability ();
 
+		bool all_points_in_convex_hull(Triangle T );
     };
+
 
 } // namespace del
 #endif
