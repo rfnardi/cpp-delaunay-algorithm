@@ -33,10 +33,13 @@ namespace del
         ~Convex_Hull();
 
         std::vector< del::Edge > edge_collection;
-
+	
         bool reliability ();
 
-		bool all_points_in_convex_hull(Triangle T );
+		bool all_points_in_convex_hull (Triangle T , int J);
+
+		Edge new_single_edge (Triangle T , int J);
+
     };
 
 

@@ -284,8 +284,8 @@ int main( int argc, char* argv[] )
 	del::Stl_module New_Module;
 	del::Triangle_Building Build;
 	del::Triangle New_Triangle;
-	del::Point New_Normal;
 	bool not_found;
+	del::Edge New_Edge_Unique;
 	del::Edge New_Edge_1;
 	del::Edge New_Edge_2;
 
@@ -310,31 +310,40 @@ int main( int argc, char* argv[] )
 		}
 		if (Convex_Hull_obj.edge_collection[J].really_a_Convex_Hull_member == false)
 		{
+			New_Triangle.same_curl(T_0);
 
-			// CRIAR AQUI A ESTRUTURA CONDICIONAL PARA VERIFICAR SE O TRIANGULO MONTADO JÁ POSSUI TODOS OS PONTOS EM EDGES DO CONVEX HULL
-			// CASO ASSIM SEJA, ELE DEVE APAGAR DOIS EDGES DO CONVEX HULL E ADICIONAR UM ÚNICO. 
-			// CASO CONTRÁRIO ELE DEVE ADICIONAR DOIS EDGES E DELETAR UM EDGE DO CONVEX HULL
-			//
-			//
-			// se achou triangulo, então deve apagar do Convex_Hull
-			// o edge que deu base para sua construção
-			// e inserir os outros 2 edges do New_Triangle no Convex_Hull:
 			del::Point New_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
 
-			//extraindo os dois edges do New_Triangle:
-			New_Edge_1.first_Point = working_edge.first_Point;
-			New_Edge_1.second_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
-			New_Edge_2.first_Point = New_Triangle.not_common_point_in_this_triangle_comparing_to_the_sharing_edge_triangle(T_0);
-			New_Edge_2.second_Point = working_edge.second_Point;
-
-			Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
-			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_2);
-			Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_1);
+			//Shrinking phase:
+			if (Convex_Hull_obj.all_points_in_convex_hull(New_Triangle, J)) 
+			{
+				New_Edge_Unique = Convex_Hull_obj.new_single_edge(New_Triangle, J);
+				if (New_Edge_Unique.first_Point == working_edge.first_Point) 
+				{
+					Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
+					Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J-1);
+					Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J - 1, New_Edge_Unique);
+				}
+				if (New_Edge_Unique.second_Point == working_edge.second_Point) 
+				{
+					Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
+					Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J+1);
+					Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J, New_Edge_Unique);
+				}
+			}
+			else /*Expanding phase*/
+			{
+				New_Edge_1.first_Point = working_edge.first_Point;
+				New_Edge_1.second_Point = New_Point;
+				New_Edge_2.first_Point = New_Point;
+				New_Edge_2.second_Point = working_edge.second_Point;
+				Convex_Hull_obj.edge_collection.erase(Convex_Hull_obj.edge_collection.begin()+J);
+				Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_2);
+				Convex_Hull_obj.edge_collection.insert(Convex_Hull_obj.edge_collection.begin()+J,New_Edge_1);
+			}
 
 			// triangulo já listado em Triangles_with_normals que possui working_edge como um de seus lados
-			New_Triangle.same_curl(T_0);
-			New_Normal = New_Triangle.Normal();
-			New_Module.Normal = New_Normal;
+			New_Module.Normal = New_Triangle.Normal();
 			New_Module.Triangle = New_Triangle;
 			not_found = true; //marcador lógico para registrar quando o triangulo encontrado já está guardado no Triangulation_with_normals
 
